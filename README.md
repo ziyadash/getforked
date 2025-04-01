@@ -16,7 +16,7 @@ As you can see this project has the following folders:
 
 ### Inital Setup
 
-1. Enter into frontend folder, either by opening the folder in your IDE, or running `cd frontend`
+1. Enter into `frontend` folder, either by opening the folder in your IDE, or running `cd frontend`
 
 2. run `npm install` to install all of the relavent packages.
 
@@ -39,4 +39,21 @@ Note the main difference is our 'models' are stored in the shared folder.
 
 ### Inital Setup
 
-1. Run `
+1. Enter into `backend` folder, either by opening the folder in your IDE, or running `cd frontend`
+
+2. Run `npm install`
+
+### Running Backend
+
+To run a development version of the server which restarts each time you edit a file run:
+- `npm run dev`
+
+- This is useful if you want to quickly test changes without needing to restart the server.
+
+To run the production version of the server which will simulate what the server will be like whilst it is running, use:
+
+- ` npm run start` or `npm start`
+
+- This is for example useful if you want to test if a specific command might crash the server.
+
+These scripts are defined in the **package.json** file, 
