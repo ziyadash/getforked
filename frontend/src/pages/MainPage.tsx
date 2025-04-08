@@ -1,4 +1,3 @@
-import React from 'react'
 import './MainPage.css'
 import MainButton from '../components/buttons/MainButton'
 import StyledBackground from '../components/background/StyledBackground'
@@ -14,3 +13,4 @@ export default function MainPage() {
         </StyledBackground>
     )
 }
+

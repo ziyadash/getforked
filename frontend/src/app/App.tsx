@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import MainPage from '../pages/MainPage'
 import VoterPage from '../pages/VoterPage'
