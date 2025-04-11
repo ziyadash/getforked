@@ -7,8 +7,8 @@ export default function MainPage() {
         <StyledBackground className='main'>
             <h1 className="title">Electus</h1>
             <div className="button-container">
-                <MainButton action="Create Vote"/>
-                <MainButton action="Join Vote"/>
+                <MainButton action="Join Vote" />
+                <MainButton action="Create Vote" />
             </div>
         </StyledBackground>
     )
