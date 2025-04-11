@@ -1,7 +1,6 @@
 .main-button {
     width: 40vw;
     height: 40vw;
-
     flex-shrink: 0;
     border-radius: 70px;
     border: 2px solid #FFF;
@@ -22,7 +21,7 @@
 .button-text {
     color: #FFF;
     text-align: center;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Lexend', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 28px;
     font-weight: 400;
 }
@@ -33,5 +32,4 @@
         height: 37vh;
         max-width: 80vw;
     }
-
 }

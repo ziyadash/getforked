@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import background from '../../assets/svg/background.svg'
 
 interface StyledBackgroundProps {
-  children?: ReactNode;
-  className?: string;
+    children?: ReactNode;
+    className?: string;
 }
 
 const StyledBackground: React.FC<StyledBackgroundProps> = ({ children, className = '' }) => {
@@ -15,9 +15,10 @@ const StyledBackground: React.FC<StyledBackgroundProps> = ({ children, className
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 width: '100%',
-                height: '100vh'
+                height: '100vh',
+                padding: '40px'
             }}
-            >
+        >
             {children}
         </div>
 

@@ -4,13 +4,13 @@ import VoterPage from '../pages/VoterPage'
 import ManagerPage from '../pages/ManagerPage'
 
 export default function App() {
-  return (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/voter" element={<VoterPage />} />
-            <Route path="/manager" element={<ManagerPage />} />
-        </Routes>
-    </BrowserRouter>
-  )
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/voter" element={<VoterPage />} />
+                <Route path="/manager" element={<ManagerPage />} />
+            </Routes>
+        </BrowserRouter>
+    )
 }
