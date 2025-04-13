@@ -10,8 +10,9 @@ export default function WideButton({ text, margin }: WideButtonInputs) {
                 className="
                 w-[56rem] h-[7rem] 
                 border-[2px] border-white rounded-[5rem]
-                bg-gradient-to-br from-white/50 to-white/0
-                text-[#f1e9e9]">
+                bg-gradient-to-br from-white/40 to-white/0
+                text-[#f1e9e9] text-xl
+                ">
 				{text}
 			</button>
 		</div>

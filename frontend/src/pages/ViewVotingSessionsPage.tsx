@@ -1,6 +1,8 @@
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
+import SmallButton from "../components/buttons/SmallButton";
+import ManageVotePanel from "../components/buttons/ManageVotePanel";
 
 export default function ViewVotingSessionsPage() {
     return (
@@ -15,7 +17,7 @@ export default function ViewVotingSessionsPage() {
             wideButton with plus
             */}
             <Heading text="Your Voting Sessions"/>
-            <WideButton text="Hi" margin="mt-[4em]"/>
+            <ManageVotePanel text="DevSoc" page="votingSessions"/>
         </StyledBackground>
     )
 }
