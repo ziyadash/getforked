@@ -3,7 +3,6 @@ import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
-// import ManageVotePanel from "../components/buttons/ManageVotePanel";
 
 export default function ViewVotingSessionsPage() {
     const buttons = ['start']
@@ -16,6 +15,7 @@ export default function ViewVotingSessionsPage() {
 
     return (
         <StyledBackground className='main'>
+            {/* Add logout button */}
             <Heading text="Your Voting Sessions"/>
 
             <div className="
@@ -32,12 +32,11 @@ export default function ViewVotingSessionsPage() {
                                 ))}
                             </div>
                         </WideButton>
-                        <SmallButton buttonType="bin"/>    
+                        <SmallButton buttonType="bin"/>
                     </div>
                 ))}
                 <WideAddButton></WideAddButton>
             </div>
-
         </StyledBackground>
     )
 }
