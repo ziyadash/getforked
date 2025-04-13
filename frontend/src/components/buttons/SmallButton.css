@@ -1,5 +1,14 @@
-.small-button-container {
+.small-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 3rem;
   height: 3rem;
   flex-shrink: 0;
+}
+
+.small-button-icon {
+  position: absolute;
+  width: 50%;
 }

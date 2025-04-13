@@ -1,19 +1,25 @@
 interface WideButtonInputs {
-	text: string,
-	margin: string,
+	text?: string,
+	margin?: string,
+    children?: React.ReactNode
 }
 
-export default function WideButton({ text, margin }: WideButtonInputs) {
+export default function WideButton({ text, margin, children }: WideButtonInputs) {
 	return (
 		<div className={`flex justify-center ${margin}`}>
 			<button 
                 className="
+                relative
+                flex justify-center items-center
                 w-[56rem] h-[7rem] 
                 border-[2px] border-white rounded-[5rem]
                 bg-gradient-to-br from-white/40 to-white/0
-                text-[#f1e9e9] text-xl
-                ">
-				{text}
+                text-[#f1e9e9] text-xl"
+            >
+				<span className="absolute left-1/2 -translate-x-1/2">{text}</span>
+                <div className="ml-auto mr-[2rem] flex items-center gap-2">
+                    {children}
+                </div>
 			</button>
 		</div>
 	);
