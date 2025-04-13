@@ -7,15 +7,8 @@ interface WideButtonInputs {
 export default function WideButton({ text, margin, children }: WideButtonInputs) {
 	return (
 		<div className={`flex justify-center ${margin}`}>
-			<button 
-                className="
-                relative
-                flex justify-center items-center
-                w-[56rem] h-[7rem] 
-                border-[2px] border-white rounded-[5rem]
-                bg-gradient-to-br from-white/40 to-white/0
-                text-[#f1e9e9] text-xl"
-            >
+            {/* TODO add hover opacity effect */}
+			<button className="wide-button">
 				<span className="absolute left-1/2 -translate-x-1/2">{text}</span>
                 <div className="ml-auto mr-[2rem] flex items-center gap-2">
                     {children}

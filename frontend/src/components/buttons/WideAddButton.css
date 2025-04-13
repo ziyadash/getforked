@@ -1,0 +1,34 @@
+.wide-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56rem;
+  height: 7rem;
+  border: 2px solid white;
+  border-radius: 5rem;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  color: #f1e9e9;
+  font-size: 1.25rem;
+}
+
+.wide-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.wide-button:hover::before {
+  opacity: 0.5;
+  cursor: pointer;
+  z-index: 0;
+}
+.wide-button > * {
+	position: relative;
+	z-index: 1;
+}
