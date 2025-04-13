@@ -11,9 +11,7 @@ export default function ViewVotingSessionsPage() {
         'DevSoc AGM 2025', 
         'CSESoc AGM 2025', 
         'DevSoc AGM 2024',
-        'CSESoc AGM 2024',
-        'DevSoc AGM 2023',
-        'CSESoc AGM 2023',
+        'CSESoc AGM 2024'
     ]
 
     return (

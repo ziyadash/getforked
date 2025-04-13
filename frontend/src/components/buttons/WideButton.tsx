@@ -1,3 +1,5 @@
+import './WideButton.css'
+
 interface WideButtonInputs {
 	text?: string,
 	margin?: string,

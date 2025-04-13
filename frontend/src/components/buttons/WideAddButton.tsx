@@ -1,5 +1,5 @@
 import addIcon from '../../assets/svg/add.svg'
-import './WideAddButton.css'
+import './WideButton.css'
 
 export default function WideAddButton() {
 	return (
