@@ -98,7 +98,18 @@ export function authLogout(sessionId: string) {
 }
 
 
-// figure out how to get sessionId
+/**
+ * User creates a vote session.
+ * @param userSessionId 
+ * @param title 
+ * @param description
+ * @param images
+ * @param startDate
+ * @param endDate
+ * @param zid_requirement
+ * @param locationOfVote
+ * @returns 
+ */
 export const authCreateVoteSession = (
   userSessionId: string,
   title: string,
