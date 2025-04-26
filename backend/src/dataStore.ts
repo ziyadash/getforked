@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { DataStore, Session, SessionStore } from './models/auth';
+import { DataStore, Session, SessionStore } from '../../shared/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
 // copied pretty much all of this code from devsoc mail!
 
 let sessionStore: SessionStore = { sessions: [] };
-let database: DataStore = { users: [] };
+let database: DataStore = { users: [], elections: [] };
 
 const SESSION_PATH = "./src/sessions.json";
 const DATA_PATH = "./src/database.json";

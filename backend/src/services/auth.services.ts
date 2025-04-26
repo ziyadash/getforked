@@ -1,7 +1,6 @@
 import { getData, setData, getSessions, setSessions, generateSessionId } from '../dataStore';
-import { Session, User } from '../models/auth';
 import { StatusCodes } from 'http-status-codes';
-
+import { Question, Election, Session, User } from '../../../shared/interfaces';
 ////////////// Util function(s) //////////////
 /**
  * Uses the CSESoc zId + zPass verification API endpoint, returns the user's name on success 
@@ -55,7 +54,7 @@ export async function authRegister(zId: string, zPass: string): Promise<string> 
   setData(db);
 
   const sessionId = generateSessionId();
-  const newSession: Session = { sessionId, userId: zId };
+  const newSession: Session = { sessionId, userZId: zId };
 
   const sessions = getSessions();
   sessions.push(newSession);
@@ -81,7 +80,7 @@ export async function authLogin(zId: string, zPass: string): Promise<string> {
   }
 
   const sessionId = generateSessionId();
-  const newSession: Session = { sessionId, userId: zId };
+  const newSession: Session = { sessionId, userZId: zId };
 
   const sessions = getSessions();
   sessions.push(newSession);
@@ -96,4 +95,56 @@ export async function authLogin(zId: string, zPass: string): Promise<string> {
 export function authLogout(sessionId: string) {
   const sessions = getSessions().filter((s) => s.sessionId !== sessionId);
   setSessions(sessions);
+}
+
+
+// figure out how to get sessionId
+export const authCreateVoteSession = (
+  userSessionId: string,
+  title: string,
+  description: string,
+  images: string[],
+  startDate: Date,
+  endDate: Date,
+  zid_requirement: boolean,
+  locationOfVote?: string,
+) : number => {
+  const db = getData();
+  const sessions = getSessions();
+
+  if (!db) {
+    throw new Error('Failed to load data store');
+  }
+
+  // find user zId:
+  const session = sessions.find((session) => session.sessionId === userSessionId);
+  
+  if (!session) throw new Error('Invalid session ID');
+
+  const userZId = session.userZId;
+
+
+  if (title.length <= 0) {
+    throw new Error('Title cannot be empty');
+  }
+
+  const questions: Question[] = [];
+
+  const newElection: Election = {
+    id: db.elections.length + 1, // subject to change
+    authUserZId: userZId,
+    name: title,
+    description: description,
+    images: images,
+    location: locationOfVote,
+    date_time_start: startDate,
+    date_time_end: endDate,
+    requires_zid: zid_requirement,
+    questions,
+  };
+
+  db.elections.push(newElection);
+  setData(db);
+
+  return newElection.id;
 }
