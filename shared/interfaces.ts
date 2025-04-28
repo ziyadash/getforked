@@ -3,12 +3,6 @@ interface Voter {
     username: string,
 }
 
-// interface Location {
-//     name: string,
-//     latitude: number,
-//     longitude: number,
-// }
-
 interface Image {
     name: string,
     image_url: string,
