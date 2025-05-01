@@ -11,7 +11,7 @@ export default function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/voter" element={<VoterPage />} />
                 <Route path="/manager" element={<ManagerPage />} />
-                <Route path="/organiser" element={<OrganiserPage />} /> {/* template */}
+                <Route path="/organiser" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
             </Routes>
         </BrowserRouter>
     )

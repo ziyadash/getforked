@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import background from '../../assets/svg/background.svg'
+import Banner from '../logo/Banner';
 
 interface StyledBackgroundProps {
     children?: ReactNode;
@@ -8,19 +9,24 @@ interface StyledBackgroundProps {
 
 const StyledBackground: React.FC<StyledBackgroundProps> = ({ children, className = '' }) => {
     return (
-        <div
-            className={`${className}`}
-            style={{
-                backgroundImage: `url(${background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                width: '100%',
-                height: '100vh',
-                padding: '40px'
-            }}
-        >
-            {children}
-        </div>
+        <>
+            <div
+                className={`${className}`}
+                style={{
+                    backgroundImage: `url(${background})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    width: '100%',
+                    height: '100vh',
+                    padding: '40px'
+                }}
+            >
+                <Banner />
+                <div className='mt-20'>
+                    {children}
+                </div>
+            </div>
+        </>
 
     );
 };
