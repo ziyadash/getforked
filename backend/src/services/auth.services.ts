@@ -1,6 +1,7 @@
-import { getData, setData, getSessions, setSessions, generateSessionId } from '../dataStore';
+import { getData, setData, getSessions, setSessions, generateSessionId, getHashOf } from '../dataStore';
 import { Session, User } from '../models/auth';
 import { StatusCodes } from 'http-status-codes';
+import { decryptData } from '../../../shared/src/encryptionBackend';
 
 ////////////// Util function(s) //////////////
 /**
@@ -9,7 +10,7 @@ import { StatusCodes } from 'http-status-codes';
  * @param zPass 
  * @returns 
  */
-async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displayName: string }> {
+async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displayName?: string; error?: string; status?: number }> {
   const payload = { zid: zId, zpass: zPass };
 
   const response = await fetch('https://verify.csesoc.unsw.edu.au/v1', {
@@ -22,17 +23,27 @@ async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displ
   });
 
   if (response.status === StatusCodes.UNAUTHORIZED) {
-    throw new Error('Incorrect password');
+    return { error: 'Incorrect password', status: StatusCodes.UNAUTHORIZED };
   }
 
   if (!response.ok) {
-    throw new Error(`Verification failed with status ${response.status}`);
+    return {
+      error: `Verification failed with status ${response.status}`,
+      status: StatusCodes.BAD_GATEWAY,
+    };
   }
 
-  return await response.json(); // contains { displayName }
+  const data = await response.json();
+  if (!data.displayName) {
+    return { error: 'Malformed verification response', status: StatusCodes.INTERNAL_SERVER_ERROR };
+  }
+
+  return { displayName: data.displayName };
 }
 
-////////////// Main logic function(s) //////////////
+////////////// Main logic functions //////////////
+
+// Notice that we decrypt the inputted zId and zPass, since they are encrypted from the frontend
 
 /**
  * Registers a user and logs then in, returns the assigned sessionId
@@ -40,29 +51,37 @@ async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displ
  * @param zPass 
  * @returns 
  */
-export async function authRegister(zId: string, zPass: string): Promise<string> {
-  const { displayName } = await verifyZidCredentials(zId, zPass);
+export async function authRegister(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
+  // decrypt first
+  const decryptedZID = decryptData(zId);
+  const decryptedZPass = decryptData(zPass);
 
+  const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
+  if (result.error) return result;
+
+  const userId = getHashOf(decryptedZID);
   const db = getData();
-  const exists = db.users.find((u) => u.zId === zId);
 
-  if (exists) {
-    throw new Error('User already registered');
+  if (db.users.find((u) => u.userId === userId)) {
+    console.log("what the freak!!!");
+    console.log(db);
+    return { error: 'User already registered', status: StatusCodes.CONFLICT };
   }
 
-  const newUser: User = { name: displayName, zId: zId };
-  db.users.push(newUser);
+  const hashedName = getHashOf(result.displayName!);
+  db.users.push({ userId: userId, name: hashedName });
   setData(db);
 
-  const sessionId = generateSessionId();
-  const newSession: Session = { sessionId, userId: zId };
+  const sessionId = generateSessionId(userId);
+  const newSession: Session = { sessionId, userId, createdAt: new Date() };
 
   const sessions = getSessions();
   sessions.push(newSession);
   setSessions(sessions);
 
-  return sessionId;
+  return { sessionId };
 }
+
 
 /**
  * Logs in an existing user and returns a session ID.
@@ -70,30 +89,47 @@ export async function authRegister(zId: string, zPass: string): Promise<string> 
  * @param zPass 
  * @returns 
  */
-export async function authLogin(zId: string, zPass: string): Promise<string> {
-  await verifyZidCredentials(zId, zPass);
+export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
+  // decrypt first
+  const decryptedZID = decryptData(zId);
+  const decryptedZPass = decryptData(zPass);
 
+  const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
+  if (result.error) return result;
+
+  const userId = getHashOf(decryptedZID);
   const db = getData();
-  const user = db.users.find((u) => u.zId === zId);
+  const user = db.users.find((u) => u.userId === userId);
 
   if (!user) {
-    throw new Error('User not registered');
+    return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  const sessionId = generateSessionId();
-  const newSession: Session = { sessionId, userId: zId };
+  const sessionId = generateSessionId(userId);
+  const newSession: Session = { sessionId, userId, createdAt: new Date() };
 
   const sessions = getSessions();
   sessions.push(newSession);
   setSessions(sessions);
 
-  return sessionId;
+  return { sessionId };
 }
 
 /**
+ * @param sessionId
  * Logs out the user by removing their session.
  */
-export function authLogout(sessionId: string) {
-  const sessions = getSessions().filter((s) => s.sessionId !== sessionId);
-  setSessions(sessions);
+export function authLogout(sessionId: string): { error?: string; status?: number } | void {
+  const sessions = getSessions();
+  const sessionExists = sessions.some(s => s.sessionId === sessionId);
+
+  if (!sessionExists) {
+    return {
+      error: 'Invalid session token',
+      status: StatusCodes.UNAUTHORIZED,
+    };
+  }
+
+  const updatedSessions = sessions.filter(s => s.sessionId !== sessionId);
+  setSessions(updatedSessions);
 }

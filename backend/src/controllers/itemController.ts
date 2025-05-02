@@ -14,7 +14,6 @@ export const createItem = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-  
   // Read all items
   export const getItems = (req: Request, res: Response, next: NextFunction) => {
     try {

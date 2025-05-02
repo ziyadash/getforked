@@ -6,7 +6,7 @@
 // that stores their existing voting sessions
 export interface User {
     name: string, 
-    zId: string,
+    userId: string,
 };
 
 interface Election {
@@ -27,9 +27,10 @@ interface Election {
 // we will discuss more design later but it makes sense to have 
 // different kinds of sessions maybe for voting vs creating votes?
 export interface Session {
-    sessionId: string,
-    userId: string,
-}
+    sessionId: string; // this is the JWT
+    userId: string;
+    createdAt: Date;
+}  
 
 export interface DataStore {
     users: User[],
