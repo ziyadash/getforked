@@ -1,8 +1,7 @@
 import { getData, setData, getSessions, setSessions, generateSessionId, getHashOf } from '../dataStore';
-import { Session, User } from '../models/auth';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
-
+import { Question, Election, Session, User } from '../../../shared/interfaces';
 ////////////// Util function(s) //////////////
 /**
  * Uses the CSESoc zId + zPass verification API endpoint, returns the user's name on success 
@@ -132,4 +131,67 @@ export function authLogout(sessionId: string): { error?: string; status?: number
 
   const updatedSessions = sessions.filter(s => s.sessionId !== sessionId);
   setSessions(updatedSessions);
+}
+
+
+/**
+ * User creates a vote session.
+ * @param userSessionId 
+ * @param title 
+ * @param description
+ * @param images
+ * @param startDate
+ * @param endDate
+ * @param zid_requirement
+ * @param locationOfVote
+ * @returns 
+ */
+export const authCreateVoteSession = (
+  userSessionId: string,
+  title: string,
+  description: string,
+  images: string[],
+  startDate: Date,
+  endDate: Date,
+  zid_requirement: boolean,
+  locationOfVote?: string,
+) : number => {
+  const db = getData();
+  const sessions = getSessions();
+
+  if (!db) {
+    throw new Error('Failed to load data store');
+  }
+
+  // find userId:
+  const session = sessions.find((session) => session.sessionId === userSessionId);
+  
+  if (!session) throw new Error('Invalid session ID');
+
+  const userZId = session.userId;
+
+
+  if (title.length <= 0) {
+    throw new Error('Title cannot be empty');
+  }
+
+  const questions: Question[] = [];
+
+  const newElection: Election = {
+    id: db.elections.length + 1, // subject to change
+    authUserZId: userZId,
+    name: title,
+    description: description,
+    images: images,
+    location: locationOfVote,
+    date_time_start: startDate,
+    date_time_end: endDate,
+    requires_zid: zid_requirement,
+    questions,
+  };
+
+  db.elections.push(newElection);
+  setData(db);
+
+  return newElection.id;
 }

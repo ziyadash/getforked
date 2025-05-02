@@ -54,4 +54,36 @@ export const logout = (req: Request, res: Response) => {
   return; 
 };
 
+export const createVoteSession = async (req: Request, res: Response, next: NextFunction) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+  const {
+    title,
+    description,
+    images,
+    startDate,
+    endDate,
+    zid_requirement, 
+    locationOfVote
+  } = req.body;
 
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  try {
+    const result = await authService.authCreateVoteSession(
+      title, 
+      description, 
+      images, 
+      startDate, 
+      endDate, 
+      zid_requirement,
+      locationOfVote
+    ) 
+
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
