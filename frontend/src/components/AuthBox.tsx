@@ -8,7 +8,7 @@
 import React, { useState } from "react";
 import ThinButton from "./buttons/ThinButton";
 import AuthInput from "./inputs/AuthInput";
-import { encryptData } from "../../../shared/encryption"; // TODO FIX!
+import { encryptData } from "../../../shared/src/encryptionFrontend";
 
 export default function AuthBox() {
   const [zID, setZID] = useState("");
