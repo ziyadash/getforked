@@ -1,4 +1,3 @@
-// jest.config.ts
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -10,6 +9,7 @@ const config: Config = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
 };
 
 export default config;

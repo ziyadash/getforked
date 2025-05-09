@@ -64,16 +64,17 @@ export {
 
 export interface User {
     name: string, 
-    zId: string,
+    userId: string,
 };
 
 // this is a generic session
 // we will discuss more design later but it makes sense to have 
 // different kinds of sessions maybe for voting vs creating votes?
 export interface Session {
-    sessionId: string,
-    userZId: string,
-}
+    sessionId: string; // this is the JWT
+    userId: string;
+    createdAt: Date;
+}  
 
 export interface DataStore {
     users: User[],
