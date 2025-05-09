@@ -49,7 +49,7 @@ export function generateSessionId(userId: string): string {
   return token;
 }
 
-// Verify a given token, use our super secret key
+// Verify a given token, use our secret key
 // I know we said not to use try catch blocks, but I feel that it makes the
 // implementation here neater. 
 export function verifySessionId(token: string): { userId: string } | null {
@@ -60,6 +60,25 @@ export function verifySessionId(token: string): { userId: string } | null {
     console.error('Token verification failed:', err);
     return null;
   }
+}
+
+/**
+ * Creates and registers a session for a given userId.
+ * Returns the generated sessionId (JWT).
+ */
+export function createAndStoreSession(userId: string): string {
+  const sessionId = generateSessionId(userId);
+  const session: Session = {
+    sessionId,
+    userId,
+    createdAt: new Date(),
+  };
+
+  const sessions = getSessions();
+  sessions.push(session);
+  setSessions(sessions);
+
+  return sessionId;
 }
 
 export function getSessions(): Session[] {

@@ -1,4 +1,12 @@
-import { getData, setData, getSessions, setSessions, generateSessionId, getHashOf } from '../data/dataStore';
+import {
+  getData,
+  setData,
+  getSessions,
+  setSessions,
+  generateSessionId,
+  getHashOf,
+  createAndStoreSession,
+} from '../data/dataStore';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
 import { Question, Election, Session, User } from '../../../shared/interfaces';
@@ -70,13 +78,8 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
   const hashedName = getHashOf(result.displayName!);
   db.users.push({ userId: userId, name: hashedName });
   setData(db);
-
-  const sessionId = generateSessionId(userId);
-  const newSession: Session = { sessionId, userId, createdAt: new Date() };
-
-  const sessions = getSessions();
-  sessions.push(newSession);
-  setSessions(sessions);
+  
+  const sessionId = createAndStoreSession(userId);
 
   return { sessionId };
 }
@@ -104,12 +107,7 @@ export async function authLogin(zId: string, zPass: string): Promise<{ sessionId
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  const sessionId = generateSessionId(userId);
-  const newSession: Session = { sessionId, userId, createdAt: new Date() };
-
-  const sessions = getSessions();
-  sessions.push(newSession);
-  setSessions(sessions);
+  const sessionId = createAndStoreSession(userId);
 
   return { sessionId };
 }
