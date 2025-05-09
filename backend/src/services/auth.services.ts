@@ -1,4 +1,4 @@
-import { getData, setData, getSessions, setSessions, generateSessionId, getHashOf } from '../dataStore';
+import { getData, setData, getSessions, setSessions, generateSessionId, getHashOf } from '../data/dataStore';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
 import { Question, Election, Session, User } from '../../../shared/interfaces';
