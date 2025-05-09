@@ -18,7 +18,6 @@ import { Question, Election, Session, User } from '../../../shared/interfaces';
  * @returns 
  */
 async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displayName?: string; error?: string; status?: number }> {
-  console.log(zId + '   ' + zPass);
   const payload = { zid: zId, zpass: zPass };
 
   const response = await fetch('https://verify.csesoc.unsw.edu.au/v1', {
