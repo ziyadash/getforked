@@ -37,9 +37,9 @@ describe('auth register tests!', () => {
   
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test.skip('Successful, returns a sessionId', () => {
-    const zId = encryptWithPublicKey('z547121231312');
-    const zPass = encryptWithPublicKey('zpass!'); // helper function directly encrypts, not testing encrypton from frontend
+  test('Successful, returns a sessionId', () => {
+    const zId = encryptWithPublicKey('z5478718');
+    const zPass = encryptWithPublicKey('GrandChampion!69'); // helper function directly encrypts, not testing encrypton from frontend
     const res = post(registerRoute, { zId, zPass });
 
     expect(res.statusCode).toEqual(OK);

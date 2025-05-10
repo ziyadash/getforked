@@ -11,21 +11,20 @@ import AuthInput from "./inputs/AuthInput";
 import { encryptData } from "../../../shared/src/encryptionFrontend";
 
 export default function AuthBox() {
-  const [zID, setZID] = useState("");
+  const [zId, setZId] = useState("");
   const [zPass, setZPass] = useState("");
 
   // use when we click the continue button
   const handleRegister = async () => {
-	// see shared/encryption
 	// encrypt data before sending it to backend
-    const encryptedZID = await encryptData(zID);
+    const encryptedZID = await encryptData(zId);
     const encryptedZPass = await encryptData(zPass);
 
 	// See backend/src/routes/authroutes and backend/src/controllers/authcontroller
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ zID: encryptedZID, zPass: encryptedZPass }),
+      body: JSON.stringify({ zId: encryptedZID, zPass: encryptedZPass }),
     });
 
 	// error handling is done on the backend, here we just console log our error.
@@ -45,8 +44,8 @@ export default function AuthBox() {
         <AuthInput
           label="zID"
           placeholder="z1234567"
-          value={zID}
-          onChange={setZID} // set zId when we input text
+          value={zId}
+          onChange={setZId} // set zId when we input text
           marginStyle="mt-[2em]"
         />
         <AuthInput

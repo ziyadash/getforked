@@ -1,4 +1,4 @@
-// encryptionFrontend.ts
+// shared/encryptionFrontend.ts
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
