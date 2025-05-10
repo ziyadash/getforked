@@ -166,7 +166,7 @@ export const authCreateVoteSession = (
   
   if (!session) throw new Error('Invalid session ID');
 
-  const userZId = session.userId;
+  const userId = session.userId; // changed this from zId to id bc we store hashed zids not the raw zid. 
 
 
   if (title.length <= 0) {
@@ -177,7 +177,7 @@ export const authCreateVoteSession = (
 
   const newElection: Election = {
     id: db.elections.length + 1, // subject to change
-    authUserZId: userZId,
+    authUserId: userId, // changed authUserZid to authUserId bc again we store hashed zids not raw zids
     name: title,
     description: description,
     images: images,

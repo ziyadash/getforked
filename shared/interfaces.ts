@@ -11,7 +11,7 @@ interface Image {
 
 interface Election {
     id: number,
-    authUserZId: string, // the owner of the election
+    authUserId: string, // the owner of the election
     name: string,
     description: string,
     images: string[]
