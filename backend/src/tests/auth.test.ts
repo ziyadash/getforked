@@ -27,19 +27,29 @@ const OK = 200;
 const BAD_REQUEST = 400;
 const UNAUTHORISED = 401;
 
+////////////////////////////// VARIABLES  //////////////////////////
+
+const zidPlainText = process.env.ZID!;
+const zpassPlainText = Buffer.from(process.env.ZPASS_BASE64!, 'base64').toString('utf-8');
+
+
+async function beforeEveryTest() {
+  await new Promise(res => setTimeout(res, 1000));
+  clear();
+}
+
 
 ////////////////////////////// TEST CASES  ////////////////////////////////
 
 describe('auth register tests!', () => {
-  beforeEach(() => {
-    clear();
-  });
+  beforeEach(async () => await beforeEveryTest());
+
   
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test.skip('Successful, returns a sessionId', () => {
-    const zId = encryptWithPublicKey('z123143');
-    const zPass = encryptWithPublicKey('adfafsrvw'); // helper function directly encrypts, not testing encrypton from frontend
+  test('Successful, returns a sessionId', () => {
+    const zId = encryptWithPublicKey(zidPlainText);
+    const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     const res = post(registerRoute, { zId, zPass });
 
     expect(res.statusCode).toEqual(OK);
@@ -51,7 +61,7 @@ describe('auth register tests!', () => {
     const sessionId = res.body.sessionId.toString();
     const payload = verifySessionId(sessionId);
     expect(payload).toEqual(expect.objectContaining({
-      userId: getHashOf('z5478718'),
+      userId: getHashOf(String(zidPlainText)),
     }));
   });
 
@@ -65,17 +75,17 @@ describe('auth register tests!', () => {
 });
 
 describe('auth login tests!', () => {
-  beforeEach(() => {
-    clear();
-  });
+  beforeEach(async () => await beforeEveryTest());
+
 
   afterEach(() => {
     clear();
   });
 
-  test.skip('Successful, logs in the user and returns a session id', () => {
-    const zId = encryptWithPublicKey('z12345678');
-    const zPass = encryptWithPublicKey('password'); // helper function directly encrypts, not testing encrypton from frontend
+  test('Successful, logs in the user and returns a session id', () => {
+    const zId = encryptWithPublicKey(zidPlainText);
+    const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
+    
     const regRes = post(registerRoute, { zId, zPass });
 
     expect(regRes.statusCode).toEqual(OK);
@@ -108,9 +118,8 @@ describe('auth login tests!', () => {
 });
 
 describe('auth logout tests!', () => {
-  beforeEach(() => {
-    clear();
-  });
+  beforeEach(async () => await beforeEveryTest());
+
 
   afterEach(() => {
     clear();
@@ -118,9 +127,9 @@ describe('auth logout tests!', () => {
 
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test.skip('Successful logout', () => {
-    const zId = encryptWithPublicKey('z12345678');
-    const zPass = encryptWithPublicKey('password'); // helper function directly encrypts, not testing encrypton from frontend
+  test('Successful logout', () => {
+    const zId = encryptWithPublicKey(zidPlainText);
+    const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
 
     const regRes = post(registerRoute, { zId, zPass });
     expect(regRes.statusCode).toEqual(OK);

@@ -1,9 +1,3 @@
 {
-  "sessions": [
-    {
-      "sessionId": "test-session-id-here",
-      "userId": "test-user-123",
-      "createdAt": "2025-05-11T06:02:01.655Z"
-    }
-  ]
+  "sessions": []
 }
