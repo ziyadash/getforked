@@ -1,7 +1,7 @@
 {
   "sessions": [
     {
-      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0LXVzZXItMTIzIiwiaWF0IjoxNzQ2OTQzMzIxfQ.RiuhLWS0sj9NxZ1408qApu7aYCZPhluYlV2u0vI9fro",
+      "sessionId": "test-session-id-here",
       "userId": "test-user-123",
       "createdAt": "2025-05-11T06:02:01.655Z"
     }
