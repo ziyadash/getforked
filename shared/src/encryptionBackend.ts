@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Path to private key (used for decryption) — in shared/
-const privateKeyPath = path.resolve(__dirname, '../private_key.pem');
+const privateKeyPath = path.resolve(__dirname, '../../backend/src/data/private_key.pem');
 
 // Path to public key (used for optional backend-side encryption, or testing) — in frontend/public/
 const publicKeyPath = path.resolve(__dirname, '../../frontend/public/public_key.pem');
