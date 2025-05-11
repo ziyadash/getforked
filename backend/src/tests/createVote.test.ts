@@ -9,7 +9,12 @@ describe('POST /createVoteSession', () => {
 
   it('Should create a vote session successfully', async () => {
     const mockUserId = 'test-user-123';
+
+    console.log("Mock user ID: " + mockUserId);
+
     const sessionId = createAndStoreSession(mockUserId);
+
+    console.log("mock session id: " + sessionId);
 
     const res = await request(app)
       .post('/api/auth/createVoteSession')
@@ -23,6 +28,10 @@ describe('POST /createVoteSession', () => {
         zid_requirement: false,
         locationOfVote: "library"
       });
+    
+    console.log("received status: " + res.statusCode);
+
+
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.result).toBeDefined();

@@ -1,9 +1,17 @@
 {
-  "users": [
+  "users": [],
+  "elections": [
     {
-      "userId": "c5784adac885d72ffb846f2267058ab6ac6eafd973a000fb6d5b338e941f65b3",
-      "name": "b5eca4605fe61d892d7e5d60e8272992cf2c889aa8f7a7ccdee98fa78431579b"
+      "id": 1,
+      "authUserId": "test-user-123",
+      "name": "Test Election",
+      "description": "This is a test election",
+      "images": [],
+      "location": "library",
+      "date_time_start": "2025-05-11T06:02:01.659Z",
+      "date_time_end": "2025-05-11T06:02:01.659Z",
+      "requires_zid": false,
+      "questions": []
     }
-  ],
-  "elections": []
+  ]
 }

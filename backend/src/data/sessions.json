@@ -1,9 +1,9 @@
 {
   "sessions": [
     {
-      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjNTc4NGFkYWM4ODVkNzJmZmI4NDZmMjI2NzA1OGFiNmFjNmVhZmQ5NzNhMDAwZmI2ZDViMzM4ZTk0MWY2NWIzIiwiaWF0IjoxNzQ2ODQzMjc5fQ.yAT5LIrMoYvhnSXw3Nzdfiy7I_PiNWpD1IfG1f_M1Kk",
-      "userId": "c5784adac885d72ffb846f2267058ab6ac6eafd973a000fb6d5b338e941f65b3",
-      "createdAt": "2025-05-10T02:14:39.609Z"
+      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0ZXN0LXVzZXItMTIzIiwiaWF0IjoxNzQ2OTQzMzIxfQ.RiuhLWS0sj9NxZ1408qApu7aYCZPhluYlV2u0vI9fro",
+      "userId": "test-user-123",
+      "createdAt": "2025-05-11T06:02:01.655Z"
     }
   ]
 }

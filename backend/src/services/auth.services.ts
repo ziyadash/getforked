@@ -144,7 +144,9 @@ export function authLogout(sessionId: string): { error?: string; status?: number
  * @param locationOfVote
  * @returns 
  */
-export const authCreateVoteSession = (
+
+
+interface authCreateVoteSessionProps {
   userSessionId: string,
   title: string,
   description: string,
@@ -153,23 +155,35 @@ export const authCreateVoteSession = (
   endDate: Date,
   zid_requirement: boolean,
   locationOfVote?: string,
-) : number => {
+}
+
+export const authCreateVoteSession = (props: authCreateVoteSessionProps) : number => {
   const db = getData();
   const sessions = getSessions();
+
+  console.log("creating session");
 
   if (!db) {
     throw new Error('Failed to load data store');
   }
 
   // find userId:
-  const session = sessions.find((session) => session.sessionId === userSessionId);
+  const session = sessions.find((session) => session.sessionId === props.userSessionId);
   
+  console.log("current sessions:")
+  console.log(sessions)
+  console.log("Found sessions:")
+  console.log(session)
+  console.log("User sessions:")
+  console.log(props.userSessionId)
+  
+
   if (!session) throw new Error('Invalid session ID');
 
   const userId = session.userId; // changed this from zId to id bc we store hashed zids not the raw zid. 
 
 
-  if (title.length <= 0) {
+  if (props.title.length <= 0) {
     throw new Error('Title cannot be empty');
   }
 
@@ -178,13 +192,13 @@ export const authCreateVoteSession = (
   const newElection: Election = {
     id: db.elections.length + 1, // subject to change
     authUserId: userId, // changed authUserZid to authUserId bc again we store hashed zids not raw zids
-    name: title,
-    description: description,
-    images: images,
-    location: locationOfVote,
-    date_time_start: startDate,
-    date_time_end: endDate,
-    requires_zid: zid_requirement,
+    name: props.title,
+    description: props.description,
+    images: props.images,
+    location: props.locationOfVote,
+    date_time_start: props.startDate,
+    date_time_end: props.endDate,
+    requires_zid: props.zid_requirement,
     questions,
   };
 

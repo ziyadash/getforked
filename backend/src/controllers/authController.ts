@@ -73,13 +73,16 @@ export const createVoteSession = async (req: Request, res: Response, next: NextF
 
   try {
     const result = await authService.authCreateVoteSession(
-      title, 
-      description, 
-      images, 
-      startDate, 
-      endDate, 
-      zid_requirement,
-      locationOfVote
+      {
+        userSessionId,
+        title, 
+        description, 
+        images, 
+        startDate, 
+        endDate, 
+        zid_requirement,
+        locationOfVote
+      }
     ) 
 
     res.status(200).json({ result });
