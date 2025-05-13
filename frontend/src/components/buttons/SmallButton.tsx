@@ -3,6 +3,9 @@ import './SmallButton.css'
 import editIcon from '../../assets/svg/edit.svg'
 import startIcon from '../../assets/svg/start.svg'
 import binIcon from '../../assets/svg/bin.svg'
+import upIcon from '../../assets/svg/upArrow.svg'
+import downIcon from '../../assets/svg/downArrow.svg'
+
 
 interface SmallButtonInputs {
 	buttonType: string,
@@ -16,6 +19,10 @@ export default function SmallButton({buttonType}: SmallButtonInputs) {
         buttonIcon = startIcon
     } else if (buttonType == 'bin') {
         buttonIcon = binIcon
+    } else if (buttonType == 'up') {
+        buttonIcon = upIcon
+    } else if (buttonType == 'down') {
+        buttonIcon = downIcon
     }
 
 	return (

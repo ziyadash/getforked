@@ -34,6 +34,12 @@
 	z-index: 1;
 }
 
+.buttons-container {
+  display: flex;
+  gap: calc(var(--spacing) * 1) /* 0.25rem = 4px */;
+  flex-direction: row;
+}
+
 .buttons {
   margin-left: auto;
   display: flex;
@@ -42,11 +48,15 @@
   margin-right: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .wide-button {
-    width: 70vw;
-    height: 6rem;
+    width: 75vw;
+    height: 8rem;
+    border-radius: 3rem;
     font-size: 1rem;
+  }
+  .buttons-container {
+    flex-direction: column;
   }
   .buttons {
     margin-right: 5vw;
