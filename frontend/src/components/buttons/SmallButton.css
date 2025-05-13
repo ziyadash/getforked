@@ -20,8 +20,9 @@
   cursor: pointer;
 }
 
-/* .small-button
- > * {
-	position: relative;
-	z-index: 1;
-} */
+@media (max-width: 768px) {
+  .small-button {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

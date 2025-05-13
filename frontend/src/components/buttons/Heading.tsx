@@ -6,8 +6,8 @@ interface HeadingInputs {
 
 export default function Heading({text}: HeadingInputs) {
   return (
-    <div className='flex flex-row'>
-      <h1 className="heading">{text}</h1>
+    <div className='flex flex-row justify-center'>
+      <div className="heading">{text}</div>
     </div>
   );
 }

@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   width: 56rem;
+  max-width: 80vw;
   height: 7rem;
   border: 2px solid white;
   border-radius: 5rem;
@@ -31,4 +32,23 @@
 .wide-button > * {
 	position: relative;
 	z-index: 1;
+}
+
+.buttons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+  margin-right: 2rem;
+}
+
+@media (max-width: 768px) {
+  .wide-button {
+    width: 70vw;
+    height: 6rem;
+    font-size: 1rem;
+  }
+  .buttons {
+    margin-right: 5vw;
+  }
 }

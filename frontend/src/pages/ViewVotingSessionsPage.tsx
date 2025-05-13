@@ -16,17 +16,17 @@ export default function ViewVotingSessionsPage() {
     return (
         <StyledBackground className='main'>
             {/* Add logout button */}
-            <Heading text="Your Voting Sessions"/>
 
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
-                mt-[2rem] mb-[2rem]
+                ml-[2rem] mr-[2rem]
             ">
+                <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name) => (
-                    <div className="flex flex-row justify-center items-center gap-5">
+                    <div className="flex flex-row justify-center items-center gap-[0.75rem]">
                         <WideButton text={name} margin="mt-[0]">
-                            <div className="flex flex-row gap-1">
+                            <div className="flex flex-row">
                                 {buttons.map((type) => (
                                     <SmallButton buttonType={type} />
                                 ))}

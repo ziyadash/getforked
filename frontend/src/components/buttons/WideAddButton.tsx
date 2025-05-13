@@ -3,9 +3,8 @@ import './WideButton.css'
 
 export default function WideAddButton() {
 	return (
-		<div className={`flex flex-start`}>
-            {/* TODO add hover opacity effect */}
-			<button className="wide-button">
+		<div>
+			<button className="wide-button min-w-full">
                 <img className="w-[6rem]" src={addIcon}></img>
 			</button>
 		</div>
