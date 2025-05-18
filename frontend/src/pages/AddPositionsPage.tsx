@@ -10,7 +10,7 @@ export default function AddPositionsPage() {
         'Treasurer', 
         'GEDI Officer', 
         'Admin Officer',
-        'Co-President',
+        'Co-President (Project Operations)',
     ]
 
     return (
@@ -24,7 +24,7 @@ export default function AddPositionsPage() {
             ">
                 <Heading text="Add Positions"/>
                 {votingSessions.map((name) => (
-                    <div className="flex flex-row justify-center items-center gap-[0.75rem]">
+                    <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
                                 {buttons.map((type) => (

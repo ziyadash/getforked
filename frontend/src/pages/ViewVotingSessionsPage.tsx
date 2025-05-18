@@ -24,7 +24,7 @@ export default function ViewVotingSessionsPage() {
             ">
                 <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name) => (
-                    <div className="flex flex-row justify-center items-center gap-[0.75rem]">
+                    <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="flex flex-row">
                                 {buttons.map((type) => (

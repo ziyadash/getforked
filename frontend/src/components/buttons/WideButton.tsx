@@ -8,9 +8,9 @@ interface WideButtonInputs {
 
 export default function WideButton({ text, margin, children }: WideButtonInputs) {
 	return (
-		<div className={`flex justify-center ${margin}`}>
+		<div className={`flex justify-around ${margin}`}>
 			<button className="wide-button">
-				<div className="absolute left-1/2 -translate-x-1/2 max-w-[30vw] overflow-y-auto">{text}</div>
+				<div className="ml-10 max-h-full overflow-y-auto text-left">{text}</div>
                 <div className="buttons">
                     {children}
                 </div>

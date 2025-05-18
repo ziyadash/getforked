@@ -11,6 +11,7 @@
   background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
   color: #f1e9e9;
   font-size: 1.25rem;
+  gap: 1rem;
 }
 
 .wide-button::before {
@@ -55,10 +56,10 @@
     border-radius: 3rem;
     font-size: 1rem;
   }
-  .buttons-container {
+  /* .buttons-container {
     flex-direction: column;
-  }
+  } */
   .buttons {
-    margin-right: 5vw;
+    margin-right: 3vw;
   }
 }
