@@ -5,7 +5,7 @@ import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 
 export default function ViewVotingSessionsPage() {
-    const buttons = ['start']
+    const buttons = ['start', 'stop', 'results']
     const votingSessions = [
         'DevSoc AGM 2025', 
         'CSESoc AGM 2025', 
@@ -20,13 +20,14 @@ export default function ViewVotingSessionsPage() {
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
-                ml-[2rem] mr-[2rem]
+                pt-[2rem]
+                p-[4rem]
             ">
                 <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
-                            <div className="flex flex-row">
+                            <div className="buttons-container">
                                 {buttons.map((type) => (
                                     <SmallButton buttonType={type} />
                                 ))}

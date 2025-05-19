@@ -20,7 +20,8 @@ export default function AddPositionsPage() {
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
-                ml-[2rem] mr-[2rem]
+                pt-[2rem]
+                p-[4rem]
             ">
                 <Heading text="Add Positions"/>
                 {votingSessions.map((name) => (
