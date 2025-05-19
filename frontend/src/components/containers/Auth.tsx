@@ -1,6 +1,6 @@
 // import React from "react";
-import ThinButton from "./buttons/ThinButton"
-import AuthInput from "./inputs/AuthInput"
+import ThinButton from "../buttons/ThinButton"
+import AuthInput from "../inputs/AuthInput"
 
 export default function AuthBox() {
 	return (

@@ -1,13 +1,14 @@
 import React, { ReactNode } from 'react';
 import background from '../../assets/svg/background.svg'
-import Banner from '../logo/Banner';
 
 interface StyledBackgroundProps {
     children?: ReactNode;
     className?: string;
+    w: string;
+    h: string;
 }
 
-const StyledBackground: React.FC<StyledBackgroundProps> = ({ children, className = '' }) => {
+const StyledContainer: React.FC<StyledBackgroundProps> = ({ children, w, h, className = '' }) => {
     return (
         <>
             <div
@@ -16,19 +17,16 @@ const StyledBackground: React.FC<StyledBackgroundProps> = ({ children, className
                     backgroundImage: `url(${background})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    width: '100%',
-                    height: '100vh',
+                    width: `${w}`,
+                    height: `${h}`,
                     padding: '40px'
                 }}
             >
-                <Banner />
-                <div className='mt-20 flex flex-col'>
-                    {children}
-                </div>
+                {children}
             </div>
         </>
 
     );
 };
 
-export default StyledBackground;
+export default StyledContainer;

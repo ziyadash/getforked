@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-import StyledBackground from "../components/background/StyledBackground";
-import Banner from "../components/logo/Banner";
+import StyledContainer from "./background/StyledContainer";
 
-interface OrganiserInput {
-  name: string,
+interface OrganiserListInput {
+  num: string,
 }
 
-export default function OrganiserList({ name }: OrganiserInput) {
+export default function OrganiserList({ num }: OrganiserListInput) {
   return (
-    <StyledBackground className='main'>
-      Started Voting Session: {name}
-    </StyledBackground>
+    <StyledContainer className='main border-1 border-[#F1E9E9] rounded-4xl' w='35rem' h='37rem'>
+      There are {num} voters in this session.
+    </StyledContainer>
   )
 }
