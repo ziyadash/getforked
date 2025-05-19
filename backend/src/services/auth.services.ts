@@ -3,10 +3,9 @@ import {
   setData,
   getSessions,
   setSessions,
-  generateSessionId,
-  getHashOf,
   createAndStoreSession,
 } from '../data/dataStore';
+import { getHashOf, generateUserId } from 'src/data/dataUtil';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
 import { Question, Election, Session, User } from '../../../shared/interfaces';
@@ -70,8 +69,6 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
   const db = getData();
 
   if (db.users.find((u) => u.userId === userId)) {
-    console.log("what the freak!!!");
-    console.log(db);
     return { error: 'User already registered', status: StatusCodes.CONFLICT };
   }
 
@@ -129,81 +126,4 @@ export function authLogout(sessionId: string): { error?: string; status?: number
 
   const updatedSessions = sessions.filter(s => s.sessionId !== sessionId);
   setSessions(updatedSessions);
-}
-
-
-/**
- * User creates a vote session.
- * @param userSessionId 
- * @param title 
- * @param description
- * @param images
- * @param startDate
- * @param endDate
- * @param zid_requirement
- * @param locationOfVote
- * @returns 
- */
-
-
-interface authCreateVoteSessionProps {
-  userSessionId: string,
-  title: string,
-  description: string,
-  images: string[],
-  startDate: Date,
-  endDate: Date,
-  zid_requirement: boolean,
-  locationOfVote?: string,
-}
-
-export const authCreateVoteSession = (props: authCreateVoteSessionProps) : number => {
-  const db = getData();
-  const sessions = getSessions();
-
-  console.log("creating session");
-
-  if (!db) {
-    throw new Error('Failed to load data store');
-  }
-
-  // find userId:
-  const session = sessions.find((session) => session.sessionId === props.userSessionId);
-  
-  console.log("current sessions:")
-  console.log(sessions)
-  console.log("Found sessions:")
-  console.log(session)
-  console.log("User sessions:")
-  console.log(props.userSessionId)
-  
-
-  if (!session) throw new Error('Invalid session ID');
-
-  const userId = session.userId; // changed this from zId to id bc we store hashed zids not the raw zid. 
-
-
-  if (props.title.length <= 0) {
-    throw new Error('Title cannot be empty');
-  }
-
-  const questions: Question[] = [];
-
-  const newElection: Election = {
-    id: db.elections.length + 1, // subject to change
-    authUserId: userId, // changed authUserZid to authUserId bc again we store hashed zids not raw zids
-    name: props.title,
-    description: props.description,
-    images: props.images,
-    location: props.locationOfVote,
-    date_time_start: props.startDate,
-    date_time_end: props.endDate,
-    requires_zid: props.zid_requirement,
-    questions,
-  };
-
-  db.elections.push(newElection);
-  setData(db);
-
-  return newElection.id;
 }

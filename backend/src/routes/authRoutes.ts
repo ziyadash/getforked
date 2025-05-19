@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { register, login, logout, createVoteSession } from '../controllers/authController';
+import { register, login, logout } from '../controllers/authController';
+import { createVoteSession } from '../controllers/voteCreateController';
 
 const router = Router();
 
