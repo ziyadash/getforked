@@ -4,6 +4,7 @@ import VoterPage from '../pages/VoterPage'
 import ManagerPage from '../pages/ManagerPage'
 import ViewVotingSessionsPage from '../pages/ViewVotingSessionsPage'
 import AddPositionsPage from '../pages/AddPositionsPage'
+import VoterVotingPage from '../pages/VoterVotingPage'
 
 
 export default function App() {
@@ -12,6 +13,8 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/voter" element={<VoterPage />} />
+                <Route path="/voter/voting" element={<VoterVotingPage />} />
+
                 <Route path="/manager" element={<ManagerPage />}/>
                 <Route path="/manager/viewVotingSessions" element={<ViewVotingSessionsPage />} />
                 <Route path="/manager/addPositions" element={<AddPositionsPage />} />
