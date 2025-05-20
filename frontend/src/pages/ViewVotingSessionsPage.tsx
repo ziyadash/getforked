@@ -1,17 +1,24 @@
+import { useState } from "react";
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
+import { deleteElement } from "./helpers";
 
 export default function ViewVotingSessionsPage() {
     const buttons = ['start', 'stop', 'results']
-    const votingSessions = [
+
+    const [votingSessions, setPositions] = useState([
         'DevSoc AGM 2025', 
         'CSESoc AGM 2025', 
         'DevSoc AGM 2024',
         'CSESoc AGM 2024'
-    ]
+    ]);
+
+    const handleDeletion = (index: number) => {
+        setPositions(deleteElement(votingSessions, index));
+    }
 
     return (
         <StyledBackground className='main'>
@@ -24,7 +31,7 @@ export default function ViewVotingSessionsPage() {
                 p-[4rem]
             ">
                 <Heading text="Your Voting Sessions"/>
-                {votingSessions.map((name) => (
+                {votingSessions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
@@ -33,7 +40,7 @@ export default function ViewVotingSessionsPage() {
                                 ))}
                             </div>
                         </WideButton>
-                        <SmallButton buttonType="bin"/>
+                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
                     </div>
                 ))}
                 <WideAddButton></WideAddButton>

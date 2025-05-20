@@ -19,8 +19,6 @@ export default function AddPositionsPage() {
     };
 
     const handleDeletion = (index: number) => {
-        const newPositions = [...positions];
-        newPositions.splice(index, 1);
         setPositions(deleteElement(positions, index));
     }
 
