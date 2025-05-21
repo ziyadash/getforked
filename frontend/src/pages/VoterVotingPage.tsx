@@ -66,8 +66,6 @@ export default function VoterVotingPage() {
 
     return (
         <StyledBackground className='main'>
-            {/* Add logout button */}
-
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
