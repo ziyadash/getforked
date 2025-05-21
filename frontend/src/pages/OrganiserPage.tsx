@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import StyledBackground from "../components/background/StyledBackground";
 import VoterCode from "../components/containers/VoterCode";
 import OrganiserList from "../components/OrganiserList";
-import StyledContainer from "../components/background/StyledContainer";
 interface OrganiserInput {
   name: string,
 }
@@ -13,6 +12,8 @@ export default function OrganiserPage({ name }: OrganiserInput) {
 
   useEffect(() => {
     setLoading(false) // once correct information has been loaded, change to false
+    setCount(1) // "there is 1 voter in this session." <- ideal text
+    setCount(2) // there are 2 voters in this session.
   }, []);
 
   return (
