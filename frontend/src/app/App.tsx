@@ -15,7 +15,7 @@ export default function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/voter" element={<VoterPage />} />
                 <Route path="/voter/voting" element={<VoterVotingPage />} />
-                <Route path="/voter/finish" element={<Voting />} />
+                <Route path="/voter/finish" element={<VotingFinishPage />} />
 
 
                 <Route path="/manager" element={<ManagerPage />}/>

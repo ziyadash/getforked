@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router';
 import StyledBackground from "../components/background/StyledBackground";
 import Heading from "../components/buttons/Heading";
 import MedHeading from "../components/buttons/MedHeading";
@@ -9,6 +10,8 @@ import ThinButton from "../components/buttons/ThinButton";
 import SmallThinButton from "../components/buttons/SmallThinButton";
 
 export default function VoterVotingPage() {
+    const navigate = useNavigate();
+
     const originalCandidates = [
         {
             position: 'Treasurer',
@@ -55,12 +58,16 @@ export default function VoterVotingPage() {
     const handleConfirm = () => {
         if (positionIndex < candidates.length - 1) {
             setPositionIndex(positionIndex + 1);
+        } else {
+        navigate("/voter/finish");
         }
     };
 
     const handleAbstain = () => {
         if (positionIndex < candidates.length - 1) {
             setPositionIndex(positionIndex + 1);
+        } else {
+        navigate("/voter/finish");
         }
     };
 
