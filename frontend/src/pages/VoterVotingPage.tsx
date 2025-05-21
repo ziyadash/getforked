@@ -9,23 +9,60 @@ import ThinButton from "../components/buttons/ThinButton";
 import SmallThinButton from "../components/buttons/SmallThinButton";
 
 export default function VoterVotingPage() {
-    const originalCandidates = ['Matthew Stewart', 
-        'Lara Thiele', 
-        'Lotte Schipper']
+    const originalCandidates = [
+        {
+            position: 'Treasurer',
+            candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper']
+        },
+        {
+            position: 'GEDI Officer',
+            candidates: ['Alexander Taylor', 'Alexia Lebrun', 'Carolina Barboza']
+        }
+    ]
     
-    const [candidates, setPositions] = useState(originalCandidates);
+    const [candidates, setCandidates] = useState(originalCandidates);
+    const [positionIndex, setPositionIndex] = useState(0);
+
+    const positionName = candidates[positionIndex].position;
+    const currentCandidates = candidates[positionIndex].candidates;
 
     const handleReorder = (index: number, direction: 'up' | 'down') => {
-        setPositions(reorderElements(candidates, index, direction));
+        const updated = reorderElements(currentCandidates, index, direction);
+        const newCandidates = [...candidates];
+        newCandidates[positionIndex] = {
+            position: newCandidates[positionIndex].position,
+            candidates: updated
+        };
+        setCandidates(newCandidates);
     };
 
     const handleDeletion = (index: number) => {
-        setPositions(deleteElement(candidates, index));
+        const updated = deleteElement(currentCandidates, index);
+        const newCandidates = [...candidates];
+        newCandidates[positionIndex] = {
+            position: newCandidates[positionIndex].position,
+            candidates: updated
+        };
+        setCandidates(newCandidates);
     }
 
     const handleReset = () => {
-        setPositions(originalCandidates);
+        const newCandidates = [...candidates];
+        newCandidates[positionIndex] = originalCandidates[positionIndex]
+        setCandidates(originalCandidates);
     }
+
+    const handleConfirm = () => {
+        if (positionIndex < candidates.length - 1) {
+            setPositionIndex(positionIndex + 1);
+        }
+    };
+
+    const handleAbstain = () => {
+        if (positionIndex < candidates.length - 1) {
+            setPositionIndex(positionIndex + 1);
+        }
+    };
 
     return (
         <StyledBackground className='main'>
@@ -37,9 +74,9 @@ export default function VoterVotingPage() {
                 pt-[2rem]
                 p-[4rem]
             ">
-                <Heading text="Now voting for Treasurer"/>
+                <Heading text={`Now voting for ${positionName}`}/>
                 <MedHeading text="Order or delete the candidates based on your choice."></MedHeading>
-                {candidates.map((name, index) => (
+                {currentCandidates.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <CandidatePane order={index+1} text={name} margin="mt-[0]">
                             <div className="buttons-container">
@@ -58,10 +95,14 @@ export default function VoterVotingPage() {
                 ))}
                 <div className="flex flex-row justify-between gap-2 items-center">
                     <SmallThinButton text="Reset" margin="mt-[0em]" onClick={() => handleReset()}  />
-                    <SmallThinButton text="Confirm" margin="mt-[0em]" />
+                    <SmallThinButton 
+                        text={positionIndex === candidates.length - 1 ? 'Finish' : 'Confirm'} 
+                        margin="mt-[0em]" 
+                        onClick={() => handleConfirm()} 
+                    />
                 </div>
                 
-                <ThinButton text="I want to abstain" margin="mt-[2em]" />
+                <ThinButton text="I want to abstain" margin="mt-[2em]" onClick={() => handleAbstain()} />
             </div>
         </StyledBackground>
     )
