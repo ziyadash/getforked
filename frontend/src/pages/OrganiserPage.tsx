@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import StyledBackground from "../components/background/StyledBackground";
 import VoterCode from "../components/containers/VoterCode";
-import OrganiserList from "../components/OrganiserList";
+import OrganiserList from "../components/containers/OrganiserList";
 interface OrganiserInput {
   name: string,
 }
