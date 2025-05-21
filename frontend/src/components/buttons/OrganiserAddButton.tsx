@@ -4,11 +4,16 @@ interface OrganiserInputs {
   height: string,
 }
 
+export default function OrganiserAddButton({ text, width, height }: OrganiserInputs) {
+  const addVoterToList = () => {
 
-export default function OrganiserMainButton({ text, width, height }: OrganiserInputs) {
+  }
+
   return (
-    <div className={`w-${width} h-${height}`} >
-      {text}
-    </div >
+    <div className={`cursor-pointer ${width} ${height} text-white text-center content-center border-1 border-[#F1E9E9] rounded-4xl backdrop-blur-2xl bg-linear-150 bg-gradient-to-br from-transparent to-white-50`}>
+      <button className={`cursor-pointer`} onClick={addVoterToList}>
+        {text}
+      </button>
+    </div>
   );
 }

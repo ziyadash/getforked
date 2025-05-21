@@ -22,10 +22,6 @@ export default function OrganiserPage({ name }: OrganiserInput) {
       </StyledBackground> :
         <StyledBackground className="main">
           <div className="flex self-center text-2xl mt-10 text-[#F1E9E9]"> Started Voting Session: {name}... </div>
-          {/* <div className="">
-            <StyledContainer w={"20em"} h={"30em"}></StyledContainer>
-            <StyledContainer w={"20em"} h={"30em"}></StyledContainer>
-          </div> */}
           <div className="grid grid-cols-2 gap-2 mt-8">
             <VoterCode />
             <OrganiserList num={count.toString()} />
