@@ -5,13 +5,15 @@ import MedHeading from "../components/buttons/MedHeading";
 import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "./helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
+import ThinButton from "../components/buttons/ThinButton";
+import SmallThinButton from "../components/buttons/SmallThinButton";
 
 export default function VoterVotingPage() {
-    const [candidates, setPositions] = useState([
-        'Matthew Stewart', 
+    const originalCandidates = ['Matthew Stewart', 
         'Lara Thiele', 
-        'Lotte Schipper'
-    ]);
+        'Lotte Schipper']
+    
+    const [candidates, setPositions] = useState(originalCandidates);
 
     const handleReorder = (index: number, direction: 'up' | 'down') => {
         setPositions(reorderElements(candidates, index, direction));
@@ -19,6 +21,10 @@ export default function VoterVotingPage() {
 
     const handleDeletion = (index: number) => {
         setPositions(deleteElement(candidates, index));
+    }
+
+    const handleReset = () => {
+        setPositions(originalCandidates);
     }
 
     return (
@@ -50,6 +56,12 @@ export default function VoterVotingPage() {
                         <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
                     </div>
                 ))}
+                <div className="flex flex-row justify-between gap-2 items-center">
+                    <SmallThinButton text="Reset" margin="mt-[0em]" onClick={() => handleReset()}  />
+                    <SmallThinButton text="Confirm" margin="mt-[0em]" />
+                </div>
+                
+                <ThinButton text="I want to abstain" margin="mt-[2em]" />
             </div>
         </StyledBackground>
     )

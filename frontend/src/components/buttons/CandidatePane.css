@@ -8,7 +8,7 @@
   height: 6rem;
   border: 2px solid white;
   border-radius: 5rem;
-  background: linear-gradient(to top left, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
   color: #f1e9e9;
   font-size: 1.25rem;
   gap: 1rem;
