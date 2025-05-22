@@ -1,11 +1,13 @@
 interface ZidButtonInput {
   id: string,
+  zidList: string[],
+  setZidList: React.Dispatch<React.SetStateAction<string[]>>,
 }
 // for organiser view on zID list
-export default function ZidXButton({ id }: ZidButtonInput) {
+export default function ZidXButton({ id, zidList, setZidList }: ZidButtonInput) {
   const removeZidContainer = () => {
-    // expecting use of ID to remove the correct box
-
+    const newZidList = zidList.filter(zid => zid !== id) // removing ID from list
+    setZidList(newZidList);
   }
 
   return (

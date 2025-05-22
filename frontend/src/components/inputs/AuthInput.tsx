@@ -10,6 +10,8 @@ export default function AuthInput({ setInput, label, placeholder, marginStyle, w
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// console.log('zid is', e.target.value);
 		setInput(e.target.value);
+		// TODO: when Add Button has been clicked
+		// setInput("");
 	}
 
 	return (
