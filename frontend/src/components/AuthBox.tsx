@@ -12,7 +12,7 @@ export default function AuthBox() {
 				<AuthInput type="password" label="Password" placeholder="••••••••••••" marginStyle="mt-[1em]" />
 				{/* NOTE FOR PASSWORD PLACEHOLDER: Chrome uses • whereas other browsers use ● */}
 				{/* https://stackoverflow.com/questions/6859727/styling-password-fields-in-css */}
-				<ThinButton text="Continue" margin="mt-[4em]" />
+				<ThinButton text="Continue" margin="mt-[3.5em]" />
 			</div>
 		</div>
 	)
