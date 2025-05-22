@@ -1,5 +1,5 @@
 import StyledBackground from "../components/background/StyledBackground";
-import AuthBox from "../components/containers/Auth";
+import AuthBox from "../components/containers/AuthBox";
 
 export default function ManagerPage() {
     return (
