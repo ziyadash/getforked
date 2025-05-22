@@ -30,8 +30,7 @@ export default function AddPositionsPage() {
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
                 pt-[0rem]
-                p-[4rem]
-                pb-[2rem]
+                p-[6rem]
             ">
                 <Heading text="Add Positions"/>
                 {positions.map((name, index) => (
