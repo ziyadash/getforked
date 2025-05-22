@@ -1,11 +1,11 @@
 
-export function deleteElement(arr: any[], index: number) {
+export function deleteElement(arr: string[], index: number) {
     const newArr = [...arr];
     newArr.splice(index, 1);
     return newArr;
 }
 
-export function reorderElements(arr: any[], index: number, direction: 'up' | 'down') {
+export function reorderElements(arr: string[], index: number, direction: 'up' | 'down') {
     const newArr = [...arr];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
 

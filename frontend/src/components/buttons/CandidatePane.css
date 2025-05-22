@@ -1,7 +1,7 @@
 .candidate-pane {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 56rem;
   max-width: 80vw;
@@ -37,8 +37,9 @@
 
 .buttons-container {
   display: flex;
-  gap: calc(var(--spacing) * 1) /* 0.25rem = 4px */;
+  gap: calc(var(--spacing) * 2) /* 0.25rem = 4px */;
   flex-direction: row;
+  margin-right: 20px;
 }
 
 .buttons {
@@ -56,9 +57,10 @@
     border-radius: 2.5rem;
     font-size: 1rem;
   }
-  /* .buttons-container {
-    flex-direction: column;
-  } */
+  .buttons-container {
+    gap: calc(var(--spacing) * 1) /* 0.25rem = 4px */;
+    margin-right: 0px;
+  }
   .buttons {
     margin-right: 3vw;
   }
