@@ -13,36 +13,18 @@ export default function OrganiserList({ num }: OrganiserListInput) {
 
       There are {num} voters in this session.
       {/* a good idea would be to remove the "w-100" from below when thinking about mobile responsiveness */}
-      <div className="w-100 h-100 bg-red-800 overflow-scroll m-8">
+      <div className="w-100 h-100 overflow-scroll m-8">
+        <ZidContainers width="" height="h-10" zid="z8349572" />
+        <ZidContainers width="" height="h-10" zid="z8349572" />
+        <ZidContainers width="" height="h-10" zid="z8349572" />
+        <ZidContainers width="" height="h-10" zid="z8349572" />
+        <ZidContainers width="" height="h-10" zid="z8349572" />
+        <ZidContainers width="" height="h-10" zid="z8349572" />
         <ZidContainers width="" height="h-10" zid="z8349572" />
         <ZidContainers width="" height="h-10" zid="z8349572" />
         <ZidContainers width="" height="h-10" zid="z8349572" />
         <ZidContainers width="" height="h-10" zid="z8349572" />
 
-        {/* <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          hello
-        </div>
-        <div className="w-50 h-20 bg-black">
-          bye
-        </div>
-        <div className="w-50 h-20 bg-black">
-          bye2
-        </div> */}
       </div>
       <OrganiserButton text="Confirm" width="w-55" height="h-12" />
     </div>

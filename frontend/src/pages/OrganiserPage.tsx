@@ -12,6 +12,10 @@ export default function OrganiserPage({ name }: OrganiserInput) {
 
   useEffect(() => {
     setLoading(false) // once correct information has been loaded, change to false
+
+    // NOTE THAT COUNT IS GOING TO BE DEPENDENT ON HOW MANY TIMES ADD IS BEING CLICKED ON
+    // FOR SAFE CHECK - IT WOULD BE TO CHECK THE TOTAL NUMBER IN THE LIST.
+
     setCount(1) // "there is 1 voter in this session." <- ideal text
     setCount(2) // there are 2 voters in this session.
   }, []);

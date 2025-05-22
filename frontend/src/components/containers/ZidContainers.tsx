@@ -1,3 +1,5 @@
+import ZidXButton from "../buttons/ZidXButton";
+
 interface ZidContainerInputs {
   width: string,
   height: string,
@@ -6,12 +8,9 @@ interface ZidContainerInputs {
 
 export default function ZidContainers({ width, height, zid }: ZidContainerInputs) {
   return (
-    <div className={`${width} ${height} bg-purple-600 relative mb-2 flex flex-col justify-center`}>
+    <div className={`${width} ${height} border-1 border-[#F1E9E9] rounded-4xl backdrop-blur-2xl bg-gradient-to-t from-violet-900/50 to-white/30 relative mb-2 flex flex-col justify-center`}>
       <p>{zid}</p>
-      {/* X button for removal from list */}
-      <div className="absolute right-5 top-0 w-10 h-10 bg-pink-400">
-        x
-      </div>
+      <ZidXButton id={""} />
     </div>
   );
 } 
