@@ -27,8 +27,9 @@ export default function ViewVotingSessionsPage() {
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
-                pt-[2rem]
+                pt-[0rem]
                 p-[4rem]
+                mb-[2rem]
             ">
                 <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name, index) => (

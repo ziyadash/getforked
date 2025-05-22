@@ -15,7 +15,7 @@ export default function VoterVotingPage() {
     const originalCandidates = [
         {
             position: 'Treasurer',
-            candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper']
+            candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper', 'Lotte Schipper', 'Lotte Schipper']
         },
         {
             position: 'GEDI Officer',
@@ -76,8 +76,9 @@ export default function VoterVotingPage() {
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
-                pt-[2rem]
+                pt-[0rem]
                 p-[4rem]
+                mb-[2rem]
             ">
                 <Heading text={`Now voting for ${positionName}`}/>
                 <MedHeading text="Order or delete the candidates based on your choice."></MedHeading>
