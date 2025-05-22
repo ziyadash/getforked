@@ -7,8 +7,8 @@ import WideAddButton from "../components/buttons/WideAddButton";
 export default function AddPositionsPage() {
     const buttons = ['up', 'down']
     const votingSessions = [
-        'Treasurer', 
-        'GEDI Officer', 
+        'Treasurer',
+        'GEDI Officer',
         'Admin Officer',
         'Co-President (Project Operations)',
     ]
@@ -23,7 +23,7 @@ export default function AddPositionsPage() {
                 pt-[2rem]
                 p-[4rem]
             ">
-                <Heading text="Add Positions"/>
+                <Heading text="Add Positions" />
                 {votingSessions.map((name) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
@@ -33,7 +33,7 @@ export default function AddPositionsPage() {
                                 ))}
                             </div>
                         </WideButton>
-                        <SmallButton buttonType="bin"/>
+                        <SmallButton buttonType="bin" />
                     </div>
                 ))}
                 <WideAddButton></WideAddButton>
