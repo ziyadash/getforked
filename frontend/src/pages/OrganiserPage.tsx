@@ -13,7 +13,7 @@ export default function OrganiserPage({ name }: OrganiserInput) {
   // for session ids?
   // const [zidList, setZidList] = useState<string[]>([]); // [userSessionID2, userSessionID1]
 
-  // for display in the view.
+  // zidList is for DISPLAYING in the view/list.
   const [zidList, setZidList] = useState<string[]>([]); // [z1234567, z2345678]
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function OrganiserPage({ name }: OrganiserInput) {
           <div className="flex self-center text-2xl mt-10 text-[#F1E9E9]"> Started Voting Session: {name}... </div>
           <div className="grid grid-cols-2 gap-2 mt-8">
             <VoterCode zidList={zidList} setZidList={setZidList} />
-            <OrganiserList zidList={zidList} num={count.toString()} />
+            <OrganiserList zidList={zidList} num={count.toString()} setZidList={setZidList} />
           </div>
         </StyledBackground>}
     </>
