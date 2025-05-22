@@ -10,15 +10,20 @@ export default function OrganiserPage({ name }: OrganiserInput) {
   const [loading, setLoading] = useState<boolean>(true);
   const [count, setCount] = useState<number>(0); // number of voters in the session
 
+  // for session ids?
+  // const [zidList, setZidList] = useState<string[]>([]); // [userSessionID2, userSessionID1]
+
+  // for display in the view.
+  const [zidList, setZidList] = useState<string[]>([]); // [z1234567, z2345678]
+
   useEffect(() => {
     setLoading(false) // once correct information has been loaded, change to false
+  }, [zidList]);
 
-    // NOTE THAT COUNT IS GOING TO BE DEPENDENT ON HOW MANY TIMES ADD IS BEING CLICKED ON
-    // FOR SAFE CHECK - IT WOULD BE TO CHECK THE TOTAL NUMBER IN THE LIST.
-
-    setCount(1) // "there is 1 voter in this session." <- ideal text
-    setCount(2) // there are 2 voters in this session.
-  }, []);
+  useEffect(() => {
+    // TODO: "there is 1 voter in this session." <- ideal text
+    setCount(zidList.length) // there are 2 voters in this session.
+  }, [zidList]);
 
   return (
     <>
@@ -28,8 +33,8 @@ export default function OrganiserPage({ name }: OrganiserInput) {
         <StyledBackground className="main">
           <div className="flex self-center text-2xl mt-10 text-[#F1E9E9]"> Started Voting Session: {name}... </div>
           <div className="grid grid-cols-2 gap-2 mt-8">
-            <VoterCode />
-            <OrganiserList num={count.toString()} />
+            <VoterCode zidList={zidList} setZidList={setZidList} />
+            <OrganiserList zidList={zidList} num={count.toString()} />
           </div>
         </StyledBackground>}
     </>
