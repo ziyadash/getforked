@@ -4,7 +4,7 @@ import StyledBackground from "../components/background/StyledBackground";
 import Heading from "../components/buttons/Heading";
 import MedHeading from "../components/buttons/MedHeading";
 import SmallButton from "../components/buttons/SmallButton";
-import { deleteElement, reorderElements } from "./helpers";
+import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinButton from "../components/buttons/ThinButton";
 import SmallThinButton from "../components/buttons/SmallThinButton";

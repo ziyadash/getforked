@@ -4,7 +4,7 @@ import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
-import { deleteElement } from "./helpers";
+import { deleteElement } from "../helpers";
 
 export default function ViewVotingSessionsPage() {
     const buttons = ['start', 'stop', 'results']

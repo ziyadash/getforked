@@ -4,7 +4,7 @@ import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
-import { deleteElement, reorderElements } from "./helpers";
+import { deleteElement, reorderElements } from "../helpers";
 
 export default function AddPositionsPage() {
     const [positions, setPositions] = useState([
