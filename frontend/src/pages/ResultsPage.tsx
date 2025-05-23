@@ -35,8 +35,8 @@ export default function ResultsPage() {
                 p-[6rem]
             ">
                 <Heading text={`${results.voteName} Results`}/>
-                {results.winners.map((winner) => (
-                    <WinnerPane winner={winner}>
+                {results.winners.map((winner, index) => (
+                    <WinnerPane key={index} winner={winner}>
                     </WinnerPane>
                 ))}
             </div>
