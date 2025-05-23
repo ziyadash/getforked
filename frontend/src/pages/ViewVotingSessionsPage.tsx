@@ -6,6 +6,7 @@ import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import { deleteElement } from "../helpers";
+import logoutIcon from "../assets/svg/logout.svg";
 
 export default function ViewVotingSessionsPage() {
     const navigate = useNavigate();
@@ -33,6 +34,14 @@ export default function ViewVotingSessionsPage() {
         setPositions(deleteElement(votingSessions, index));
     }
 
+    const handleAddSession = () => {
+        navigate('/create-vote');
+    }
+
+    const handleLogout = () => {
+        navigate('/');
+    }
+
     return (
         <StyledBackground className='main'>
             {/* Add logout button */}
@@ -43,6 +52,9 @@ export default function ViewVotingSessionsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
+                <button className="p-4 absolute top-2 left-4 z-10" onClick={handleLogout}>
+                    <img className="h-[40px]" src={logoutIcon}></img>
+                </button>
                 <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
@@ -65,7 +77,7 @@ export default function ViewVotingSessionsPage() {
                         <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
                     </div>
                 ))}
-                <WideAddButton></WideAddButton>
+                <WideAddButton onClick={() => handleAddSession()}></WideAddButton>
             </div>
         </StyledBackground>
     )

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinButton from '../components/buttons/ThinButton';
 import '../components/logo/Banner.css';
@@ -6,6 +7,8 @@ import editIcon from '../assets/svg/edit.svg';
 import binIcon from '../assets/svg/bin.svg';
 
 export default function CreateVoteAddInfo() {
+  const navigate = useNavigate();
+
   const [candidates, setCandidates] = useState(["Alexia Lebrun", "Patrick Cooper", "Lina Pasquier", "Timothy Stevens"])
   const [newCandidate, setNewCandidate] = useState("")
   const [positionName, setPositionName] = useState("Treasurer")
@@ -17,17 +20,36 @@ export default function CreateVoteAddInfo() {
     }
   }
 
+  const editCandidate = () => {
+    navigate('/create-vote/edit-candidate')
+  }
+
   const removeCandidate = (index: number) => {
     setCandidates(candidates.filter((_, i) => i !== index))
   }
 
+  const goBack = () => {
+    navigate('/manager/addPositions');
+  }
+
+  const handleAddPosition = () => {
+    // send to backend? 
+    navigate('/manager/addPositions');
+  }
+
   return (
     <StyledBackground className='main'>
-      <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10">
+    <div className="
+        flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
+        h-[100vh]
+        pt-[0rem]
+        p-[6rem]
+    ">
+      <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
         ←
       </button>
       
-      <div className="w-full max-w-3xl mx-auto px-4 pt-16">
+      <div className="w-full max-w-3xl mx-auto px-4">
         <h1 className="title text-center mt-4 mb-8">Add Position</h1>
 
         <div className="border-2 border-[#f1e9e9] bg-white/10 backdrop-blur-sm rounded-4xl p-6 md:p-8">
@@ -72,7 +94,7 @@ export default function CreateVoteAddInfo() {
                     </div>
                     <div className="flex space-x-2">
                       <button className="p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md">
-                        <img src={editIcon} alt="Edit" className="w-4 h-4" />
+                        <img src={editIcon} alt="Edit" className="w-4 h-4" onClick={editCandidate} />
                       </button>
                       <button 
                         className="p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md" 
@@ -96,11 +118,13 @@ export default function CreateVoteAddInfo() {
             </div>
 
             <div className="flex justify-center mt-6">
-              <ThinButton text="Continue" margin="mt-2" />
+              <ThinButton text="Continue" margin="mt-2" onClick={handleAddPosition}/>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
     </StyledBackground>
   )
 }

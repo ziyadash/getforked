@@ -1,12 +1,14 @@
 import addIcon from '../../assets/svg/add.svg'
 import './WideButton.css'
 
-export default function WideAddButton() {
+interface WideAddButtonInputs {
+    onClick?: () => void
+}
+
+export default function WideAddButton({onClick}: WideAddButtonInputs) {
 	return (
-		<div>
-			<button className="wide-button">
-                <img className="w-[6rem]" src={addIcon}></img>
-			</button>
-		</div>
+        <button className="wide-button" onClick={onClick}>
+            <img className="w-[6rem]" src={addIcon}></img>
+        </button>
 	);
 }
