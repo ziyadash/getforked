@@ -15,7 +15,7 @@ export default function OrganiserList({ num, zidList, setZidList }: OrganiserLis
 
       There are {num} voters in this session.
       {/* a good idea would be to remove the "w-100" from below when thinking about mobile responsiveness */}
-      <div className="w-100 h-100 overflow-scroll m-8">
+      <div className="w-100 h-100 overflow-scroll m-8 no-scrollbar">
         {zidList.map((zid, index) => (
           <ZidContainers key={index} width="" height="h-10" zid={zid} zidList={zidList} setZidList={setZidList} />
         ))}

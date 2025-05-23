@@ -1,19 +1,23 @@
-.heading {
+.med-heading {
   color: rgb(241, 233, 233);
   text-align: center;
   font-family: Lexend;
-  font-size: 3em;
+  font-size: 1.25em;
   font-style: normal;
   font-weight: 350;
   line-height: normal;
-  margin: 1rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
   font-family: 'Lexend', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
 @media (max-width: 768px) {
-  .heading {
-    font-size: 2.5rem;
-    /* margin-top: 3rem; */
+  .med-heading {
+    font-size: 1.25rem;
+    margin-top: 1rem;
     margin-bottom: 1rem;
   }
 }

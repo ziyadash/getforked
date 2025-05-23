@@ -4,8 +4,8 @@ import './WideButton.css'
 export default function WideAddButton() {
 	return (
 		<div>
-			<button className="wide-button min-w-full">
-				<img className="w-[6rem]" src={addIcon}></img>
+			<button className="wide-button">
+                <img className="w-[6rem]" src={addIcon}></img>
 			</button>
 		</div>
 	);
