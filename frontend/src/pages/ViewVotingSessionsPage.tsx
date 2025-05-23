@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router';
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
@@ -7,7 +8,7 @@ import WideAddButton from "../components/buttons/WideAddButton";
 import { deleteElement } from "../helpers";
 
 export default function ViewVotingSessionsPage() {
-    const buttons = ['start', 'stop', 'results']
+    const navigate = useNavigate();
 
     const [votingSessions, setPositions] = useState([
         'DevSoc AGM 2025', 
@@ -15,6 +16,18 @@ export default function ViewVotingSessionsPage() {
         'DevSoc AGM 2024',
         'CSESoc AGM 2024'
     ]);
+
+    const handleStart = (index: number) => {
+        index = index
+    }
+
+    const handleStop = (index: number) => {
+        index = index
+    }
+
+    const handleResults = () => {
+        navigate('/manager/results')
+    }
 
     const handleDeletion = (index: number) => {
         setPositions(deleteElement(votingSessions, index));
@@ -35,9 +48,18 @@ export default function ViewVotingSessionsPage() {
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
-                                {buttons.map((type) => (
-                                    <SmallButton buttonType={type} />
-                                ))}
+                                <SmallButton 
+                                    buttonType="start" 
+                                    onClick={() => handleStart(index)} 
+                                />
+                                <SmallButton 
+                                    buttonType="stop" 
+                                    onClick={() => handleStop(index)} 
+                                />
+                                <SmallButton 
+                                    buttonType="results" 
+                                    onClick={() => handleResults()} 
+                                />
                             </div>
                         </WideButton>
                         <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
