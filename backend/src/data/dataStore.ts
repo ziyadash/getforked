@@ -85,7 +85,7 @@ export function setData(newData: DataStore) {
   saveData();
 }
 
-////////////////////////////// MISC UTILS  ////////////////////////////////
+////////////////////////////// DELETE UTILS  ////////////////////////////////
 // clears the entire database, as well as clears out all existing sessions.
 export function clear() {
   // Reset both memory and files

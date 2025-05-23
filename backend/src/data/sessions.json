@@ -1,3 +1,9 @@
 {
-  "sessions": []
+  "sessions": [
+    {
+      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmY3NjY5ZDRjZWE2MTc1MjQ5YTBkMjc4YWQ0MDZhMjRhYzU4MjIyODMyNzQwNjRkZGE5MDlhYzA5OTViZDM2IiwiaWF0IjoxNzQ3OTI4NjExfQ.uImOuF9hmZZpV7Kas7ghct6GKJI9i-9V7rAyaMiGXGY",
+      "userId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+      "createdAt": "2025-05-22T15:43:31.189Z"
+    }
+  ]
 }

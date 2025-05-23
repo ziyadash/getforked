@@ -1,4 +1,29 @@
 {
-  "users": [],
-  "elections": []
+  "users": [
+    {
+      "userId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+      "name": "e7e08e78f70c46cc7e948c475cb4ae5eb4ad97c79aff54fd76607c1c15a6f7b3"
+    }
+  ],
+  "elections": [
+    {
+      "id": 1,
+      "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+      "name": "Test Election yippee!",
+      "description": "This is a test election. it has one position to vote for.",
+      "images": [],
+      "location": "library",
+      "date_time_start": "2025-05-22T15:43:31.197Z",
+      "date_time_end": "2025-05-22T15:43:31.197Z",
+      "requires_zid": false,
+      "questions": [
+        {
+          "id": 1,
+          "title": "President",
+          "candidates": [],
+          "questionType": "single"
+        }
+      ]
+    }
+  ]
 }

@@ -29,14 +29,12 @@ enum QuestionType {
 }
 
 interface Question {
-    //Title e.g. Treasurer
     id: number;
-    title: string
-    candidates: Candidate[],
-    vote_answers: VoteAnswer[],
-    questionType: QuestionType,
-    QuestionType: QuestionType
-}
+    title: string; // e.g. "Treasurer"
+    candidates: Candidate[];
+    questionType: QuestionType; // e.g. "single" or "multiple"
+  }
+  
 
 // Change this to use ZK Proof 
 interface VoteAnswer {
@@ -44,13 +42,16 @@ interface VoteAnswer {
     answerIndex: number | number[],
 }
 
+// NOTE: 
 interface Candidate {
     zId?: number;
     fullName: string;
     description: string;
     image: string;
-    votes: number;
+    votes: number[]; // an array of preferential votes; votes[0] is the number of first preference votes
+    candidateIndex: number,
 }
+
 export {
     Voter,
     // Location,
