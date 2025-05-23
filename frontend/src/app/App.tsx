@@ -7,7 +7,7 @@ import ViewVotingSessionsPage from '../pages/ViewVotingSessionsPage'
 import AddPositionsPage from '../pages/AddPositionsPage'
 import VoterVotingPage from '../pages/VoterVotingPage'
 import VotingFinishPage from '../pages/VotingFinishPage'
-
+import ResultsPage from '../pages/ResultsPage'
 
 export default function App() {
     return (
@@ -23,6 +23,7 @@ export default function App() {
                 <Route path="/organiser" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
                 <Route path="/manager/viewVotingSessions" element={<ViewVotingSessionsPage />} />
                 <Route path="/manager/addPositions" element={<AddPositionsPage />} />
+                <Route path="/manager/results" element={<ResultsPage />} />
             </Routes >
         </BrowserRouter >
     )
