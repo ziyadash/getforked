@@ -12,7 +12,7 @@ interface AuthBoxInput {
 export default function AuthBox({ user }: AuthBoxInput) {
 	const [/*input*/, setInput] = useState<string>('');
 	const [navTo, setNavTo] = useState<string>('');
-	const [signupLogin, setSignupLogin] = useState<'sign up' | 'login'>('login');
+	const [signupLogin, setSignupLogin] = useState<'Sign up' | 'Login'>('Login');
 
 	const location = useLocation();
 	const route = location.pathname;
@@ -20,10 +20,10 @@ export default function AuthBox({ user }: AuthBoxInput) {
 	useEffect(() => {
 		if (route === `/${user}/signup`) {
 			setNavTo(`/${user}/login`);
-			setSignupLogin('sign up');
+			setSignupLogin('Sign up');
 		} else if (route === `/${user}/login`) {
 			setNavTo(`/${user}/signup`);
-			setSignupLogin('login');
+			setSignupLogin('Login');
 		}
 	}, [route]);
 
@@ -46,7 +46,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 				←
 			</button>
 
-			<h1 className="flex justify-center mt-1 text-[#f1e9e9] text-3xl"> Please {signupLogin} with your zID </h1>
+			<h1 className="flex justify-center mt-1 text-[#f1e9e9] text-3xl"> {signupLogin} with your zID </h1>
 			<div>
 				<AuthInput type="text" label="zID" placeholder="z1234567" marginStyle="mt-[2em]" setInput={setInput} w="w-[23em]" h="h-[2.5em]" />
 				<AuthInput type="password" label="Password" placeholder="••••••••••••" marginStyle="mt-[1em]" setInput={setInput} w="" h="" />
