@@ -12,8 +12,8 @@ export default function ViewVotingSessionsPage() {
     const navigate = useNavigate();
 
     const [votingSessions, setPositions] = useState([
-        'DevSoc AGM 2025', 
-        'CSESoc AGM 2025', 
+        'DevSoc AGM 2025',
+        'CSESoc AGM 2025',
         'DevSoc AGM 2024',
         'CSESoc AGM 2024'
     ]);
@@ -27,7 +27,7 @@ export default function ViewVotingSessionsPage() {
     }
 
     const handleResults = () => {
-        navigate('/manager/results')
+        navigate('/creator/results/01')
     }
 
     const handleDeletion = (index: number) => {
@@ -35,7 +35,7 @@ export default function ViewVotingSessionsPage() {
     }
 
     const handleAddSession = () => {
-        navigate('/create-vote');
+        navigate('/creator/create-vote');
     }
 
     const handleLogout = () => {
@@ -44,37 +44,35 @@ export default function ViewVotingSessionsPage() {
 
     return (
         <StyledBackground className='main'>
-            {/* Add logout button */}
-
             <div className="
                 flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
                 h-[100vh]
                 pt-[0rem]
                 p-[6rem]
             ">
-                <button className="p-4 absolute top-2 left-4 z-10" onClick={handleLogout}>
+                <button className="p-4 absolute top-2 right-4 z-10 hover:cursor-pointer" onClick={handleLogout}>
                     <img className="h-[40px]" src={logoutIcon}></img>
                 </button>
-                <Heading text="Your Voting Sessions"/>
+                <Heading text="Your Voting Sessions" />
                 {votingSessions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
-                                <SmallButton 
-                                    buttonType="start" 
-                                    onClick={() => handleStart(index)} 
+                                <SmallButton
+                                    buttonType="start"
+                                    onClick={() => handleStart(index)}
                                 />
-                                <SmallButton 
-                                    buttonType="stop" 
-                                    onClick={() => handleStop(index)} 
+                                <SmallButton
+                                    buttonType="stop"
+                                    onClick={() => handleStop(index)}
                                 />
-                                <SmallButton 
-                                    buttonType="results" 
-                                    onClick={() => handleResults()} 
+                                <SmallButton
+                                    buttonType="results"
+                                    onClick={() => handleResults()}
                                 />
                             </div>
                         </WideButton>
-                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
+                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)} />
                     </div>
                 ))}
                 <WideAddButton onClick={() => handleAddSession()}></WideAddButton>
