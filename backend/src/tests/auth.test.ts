@@ -4,7 +4,7 @@ import { encryptWithPublicKey } from "../../../shared/src/encryptionBackend";
 import { post, OK, BAD_REQUEST, UNAUTHORISED } from './testUtil';
 import { registerRoute, loginRoute, logoutRoute } from "./testUtil";
 import { zidPlainText, zpassPlainText } from "./testUtil";
-import { clear } from "../data/dataStore";
+import { clear, getSessions } from "../data/dataStore";
 
 async function beforeEveryTest() {
   await new Promise(res => setTimeout(res, 1000));
@@ -19,7 +19,7 @@ describe('auth register tests!', () => {
   
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test.only('Successful, returns nothing', () => {
+  test('Successful, returns nothing', () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     const res = post(registerRoute, { zId, zPass });
@@ -47,7 +47,7 @@ describe('auth login tests!', () => {
     clear();
   });
 
-  test('Successful, logs in the user and returns a session id', () => {
+  test.only('Successful, logs in the user and returns a session id', () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     
@@ -97,6 +97,8 @@ describe('auth logout tests!', () => {
 
     const regRes = post(registerRoute, { zId, zPass });
     expect(regRes.statusCode).toEqual(OK);
+
+    console.log("hello1!")
 
     const sessionId = regRes.body.sessionId;
     const logoutRes = post(logoutRoute, { token: sessionId });
