@@ -8,6 +8,7 @@ import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinButton from "../components/buttons/ThinGradientButton";
 import SmallThinButton from "../components/buttons/SmallThinButton";
+import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function VoterVotingPage() {
     const navigate = useNavigate();
@@ -99,15 +100,19 @@ export default function VoterVotingPage() {
                     </div>
                 ))}
                 <div className="flex flex-row justify-between gap-2 items-center">
-                    <SmallThinButton text="Reset" margin="mt-[0em]" onClick={() => handleReset()} />
-                    <SmallThinButton
-                        text={positionIndex === candidates.length - 1 ? 'Finish' : 'Confirm'}
+                    <ThinGradientButton
+                        text="Reset"
+                        margin="mt-4"
+                        onClick={() => handleReset()}
+                        w={"w-100"}
+                    />
+                    <ThinGradientButton text={positionIndex === candidates.length - 1 ? 'Finish' : 'Confirm'}
                         margin="mt-[0em]"
                         onClick={() => handleConfirm()}
+                        w={"w-100"}
                     />
                 </div>
-
-                <ThinButton text="I want to abstain" margin="mt-[2em]" onClick={() => handleAbstain()} />
+                <ThinGradientButton text="I want to abstain" margin="mt-4" onClick={() => handleAbstain()} w={"w-50"} />
             </div>
         </StyledBackground>
     )

@@ -22,7 +22,7 @@ export default function App() {
                 <Route path="/voter/login" element={<VoterPage />} />
                 <Route path="/voter/signup" element={<VoterPage />} />
                 <Route path="/voter/join" element={<VoterJoinSessionPage />} />
-                <Route path="/voter/voting" element={<VoterVotingPage />} />
+                <Route path="/voter/voting/:id" element={<VoterVotingPage />} />
                 <Route path="/voter/finish" element={<VotingFinishPage />} />
 
                 <Route path="/creator/login" element={<CreatorPage />} />

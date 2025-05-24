@@ -19,15 +19,6 @@ export default function ListVoters({ num, zidList, setZidList }: ListVotersInput
         {zidList.map((zid, index) => (
           <ZidContainers key={index} width="" height="h-10" zid={zid} zidList={zidList} setZidList={setZidList} />
         ))}
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
-        <ZidContainers width="" height="h-10" zid={"z1234567"} zidList={zidList} setZidList={setZidList} />
       </div>
       <div className="ml-100">
         <SampleQRButton />

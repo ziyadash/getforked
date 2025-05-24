@@ -53,7 +53,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 				}
 				{/* NOTE FOR PASSWORD PLACEHOLDER: Chrome uses • whereas other browsers use ● */}
 				{/* https://stackoverflow.com/questions/6859727/styling-password-fields-in-css */}
-				<ThinGradientButton text="Continue" margin="mt-10" />
+				<ThinGradientButton text="Continue" margin="mt-10" w="w-[23em]" />
 			</div>
 		</div>
 	);
