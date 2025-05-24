@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
-import ThinButton from '../components/buttons/ThinGradientButton';
+import ThinGradientButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 
 export default function CreateVoteEditCandidate() {
@@ -10,12 +10,12 @@ export default function CreateVoteEditCandidate() {
 
   const navigate = useNavigate();
   const goBack = () => {
-    navigate('/create-vote/add-position')
+    navigate('/creator/create-vote/add-position');
   }
 
   return (
     <StyledBackground className='main'>
-      <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+      <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
         ←
       </button>
 
@@ -53,14 +53,14 @@ export default function CreateVoteEditCandidate() {
             <div>
               <button type="button" className="flex items-center gap-2 text-white">
                 <span>Add an image</span>
-                <div className="bg-white/20 rounded-full p-1">
+                <div className="hover:cursor-pointer hover:opacity-50 bg-linear-130 border-[0.5px] from-white/30 rounded-full flex flex-col items-center justify-center p-4 h-2 w-2">
                   +
                 </div>
               </button>
             </div>
 
             <div className="flex justify-center mt-6">
-              <ThinButton text="Save" margin="mt-2" onClick={goBack} />
+              <ThinGradientButton text="Save" margin="mt-2" onClick={goBack} w={'w-25'} />
             </div>
           </form>
         </div>

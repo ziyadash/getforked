@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
-import ThinButton from '../components/buttons/ThinGradientButton';
+import ThinGradientButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 import editIcon from '../assets/svg/edit.svg';
 import binIcon from '../assets/svg/bin.svg';
@@ -12,7 +12,7 @@ export default function CreateVoteAddInfo() {
 
   const [candidates, setCandidates] = useState(["Alexia Lebrun", "Patrick Cooper", "Lina Pasquier", "Timothy Stevens"])
   const [newCandidate, setNewCandidate] = useState("")
-  const [positionName, setPositionName] = useState("Treasurer")
+  const [positionName, setPositionName] = useState("President")
 
   const addCandidate = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newCandidate.trim()) {
@@ -21,8 +21,9 @@ export default function CreateVoteAddInfo() {
     }
   }
 
-  const editCandidate = () => {
-    navigate('/create-vote/edit-candidate')
+  const editCandidate = (index: number) => {
+    navigate(`/creator/create-vote/edit-candidate/${index}`);
+    // need to think about how to pass the name that is being changed here.
   }
 
   const removeCandidate = (index: number) => {
@@ -35,7 +36,7 @@ export default function CreateVoteAddInfo() {
 
   const handleAddPosition = () => {
     // send to backend? 
-    navigate('/manager/addPositions');
+    navigate('/creator/create-vote/positions');
   }
 
   return (
@@ -55,7 +56,7 @@ export default function CreateVoteAddInfo() {
             <Heading text="Add a New Position" />
           </div>
 
-          <div className="border-2 border-[#f1e9e9] bg-linear-130 from-transparent to-white/30  backdrop-blur-sm rounded-4xl p-6 md:p-8">
+          <div className="border-2 border-[#f1e9e9] bg-linear-130 from-violet-950/35 to-white/30 backdrop-blur-sm rounded-4xl p-6 md:p-8">
             <div className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="position" className="text-white text-lg">
@@ -64,7 +65,7 @@ export default function CreateVoteAddInfo() {
                 <input
                   id="position"
                   type="text"
-                  value={positionName}
+                  placeholder={positionName}
                   onChange={(e) => setPositionName(e.target.value)}
                   className="w-full p-3 rounded-md bg-white text-black"
                 />
@@ -88,19 +89,18 @@ export default function CreateVoteAddInfo() {
 
               <div className="space-y-3">
                 <label className="text-white text-lg">Candidates</label>
-
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {candidates.map((candidate, index) => (
-                    <div key={index} className="flex items-center justify-between border border-[#f1e9e9] bg-white/5 rounded-full px-4 py-3">
+                    <div key={index} className="flex items-center justify-between border border-[#f1e9e9] bg-linear-130 from-violet-950/20 to-white/25 rounded-full px-4 py-3">
                       <div className="flex-grow text-center text-white">
                         {candidate}
                       </div>
                       <div className="flex space-x-2">
-                        <button className="p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md">
-                          <img src={editIcon} alt="Edit" className="w-4 h-4" onClick={editCandidate} />
+                        <button className="hover:cursor-pointer p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md">
+                          <img src={editIcon} alt="Edit" className="w-4 h-4" onClick={() => { editCandidate(index) }} />
                         </button>
                         <button
-                          className="p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md"
+                          className="hover:cursor-pointer p-1.5 border border-[#f1e9e9] bg-white/5 rounded-md"
                           onClick={() => removeCandidate(index)}
                         >
                           <img src={binIcon} alt="Delete" className="w-4 h-4" />
@@ -121,7 +121,7 @@ export default function CreateVoteAddInfo() {
               </div>
 
               <div className="flex justify-center mt-6">
-                <ThinButton text="Continue" margin="mt-2" onClick={handleAddPosition} w={'w-40'} />
+                <ThinGradientButton text="Continue" margin="mt-2" onClick={handleAddPosition} w={'w-40'} />
               </div>
             </div>
           </div>

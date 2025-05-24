@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
-import ThinButton from '../components/buttons/ThinGradientButton';
+import ThinGradientButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 import Heading from '../components/buttons/Heading';
 
@@ -111,14 +111,12 @@ export default function CreateVoteBasicInfo() {
                             </div>
 
                             <div className="flex justify-center mt-6">
-                                <ThinButton text="Continue" margin="mt-2" onClick={() => goToAddPositions()} w={'w-30'} />
+                                <ThinGradientButton text="Continue" margin="mt-2" onClick={() => goToAddPositions()} w={'w-30'} />
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </StyledBackground>
     );
 }

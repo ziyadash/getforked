@@ -6,6 +6,7 @@ import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import { deleteElement, reorderElements } from "../helpers";
+import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function AddPositionsPage() {
     const [positions, setPositions] = useState([
@@ -29,6 +30,9 @@ export default function AddPositionsPage() {
     }
     const goBack = () => {
         navigate('/creator/create-vote')
+    }
+    const navigateAllVotes = () => {
+        navigate('/creator/view-voting-sessions')
     }
 
     return (
@@ -63,6 +67,7 @@ export default function AddPositionsPage() {
                     </div>
                 ))}
                 <WideAddButton onClick={() => handleAddPositions()}></WideAddButton>
+                <ThinGradientButton text="Save" margin="mt-2 mr-22" onClick={navigateAllVotes} w={'w-25'} />
             </div>
         </StyledBackground>
     )
