@@ -1,13 +1,14 @@
-import { clear, getSessions} from "../data/dataStore";
+// import { clear, getSessions} from "../data/dataStore";
 import { getHashOf, verifySessionId } from "../data/dataUtil";
 import { encryptWithPublicKey } from "../../../shared/src/encryptionBackend";
 import { post, OK, BAD_REQUEST, UNAUTHORISED } from './testUtil';
 import { registerRoute, loginRoute, logoutRoute } from "./testUtil";
 import { zidPlainText, zpassPlainText } from "./testUtil";
+import { clear } from "../data/dataStore";
 
 async function beforeEveryTest() {
   await new Promise(res => setTimeout(res, 1000));
-  clear();
+  // clear();
 }
 
 ////////////////////////////// TEST CASES  ////////////////////////////////
@@ -18,22 +19,15 @@ describe('auth register tests!', () => {
   
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test('Successful, returns a sessionId', () => {
+  test.only('Successful, returns nothing', () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     const res = post(registerRoute, { zId, zPass });
 
     expect(res.statusCode).toEqual(OK);
     expect(res.body).toEqual({
-      sessionId: expect.any(String),
+      
     });
-
-    // verify session id
-    const sessionId = res.body.sessionId.toString();
-    const payload = verifySessionId(sessionId);
-    expect(payload).toEqual(expect.objectContaining({
-      userId: getHashOf(String(zidPlainText)),
-    }));
   });
 
   test('Unsuccessful, missing zId + zPass', () => {

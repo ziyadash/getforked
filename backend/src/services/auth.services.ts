@@ -1,14 +1,17 @@
 import {
-  getData,
-  setData,
-  getSessions,
-  setSessions,
-  createAndStoreSession,
+  // getSessions,
+  // setSessions,
+  // createAndStoreSession,
+  userDatabase,
+  saveUserDataBaseToFile,
+  createAndStoreSession
 } from '../data/dataStore';
 import { getHashOf, } from '../data/dataUtil';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
 import { Question, Election, Session, User } from '../../../shared/interfaces';
+import { write } from 'fs';
+import { rawListeners } from 'process';
 
 // get instance of mutex
 const { writeMutex } = require('../data/syncPrimitives');
@@ -103,28 +106,38 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
   if (result.error) return result;
 
   const userId = getHashOf(decryptedZID);
-  const db = getData();
-
-  if (db.users.find((u) => u.userId === userId)) {
-    return { error: 'User already registered', status: StatusCodes.CONFLICT };
-  }
 
   const hashedName = getHashOf(result.displayName!);
-  db.users.push({ userId: userId, name: hashedName });
-  setData(db);
-  
+
+  const release = await writeMutex.acquire();
+  let registerRes: { sessionId?: string; error?: string; status?: number } = {};
+
+  try {
+    if (userDatabase.has(userId)) {
+      console.log("EORRRRRRRRRRRRRR")
+      release();
+      return  { error: 'User already registered', status: StatusCodes.CONFLICT };
+    }
+
+    userDatabase.set(userId, hashedName);
+    console.log("user database SAVEDD TO DATA, NOW TO PERSIST THE DATA");
+    await saveUserDataBaseToFile();
+  } finally {
+    release();
+  }
+
+  console.log("THIS IS THE USER ID " + userDatabase.get(userId));
   const sessionId = createAndStoreSession(userId);
 
-  return { sessionId };
+  return registerRes;
 }
 
-
-/**
- * Logs in an existing user and returns a session ID.
- * @param zId 
- * @param zPass 
- * @returns 
- */
+// /**
+//  * Logs in an existing user and returns a session ID.
+//  * @param zId 
+//  * @param zPass 
+//  * @returns 
+//  */
 export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
   // decrypt first
   const decryptedZID = decryptData(zId);
@@ -134,33 +147,34 @@ export async function authLogin(zId: string, zPass: string): Promise<{ sessionId
   if (result.error) return result;
 
   const userId = getHashOf(decryptedZID);
-  const db = getData();
-  const user = db.users.find((u) => u.userId === userId);
+  // const db = getData();
+  // const user = db.users.find((u) => u.userId === userId);
+  const user = userDatabase.get(userId);
 
   if (!user) {
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  const sessionId = createAndStoreSession(userId);
+  // const sessionId = createAndStoreSession(userId);
 
-  return { sessionId };
+  return { };
 }
 
-/**
- * @param sessionId
- * Logs out the user by removing their session.
- */
-export function authLogout(sessionId: string): { error?: string; status?: number } | void {
-  const sessions = getSessions();
-  const sessionExists = sessions.sessions.some(s => s.sessionId === sessionId);
+// /**
+//  * @param sessionId
+//  * Logs out the user by removing their session.
+//  */
+// export function authLogout(sessionId: string): { error?: string; status?: number } | void {
+//   const sessions = getSessions();
+//   const sessionExists = sessions.sessions.some(s => s.sessionId === sessionId);
 
-  if (!sessionExists) {
-    return {
-      error: 'Invalid session token',
-      status: StatusCodes.UNAUTHORIZED,
-    };
-  }
+//   if (!sessionExists) {
+//     return {
+//       error: 'Invalid session token',
+//       status: StatusCodes.UNAUTHORIZED,
+//     };
+//   }
 
-  sessions.sessions.filter(s => s.sessionId !== sessionId);
-  setSessions(sessions);
-}
+//   sessions.sessions.filter(s => s.sessionId !== sessionId);
+//   setSessions(sessions);
+// }

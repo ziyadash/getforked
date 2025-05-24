@@ -8,14 +8,15 @@ import { promises as fs } from 'fs';
 let sessionStore: SessionStore = { sessions: [] };
 let database: DataStore = { users: [], elections: [] };
 
-let userDatabase: Map<string, User> = new Map();
+export let userDatabase: Map<string, string> = new Map();
 let electionDatabase: Map<string, Election> = new Map();
 
-const SESSION_PATH = "./src/data/sessions.json";
+// const SESSION_PATH = "./src/data/sessions.json";
 // const USER_DATABASE_PATH = "./src/data/userDatabase.json";
-const path = require('path');
-const USER_DATABASE_PATH = path.join(__dirname, 'data', 'userDatabase.json')
-
+// const path = require('path');
+// const USER_DATABASE_PATH = path.join(__dirname, 'data', 'userDatabase.json');
+const USER_DATABASE_PATH = './src/data/userDatabase.json';
+const SESSIONSTORE_PATH = './src/data/sessions.json'
 // importing instance of mutex & semaphore
 const { writeMutex, readSemaphore } = require('./syncPrimitives');
 
@@ -24,20 +25,20 @@ const secretKey = 'abcde12345';
 
 ////////////////////////////// SESSION UTILS  ////////////////////////////////
 
-export function saveSessions() {
-  const data = JSON.stringify(sessionStore, null, 2);
-  fs.writeFileSync(SESSION_PATH, data, { flag: 'w' });
-}
+// export function saveSessions() {
+//   const data = JSON.stringify(sessionStore, null, 2);
+//   fs.writeFileSync(SESSION_PATH, data, { flag: 'w' });
+// }
 
-export function loadSessions() {
-  if (fs.existsSync(SESSION_PATH)) {
-    const data = fs.readFileSync(SESSION_PATH, { flag: 'r' });
-    sessionStore = JSON.parse(data.toString());
-  } else {
-    // if file doesn't exist
-    saveSessions();
-  }
-}
+// export function loadSessions() {
+//   if (fs.existsSync(SESSION_PATH)) {
+//     const data = fs.readFileSync(SESSION_PATH, { flag: 'r' });
+//     sessionStore = JSON.parse(data.toString());
+//   } else {
+//     // if file doesn't exist
+//     saveSessions();
+//   }
+// }
 
 /**
  * Creates and registers a session for a given userId.
@@ -64,7 +65,7 @@ export function getSessions(): SessionStore {
 
 export function setSessions(sessions: SessionStore) {
   sessionStore = sessions;
-  saveSessions();
+  saveSessionToFile();
 }
 
 ////////////////////////////// DATA UTILS  ///////////////////////////////////
@@ -97,8 +98,15 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
 
   try {
-    const data = await fs.readFile(USER_DATABASE_PATH, 'utf8'); // idk what this is yet
-    const obj = JSON.parse(data) as Record<string, User>;
+    const data = await fs.readFile(USER_DATABASE_PATH, 'utf8');
+  
+    // if (!data.trim()) {
+    //   console.warn('User database file is empty. Starting with an empty userDatabase.');
+    //   userDatabase.clear();
+    //   return;
+    // }
+  
+    const obj = JSON.parse(data) as Record<string, string>;
 
     userDatabase.clear();
     for (const [id, user] of Object.entries(obj)) {
@@ -113,15 +121,59 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
   }
 };
 
-export const saveUserDataBaseToFile = async (): Promise<void> => {
+export const loadSessionFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
+
   try {
-    const obj = Object.fromEntries(userDatabase);
-    const json = JSON.stringify(obj, null, 2);
+    const data = await fs.readFile(SESSIONSTORE_PATH, 'utf8');
 
-    await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
+    if (!data.trim()) {
+      console.warn('Session file is empty. Starting with an empty sessionStore.');
+      sessionStore = { sessions: [] };
+      return;
+    }
 
-    console.log(`User database saved to ${USER_DATABASE_PATH}`);
+    const obj = JSON.parse(data) as SessionStore;
+    sessionStore = obj;
+    console.log('Session store loaded from file.');
+  } catch (err) {
+    console.error('Error loading session store:', err);
+  } finally {
+    release();
+  }
+}
+
+export const saveSessionToFile = async () => {
+  const json = JSON.stringify(sessionStore, null, 2);
+  await fs.writeFile(SESSIONSTORE_PATH, json, 'utf8');
+  console.log(`Session store saved to ${SESSIONSTORE_PATH}`);
+}
+
+export const saveUserDataBaseToFile = async (): Promise<void> => {
+  const obj = Object.fromEntries(userDatabase);
+  const json = JSON.stringify(obj, null, 2);
+
+  console.log("JSONNN FROM SAVEUSERDATA: " + json);
+  await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
+  console.log(`User database saved to ${USER_DATABASE_PATH}`);
+} 
+
+export const clear = async (): Promise<void>  => {
+  // Acquire mutex to safely modify shared data
+  const release = await writeMutex.acquire();
+
+  try {
+    // Clear in-memory stores
+    userDatabase.clear();
+
+    // Persist cleared user database
+    await saveUserDataBaseToFile();
+
+    // If you decide to persist sessions or elections to disk, you'd also save them here
+    // Example:
+    // saveSessions(); 
+    // saveElectionDatabase(); 
+    console.log('All in-memory data cleared and user database file reset.');
   } finally {
     release();
   }
