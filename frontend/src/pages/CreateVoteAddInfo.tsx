@@ -121,7 +121,7 @@ export default function CreateVoteAddInfo() {
               </div>
 
               <div className="flex justify-center mt-6">
-                <ThinGradientButton text="Continue" margin="mt-2" onClick={handleAddPosition} w={'w-40'} />
+                <ThinGradientButton text="Save" margin="mt-2" onClick={handleAddPosition} w={'w-30'} />
               </div>
             </div>
           </div>
