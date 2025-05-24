@@ -11,18 +11,21 @@ import CreateVoteEditCandidate from '../pages/CreateVoteEditCandidate'
 import VoterVotingPage from '../pages/VoterVotingPage'
 import VotingFinishPage from '../pages/VotingFinishPage'
 import ResultsPage from '../pages/ResultsPage'
+import VoterJoinSessionPage from '../pages/VoterJoinSessionPage'
 
 export default function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<MainPage />} />
-                <Route path="/voter" element={<VoterPage />} />
+                <Route path="/voter/login" element={<VoterPage />} />
+                <Route path="/voter/signup" element={<VoterPage />} />
+                <Route path="/voter/join" element={<VoterJoinSessionPage />} />
                 <Route path="/voter/voting" element={<VoterVotingPage />} />
                 <Route path="/voter/finish" element={<VotingFinishPage />} />
 
-
-                <Route path="/manager" element={<ManagerPage />} />
+                <Route path="/manager/login" element={<ManagerPage />} />
+                <Route path="/manager/signup" element={<ManagerPage />} />
                 <Route path="/organiser" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
                 <Route path="/manager/viewVotingSessions" element={<ViewVotingSessionsPage />} />
                 <Route path="/manager/addPositions" element={<AddPositionsPage />} />
