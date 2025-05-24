@@ -9,14 +9,6 @@ import {
 import { getHashOf, } from '../data/dataUtil';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
-import { Question, Election, Session, User } from '../../../shared/interfaces';
-import { write } from 'fs';
-import { rawListeners } from 'process';
-
-// get instance of mutex
-const USER_DATABASE_PATH = require('../data/userDatabase.json'); // not 100% sure if this is correct
-const fs = require('fs/promises');
-
 
 ////////////// Util function(s) //////////////
 /**

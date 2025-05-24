@@ -17,9 +17,6 @@ export let userDatabase: Map<string, string> = new Map();
 let electionDatabase: Map<string, Election> = new Map();
 
 // const SESSION_PATH = "./src/data/sessions.json";
-// const USER_DATABASE_PATH = "./src/data/userDatabase.json";
-// const path = require('path');
-// const USER_DATABASE_PATH = path.join(__dirname, 'data', 'userDatabase.json');
 const USER_DATABASE_PATH = './src/data/userDatabase.json';
 const SESSIONSTORE_PATH = './src/data/sessions.json'
 // importing instance of mutex & semaphore
@@ -105,7 +102,6 @@ export const getUserData = async (
   const release = await writeMutex.acquire();
   try {
     modifier(userDatabase);
-    // await saveUserDataBaseToFile(); // optionally persist changes
   } finally {
     release();
   }
@@ -117,11 +113,11 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
   try {
     const data = await fs.readFile(USER_DATABASE_PATH, 'utf8');
   
-    // if (!data.trim()) {
-    //   console.warn('User database file is empty. Starting with an empty userDatabase.');
-    //   userDatabase.clear();
-    //   return;
-    // }
+    if (!data.trim()) {
+      console.warn('User database file is empty. Starting with an empty userDatabase.');
+      userDatabase.clear();
+      return;
+    }
   
     const obj = JSON.parse(data) as Record<string, string>;
 
