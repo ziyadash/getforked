@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { register, login, logout } from '../controllers/authController';
+import {createElection, createPosition, createCandidate, editCandidate, viewCandidates, deleteCandidate} from '../controllers/voteCreateController'
 // import {} from '../controllers/voteCreateController';
 // import { createVoteSession, createPosition, createCandidate, editCandidate, deleteCandidate, viewCandidates, } from '../controllers/voteCreateController';
 
@@ -10,18 +11,18 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.delete('/logout', logout);
 
-// // TODO: move these to a new file called createVoteRoutes.ts or something
-// // because this functionality is separate from auth
-// router.post('/createVoteSession', createVoteSession);
+// TODO: move these to a new file called createVoteRoutes.ts or something
+// because this functionality is separate from auth
+router.post('/createElection', createElection);
 
-// // Routes for positions
-// router.post('/createPosition', createPosition);
+// Routes for positions
+router.post('/createPosition', createPosition);
 
-// // Routes for candidates
-// router.post('/createCandidate', createCandidate);
-// router.post('/editCandidate', editCandidate);
-// router.get('/votes/:voteId/positions/:positionId/candidates', viewCandidates);
-// router.delete('/votes/:voteId/positions/:positionId/candidates/:candidateIndex', deleteCandidate);
+// Routes for candidates
+router.post('/createCandidate', createCandidate);
+router.post('/editCandidate', editCandidate);
+router.get('/votes/:voteId/positions/:positionId/candidates', viewCandidates);
+router.delete('/votes/:voteId/positions/:positionId/candidates/:candidateIndex', deleteCandidate);
 
 
 export default router;

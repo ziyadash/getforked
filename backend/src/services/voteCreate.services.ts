@@ -1,5 +1,6 @@
 import { getElectionData, saveElectionDatabaseToFile } from '../data/dataStore';
 import { Question, Election, QuestionType, Candidate } from '../../../shared/interfaces';
+import {  } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
 import { validateUserId, validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
 
@@ -20,7 +21,7 @@ import { validateUserId, validateSessionId, validateElectionId, validatePosition
  * @returns new election ID
  */
 
-interface CreateElectionProps {
+export interface CreateElectionProps {
     userSessionId: string;
     title: string;
     description: string;
@@ -80,7 +81,7 @@ export const createElection = async (
 // - viewing positions in a vote, corresponding to the "Create Vote - Add Positions"  page
 // - adding a position to a vote, corresponding to the "Create Vote - Add Position"  page
 // TODO: this is a stub for the addPosition HTTP route
-interface CreatePositionProps {
+export interface CreatePositionProps {
     userSessionId: string;
     voteId: number;
     title: string;
@@ -134,7 +135,7 @@ export const createPosition = async (
 // - editing candidates for a position, corresponding to the "Create Vote - Edit Candidate"  page
 
 
-interface CreateCandidateProps {
+export interface CreateCandidateProps {
   userSessionId: string;
   voteId: number;
   positionId: number;
@@ -191,7 +192,7 @@ export const createCandidate = async (
       .candidates.length };
   };
 
-interface EditCandidateProps {
+export interface EditCandidateProps {
   userSessionId: string;
   voteId: number;
   positionId: number;
@@ -255,7 +256,7 @@ export const editCandidate = async (
   return 0;
 };
 
-interface DeleteCandidateProps {
+export interface DeleteCandidateProps {
   userSessionId: string;
   voteId: number;
   positionId: number;
@@ -314,7 +315,7 @@ export const deleteCandidate = async (
 };
 
 
-interface ViewCandidateProps {
+export interface ViewCandidateProps {
   userSessionId: string;
   voteId: number;
   positionId: number;

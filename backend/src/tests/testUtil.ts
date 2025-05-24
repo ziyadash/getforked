@@ -13,7 +13,7 @@ const url = 'http://localhost';
 export const registerRoute = '/api/auth/register';
 export const loginRoute = '/api/auth/login';
 export const logoutRoute = '/api/auth/logout';
-export const createVoteRoute = '/api/auth/createVoteSession';
+export const createVoteRoute = '/api/auth/createElection';
 export const createPositionRoute = '/api/auth/createPosition';
 export const createCandidateRoute = '/api/auth/createCandidate';
 export const editCandidateRoute = '/api/auth/editCandidate';
@@ -38,12 +38,13 @@ export const UNAUTHORISED = 401;
 // src/test/testUtils.ts
 
 export function resetTestVotePosition(
-  authuserId: string,
+  userSessionId: string,
   voteId: number,
   positionId: number
 ) {
-  return deleteAllCandidates({ authuserId, voteId, positionId });
+  return deleteAllCandidates({ userSessionId, voteId, positionId });
 }
+
 
 export function post(
   route: string,
