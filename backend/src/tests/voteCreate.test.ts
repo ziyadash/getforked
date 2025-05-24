@@ -17,6 +17,7 @@ import {
   zpassPlainText
 } from './testUtil';
 import { encryptWithPublicKey } from '../../../shared/src/encryptionBackend';
+import { QuestionType } from '../../../shared/interfaces';
 
 
 // TODO: implement Brandan's feedback for this test:
@@ -112,7 +113,7 @@ describe('tests for viewing/adding/modifying/deleting candidates in a position',
       .send({
         voteId,
         title: "President",
-        questionType: "single"
+        questionType: QuestionType.Preferential
       });
 
     expect(createPositionRes.statusCode).toBe(200);

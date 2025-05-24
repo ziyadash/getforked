@@ -2,11 +2,13 @@ import { getElectionData, saveElectionDatabaseToFile } from '../data/dataStore';
 import { Question, Election, QuestionType, Candidate } from '../../../shared/interfaces';
 import {  } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
-import { validateUserId, validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
+import { validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
+import { randomUUID } from 'crypto';
 
-// TODO: potentially refactor this code so that the createCandidate function is just called in 
-// addPosition/editPosition? seems unnecessary to have a whole API server route for it
-// but im not sure so il think about it and implement later once code has been merged together 
+// helper functions to generate ids better since i noticed this was done quite poorly previously
+const generateElectionId = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9));
+const generatePositionId = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9));
+const generateCandidateIndex = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9)); 
 
 /**
  * User creates a vote session.
@@ -49,7 +51,7 @@ export const createElection = async (
       throw new Error('Title cannot be empty');
     }
   
-    let newElectionId: number = 1;
+    let newElectionId: number = generateElectionId();
   
     await getElectionData(map => {
       const maxId = Math.max(0, ...Array.from(map.values()).map(e => e.id));
@@ -82,50 +84,82 @@ export const createElection = async (
 // - adding a position to a vote, corresponding to the "Create Vote - Add Position"  page
 // TODO: this is a stub for the addPosition HTTP route
 export interface CreatePositionProps {
-    userSessionId: string;
-    voteId: number;
-    title: string;
-    questionType: QuestionType;
-  }
+  userSessionId: string;
+  voteId: number;
+  title: string;
+  questionType: QuestionType;
+}
 
 /**
  * Adds a new question/position to an election.
  */
 export const createPosition = async (
-    props: CreatePositionProps
-  ): Promise<{ positionId: number }> => {
-    const sessionValidation = await validateSessionId(props.userSessionId);
-    if ('error' in sessionValidation) {
-      throw new Error(sessionValidation.error);
-    }
+  props: CreatePositionProps
+): Promise<{ positionId: number }> => {
+  const sessionValidation = await validateSessionId(props.userSessionId);
+  if ('error' in sessionValidation) {
+    throw new Error(sessionValidation.error);
+  }
+
+  const userId = sessionValidation.userId;
+
+  const electionValidation = await validateElectionId(props.voteId, userId);
+  if ('error' in electionValidation) {
+    throw new Error(electionValidation.error);
+  }
+
+  await getElectionData(map => {
+    const election = map.get(String(props.voteId));
+    if (!election) throw new Error('Election unexpectedly not found');
+
+    const newQuestionId = generatePositionId();
+
+    const newQuestion = {
+      id: newQuestionId,
+      title: props.title,
+      candidates: [],
+      questionType: props.questionType, // store as string
+    };      
+
+    election.questions.push(newQuestion);
+  });
+
+  await saveElectionDatabaseToFile();
+
+  return { positionId: props.voteId };
+};
+
+interface DeletePositionProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+}
   
-    const userId = sessionValidation.userId;
-  
-    const electionValidation = await validateElectionId(props.voteId, userId);
-    if ('error' in electionValidation) {
-      throw new Error(electionValidation.error);
-    }
-  
-    await getElectionData(map => {
-      const election = map.get(String(props.voteId));
-      if (!election) throw new Error('Election unexpectedly not found');
-  
-      const newQuestionId = election.questions.length + 1;
-  
-      const newQuestion = {
-        id: newQuestionId,
-        title: props.title,
-        candidates: [],
-        questionType: props.questionType,
-      };
-  
-      election.questions.push(newQuestion);
-    });
-  
-    await saveElectionDatabaseToFile();
-  
-    return { positionId: props.voteId };
-  };
+export const deletePosition = async (
+  props: DeletePositionProps
+): Promise<{ success: true }> => {
+  const sessionValidation = await validateSessionId(props.userSessionId);
+  if ('error' in sessionValidation) throw new Error(sessionValidation.error);
+
+  const userId = sessionValidation.userId;
+
+  const electionValidation = await validateElectionId(props.voteId, userId);
+  if ('error' in electionValidation) throw new Error(electionValidation.error);
+
+  await getElectionData(map => {
+    const election = map.get(String(props.voteId));
+    if (!election) throw new Error('Election unexpectedly not found');
+
+    const index = election.questions.findIndex(q => q.id === props.positionId);
+    if (index === -1) throw new Error('Position not found');
+
+    election.questions.splice(index, 1);
+  });
+
+  await saveElectionDatabaseToFile();
+
+  return { success: true };
+};
 
 // functionality for creating votes is already done
 // functionality for creating positions in a vote is already done
@@ -172,7 +206,7 @@ export const createCandidate = async (
       const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
       if (!position) throw new Error('Position unexpectedly missing');
   
-      const newCandidateIndex = position.candidates.length + 1;
+      const newCandidateIndex = generateCandidateIndex();
   
       const newCandidate: Candidate = {
         fullName: candidateData.name,

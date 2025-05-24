@@ -75,39 +75,65 @@ export const createPosition = async (
     }
   };
 
+export const deletePosition = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+  const voteId = Number(req.params.voteId);
+  const positionId = Number(req.params.positionId);
 
-  export const createCandidate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const userSessionId = req.headers['x-session-id'] as string;
-  
-    if (!userSessionId) {
-      res.status(400).json({ error: 'Missing user session ID' });
-      return;
-    }
-  
-    const {
-      voteId,
-      positionId,
-      name,
-    } = req.body;
-  
-    const props: voteCreateService.CreateCandidateProps = {
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  try {
+    const result = await voteCreateService.deletePosition({
       userSessionId,
       voteId,
       positionId,
-      name,
-    };
-  
-    try {
-      const result = await voteCreateService.createCandidate(props);
-      res.status(200).json({ result });
-    } catch (e) {
-      next(e);
-    }
+    });
+
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const createCandidate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  const {
+    voteId,
+    positionId,
+    name,
+  } = req.body;
+
+  const props: voteCreateService.CreateCandidateProps = {
+    userSessionId,
+    voteId,
+    positionId,
+    name,
   };
+
+  try {
+    const result = await voteCreateService.createCandidate(props);
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
 
 export const editCandidate = async (
   req: Request,

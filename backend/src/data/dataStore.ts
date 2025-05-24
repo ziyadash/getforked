@@ -7,9 +7,6 @@ const {Mutex, Semaphore } = require('async-mutex');
 const writeMutex = new Mutex();
 const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
 
-// copied pretty much all of this code from devsoc mail!
-
-// TODO: change the type of session store, using any is bad practice.
 export let sessionDatabase: SessionStore = { sessions: [] };
 export let userDatabase: Map<string, string> = new Map();
 export let electionDatabase: Map<string, Election> = new Map();
@@ -23,23 +20,9 @@ const SESSION_DATABASE_PATH = './src/data/sessions.json';
 // TODO: move this to a .env file! and put the .env in .gitignore
 const secretKey = 'abcde12345';
 
+
+
 ////////////////////////////// SESSION UTILS  ////////////////////////////////
-
-// export function saveSessions() {
-//   const data = JSON.stringify(sessionStore, null, 2);
-//   fs.writeFileSync(SESSION_PATH, data, { flag: 'w' });
-// }
-
-// export function loadSessions() {
-//   if (fs.existsSync(SESSION_PATH)) {
-//     const data = fs.readFileSync(SESSION_PATH, { flag: 'r' });
-//     sessionStore = JSON.parse(data.toString());
-//   } else {
-//     // if file doesn't exist
-//     saveSessions();
-//   }
-// }
-
 /**
  * Creates and registers a session for a given userId.
  * Returns the generated sessionId (JWT).
@@ -60,35 +43,20 @@ export async function createAndStoreSession(userId: string): Promise<string> {
   return sessionId;
 }
 
-////////////////////////////// DATA UTILS  ///////////////////////////////////
-
-// export function saveData() {
-//   const data = JSON.stringify(database, null, 2);
-//   fs.writeFileSync(DATA_PATH, data, { flag: 'w' });
-// }
-
-// export function loadData() {
-//   if (fs.existsSync(DATA_PATH)) {
-//     const data = fs.readFileSync(DATA_PATH, { flag: 'r' });
-//     database = JSON.parse(data.toString());
-//   } else {
-//     // if file doesn't exist
-//     saveData();
-//   }
-// }
-
-// export function getData() {
-//   return database;
-// }
-
-// export function setData(newData: DataStore) {
-//   database = newData;
-//   saveData();
-// }
-
 // ///////////////// USER_DB RELATED FUNCTIONALITY /////////////////
 
 // create a getUserData function to modify
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+  await getUserData(map => {
+    userAlreadyExists = map.has(userId);
+    if (!userAlreadyExists) {
+      map.set(userId, hashedName);
+    }
+  });
+*/
 export const getUserData = async (
   modifier: (map: Map<string, string>) => void
 ): Promise<void> => {
@@ -141,6 +109,18 @@ export const saveUserDataBaseToFile = async (): Promise<void> => {
 } 
 
 // ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+  await getSessionData(store => {
+    const index = store.sessions.findIndex(s => s.sessionId === sessionId);
+    if (index !== -1) {
+      store.sessions.splice(index, 1);
+      removed = true;
+    }
+  });
+*/
 export const getSessionData = async (
   modifier: (store: SessionStore) => void
 ): Promise<void> => {
@@ -189,7 +169,26 @@ export const saveSessionToFile = async () => {
 }
 
 // ///////////////// ELECTION_DB RELATED FUNCTIONALITY /////////////////
-
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+    await getElectionData(map => {
+      const election = map.get(String(props.voteId));
+      if (!election) throw new Error('Election unexpectedly not found');
+  
+      const newQuestionId = election.questions.length + 1;
+  
+      const newQuestion = {
+        id: newQuestionId,
+        title: props.title,
+        candidates: [],
+        questionType: props.questionType, // store as string
+      };      
+  
+      election.questions.push(newQuestion);
+    });
+*/
 export const getElectionData = async (
   modifier: (map: Map<string, Election>) => void
 ): Promise<void> => {
