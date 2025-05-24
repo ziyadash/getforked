@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinButton from '../components/buttons/ThinButton';
 import '../components/logo/Banner.css';
@@ -7,9 +8,14 @@ export default function CreateVoteEditCandidate() {
   const [name, setName] = useState("Alexia Lebrun")
   const [description, setDescription] = useState("I LOVE DEVSOC!")
 
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate('/create-vote/add-position')
+  }
+
   return (
     <StyledBackground className='main'>
-      <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10">
+      <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
         ←
       </button>
       
@@ -54,7 +60,7 @@ export default function CreateVoteEditCandidate() {
             </div>
 
             <div className="flex justify-center mt-6">
-              <ThinButton text="Save" margin="mt-2" />
+              <ThinButton text="Save" margin="mt-2" onClick={goBack} />
             </div>
           </form>
         </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import StyledBackground from "../components/background/StyledBackground";
 import Heading from "../components/buttons/Heading";
 import WinnerPane from "../components/buttons/WinnerPane";
@@ -25,6 +26,11 @@ export default function ResultsPage() {
         ]
     };
 
+    const navigate = useNavigate();
+    const goBack = () => {
+        navigate('/manager/viewVotingSessions')
+    }
+
     return (
         <StyledBackground className='main'>
 
@@ -34,6 +40,9 @@ export default function ResultsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
+                <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+                    ←
+                </button>
                 <Heading text={`${results.voteName} Results`}/>
                 {results.winners.map((winner, index) => (
                     <WinnerPane key={index} winner={winner}>

@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router';
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import { deleteElement } from "../helpers";
+import logoutIcon from "../assets/svg/logout.svg";
 
 export default function ViewVotingSessionsPage() {
-    const buttons = ['start', 'stop', 'results']
+    const navigate = useNavigate();
 
     const [votingSessions, setPositions] = useState([
         'DevSoc AGM 2025', 
@@ -16,8 +18,28 @@ export default function ViewVotingSessionsPage() {
         'CSESoc AGM 2024'
     ]);
 
+    const handleStart = (index: number) => {
+        index = index
+    }
+
+    const handleStop = (index: number) => {
+        index = index
+    }
+
+    const handleResults = () => {
+        navigate('/manager/results')
+    }
+
     const handleDeletion = (index: number) => {
         setPositions(deleteElement(votingSessions, index));
+    }
+
+    const handleAddSession = () => {
+        navigate('/create-vote');
+    }
+
+    const handleLogout = () => {
+        navigate('/');
     }
 
     return (
@@ -30,20 +52,32 @@ export default function ViewVotingSessionsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
+                <button className="p-4 absolute top-2 left-4 z-10" onClick={handleLogout}>
+                    <img className="h-[40px]" src={logoutIcon}></img>
+                </button>
                 <Heading text="Your Voting Sessions"/>
                 {votingSessions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
-                                {buttons.map((type) => (
-                                    <SmallButton buttonType={type} />
-                                ))}
+                                <SmallButton 
+                                    buttonType="start" 
+                                    onClick={() => handleStart(index)} 
+                                />
+                                <SmallButton 
+                                    buttonType="stop" 
+                                    onClick={() => handleStop(index)} 
+                                />
+                                <SmallButton 
+                                    buttonType="results" 
+                                    onClick={() => handleResults()} 
+                                />
                             </div>
                         </WideButton>
                         <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
                     </div>
                 ))}
-                <WideAddButton></WideAddButton>
+                <WideAddButton onClick={() => handleAddSession()}></WideAddButton>
             </div>
         </StyledBackground>
     )

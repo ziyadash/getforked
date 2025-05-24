@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
@@ -22,6 +23,14 @@ export default function AddPositionsPage() {
         setPositions(deleteElement(positions, index));
     }
 
+    const navigate = useNavigate();
+    const handleAddPositions = () => {
+        navigate('/create-vote/add-position')
+    }
+    const goBack = () => {
+        navigate('/create-vote')
+    }
+
     return (
         <StyledBackground className='main'>
             {/* Add logout button */}
@@ -32,6 +41,9 @@ export default function AddPositionsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
+                <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+                    ←
+                </button>
                 <Heading text="Add Positions"/>
                 {positions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
@@ -50,7 +62,7 @@ export default function AddPositionsPage() {
                         <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
                     </div>
                 ))}
-                <WideAddButton></WideAddButton>
+                <WideAddButton onClick={() => handleAddPositions()}></WideAddButton>
             </div>
         </StyledBackground>
     )
