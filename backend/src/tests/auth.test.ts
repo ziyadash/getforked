@@ -47,7 +47,7 @@ describe('auth login tests!', () => {
     clear();
   });
 
-  test.only('Successful, logs in the user and returns a session id', () => {
+  test('Successful, logs in the user and returns a session id', () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     
@@ -91,7 +91,7 @@ describe('auth logout tests!', () => {
 
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test('Successful logout', () => {
+  test.only('Successful logout', () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
 
