@@ -32,6 +32,10 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		navigate('/');
 	}
 
+	const goToPage = () => {
+		navigate('/creator/view-voting-sessions')
+	}
+
 	return (
 		<div className="flex flex-col mt-8 w-[35em] h-[32em] border-2 border-[#f1e9e9] rounded-4xl">
 			<button className="text-white p-4 text-2xl flex justify-start pt-10 pl-10 hover:cursor-pointer" onClick={goBack}>

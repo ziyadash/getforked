@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import MainPage from '../pages/MainPage'
 import VoterPage from '../pages/VoterPage'
 import CreatorPage from '../pages/CreatorPage'
-import OrganiserPage from '../pages/OrganiserPage'
+import VoteSessionPage from '../pages/VoteSessionPage'
 import ViewVotingSessionsPage from '../pages/ViewVotingSessionsPage'
 import AddPositionsPage from '../pages/AddPositionsPage'
 import CreateVoteBasicInfo from '../pages/CreateVoteBasicInfo'
@@ -28,13 +28,14 @@ export default function App() {
                 <Route path="/creator/login" element={<CreatorPage />} />
                 <Route path="/creator/signup" element={<CreatorPage />} />
 
-                <Route path="/creator/voting-in-session" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
                 <Route path="/creator/view-voting-sessions" element={<ViewVotingSessionsPage />} />
                 <Route path="/creator/create-vote" element={<CreateVoteBasicInfo />} />
-                <Route path="/creator/add-positions" element={<AddPositionsPage />} />
-                <Route path="/creator/results" element={<ResultsPage />} />
+                <Route path="/creator/create-vote/positions" element={<AddPositionsPage />} />
                 <Route path="/creator/create-vote/add-position" element={<CreateVoteAddInfo />} />
                 <Route path="/creator/create-vote/edit-candidate" element={<CreateVoteEditCandidate />} />
+
+                <Route path="/creator/voting-in-session/:id" element={<VoteSessionPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
+                <Route path="/creator/results" element={<ResultsPage />} />
             </Routes>
         </BrowserRouter>
     )
