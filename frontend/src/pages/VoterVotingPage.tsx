@@ -68,7 +68,7 @@ export default function VoterVotingPage() {
         if (positionIndex < candidates.length - 1) {
             setPositionIndex(positionIndex + 1);
         } else {
-            navigate("/voter/finish");
+            navigate("/finish");
         }
     };
 

@@ -32,8 +32,12 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		navigate('/');
 	}
 
-	const goToPage = () => {
-		navigate('/creator/view-voting-sessions')
+	const submit = () => {
+		if (route.includes('voter') && true) {
+			navigate('/voter/join')
+		} else if (route.includes('creator') && true) { // true being that their details are correct/filled out once 
+			navigate('/creator/view-voting-sessions');
+		}
 	}
 
 	return (
@@ -53,7 +57,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 				}
 				{/* NOTE FOR PASSWORD PLACEHOLDER: Chrome uses • whereas other browsers use ● */}
 				{/* https://stackoverflow.com/questions/6859727/styling-password-fields-in-css */}
-				<ThinGradientButton text="Continue" margin="mt-10" w="w-[23em]" />
+				<ThinGradientButton text="Continue" margin="mt-10" w="w-[23em]" onClick={submit} />
 			</div>
 		</div>
 	);
