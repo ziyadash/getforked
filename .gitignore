@@ -1,2 +1,6 @@
 **/node_modules/
 **/dist/
+**/backend/src/data/private_key.pem
+**/backend/src/data/database.json
+**/backend/src/data/sessions.json
+**/backend/.env
