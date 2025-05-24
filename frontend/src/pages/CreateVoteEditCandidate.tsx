@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinGradientButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
+import Heading from '../components/buttons/Heading';
 
 export default function CreateVoteEditCandidate() {
   const [name, setName] = useState("Alexia Lebrun")
@@ -20,9 +21,11 @@ export default function CreateVoteEditCandidate() {
       </button>
 
       <div className="w-full max-w-3xl mx-auto px-4 pt-16">
-        <h1 className="title text-center mt-4 mb-8">Edit Candidate</h1>
+        <div className='mb-4'>
+          <Heading text="Edit Candidate" />
+        </div>
 
-        <div className="border-2 border-[#f1e9e9] bg-white/10 backdrop-blur-sm rounded-4xl p-6 md:p-8">
+        <div className="border-2 border-[#f1e9e9] bg-linear-130 from-violet-950/40 to-white/30 backdrop-blur-sm rounded-4xl p-6 md:p-8">
           <form className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="name" className="text-white text-lg">

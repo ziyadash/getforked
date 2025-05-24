@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 interface VotingOrganiserButtonInputs {
   zid: string,
   text: string,
@@ -8,6 +10,7 @@ interface VotingOrganiserButtonInputs {
 }
 
 export default function VotingOrganiserButton({ zid, text, width, height, zidList, setZidList }: VotingOrganiserButtonInputs) {
+  const navigate = useNavigate();
   const handleChange = (): void => {
     /*
     * Deprecated Code !!
@@ -28,6 +31,7 @@ export default function VotingOrganiserButton({ zid, text, width, height, zidLis
 
     else */if (text == "Start Session") {
       // TODO: Start the voting session, passing through the list of voters
+      navigate('/creator/view-voting-sessions');
     }
   }
 

@@ -28,7 +28,7 @@ export default function ResultsPage() {
 
     const navigate = useNavigate();
     const goBack = () => {
-        navigate('/manager/viewVotingSessions')
+        navigate('/creator/view-voting-sessions')
     }
 
     return (
@@ -40,10 +40,10 @@ export default function ResultsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
-                <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+                <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
                     ←
                 </button>
-                <Heading text={`${results.voteName} Results`}/>
+                <Heading text={`${results.voteName} Results`} />
                 {results.winners.map((winner, index) => (
                     <WinnerPane key={index} winner={winner}>
                     </WinnerPane>

@@ -19,15 +19,16 @@ export default function ViewVotingSessionsPage() {
     ]);
 
     const handleStart = (index: number) => {
-        index = index
+        index = index;
+        navigate(`/creator/voting-in-session/${index}`);
     }
 
     const handleStop = (index: number) => {
-        index = index
+        index = index;
     }
 
-    const handleResults = () => {
-        navigate('/creator/results/01')
+    const handleResults = (index: number) => {
+        navigate(`/creator/results/${index}`);
     }
 
     const handleDeletion = (index: number) => {
@@ -68,7 +69,7 @@ export default function ViewVotingSessionsPage() {
                                 />
                                 <SmallButton
                                     buttonType="results"
-                                    onClick={() => handleResults()}
+                                    onClick={() => handleResults(index)}
                                 />
                             </div>
                         </WideButton>
@@ -78,5 +79,5 @@ export default function ViewVotingSessionsPage() {
                 <WideAddButton onClick={() => handleAddSession()}></WideAddButton>
             </div>
         </StyledBackground>
-    )
+    );
 }
