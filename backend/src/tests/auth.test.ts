@@ -1,4 +1,4 @@
-import { clear, getData, getSessions} from "../data/dataStore";
+import { clear, getSessions} from "../data/dataStore";
 import { getHashOf, verifySessionId } from "../data/dataUtil";
 import { encryptWithPublicKey } from "../../../shared/src/encryptionBackend";
 import { post, OK, BAD_REQUEST, UNAUTHORISED } from './testUtil';
@@ -12,7 +12,7 @@ async function beforeEveryTest() {
 
 ////////////////////////////// TEST CASES  ////////////////////////////////
 
-describe.skip('auth register tests!', () => {
+describe('auth register tests!', () => {
   beforeEach(async () => await beforeEveryTest());
 
   
@@ -45,7 +45,7 @@ describe.skip('auth register tests!', () => {
   });
 });
 
-describe.skip('auth login tests!', () => {
+describe('auth login tests!', () => {
   beforeEach(async () => await beforeEveryTest());
 
 
@@ -88,9 +88,8 @@ describe.skip('auth login tests!', () => {
   });
 });
 
-describe.skip('auth logout tests!', () => {
+describe('auth logout tests!', () => {
   beforeEach(async () => await beforeEveryTest());
-
 
   afterEach(() => {
     clear();
@@ -113,7 +112,7 @@ describe.skip('auth logout tests!', () => {
 
     // Confirm session is gone
     const sessions = getSessions();
-    const stillActive = sessions.find(s => s.sessionId === sessionId);
+    const stillActive = sessions.sessions.find(s => s.sessionId === sessionId);
     expect(stillActive).toBeUndefined();
   });
 

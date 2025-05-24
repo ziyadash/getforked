@@ -33,6 +33,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "async-mutex": "^0.5.0",
     "babel-jest": "^29.7.0",
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",

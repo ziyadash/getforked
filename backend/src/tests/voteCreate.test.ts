@@ -30,7 +30,7 @@ User session from a prevoius test, or Create a session by calling the user API a
 // we should actually use the API route:
 //    router.post('/login', login);
 // to register a user and create a session token
-describe.skip('POST /createVoteSession', () => {
+describe('POST /createVoteSession', () => {
   beforeEach(() => {
     clear();
   });
@@ -77,6 +77,8 @@ describe('tests for viewing/adding/modifying/deleting candidates in a position',
   const zId = encryptWithPublicKey(zidPlainText);
   const zPass = encryptWithPublicKey(zpassPlainText);
   const registerRes = post(registerRoute, { zId, zPass });
+  console.log("ADSJALSKDJKJFLK AJFLKJALDKJ")
+  console.log(registerRes);
   const sessionId = registerRes.body.sessionId.toString();
   const payload = verifySessionId(sessionId);
   const authUserId = payload?.userId;

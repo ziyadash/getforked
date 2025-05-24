@@ -49,7 +49,7 @@ export const authCreateVoteSession = (
   }
 
   // Find userId from session
-  const session = sessions.find(
+  const session = sessions.sessions.find(
     (session) => session.sessionId === props.userSessionId
   );
 

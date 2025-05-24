@@ -3,4 +3,4 @@
 **/backend/src/data/private_key.pem
 **/backend/src/data/database.json
 **/backend/src/data/sessions.json
-**/.env
+**/backend/.env
