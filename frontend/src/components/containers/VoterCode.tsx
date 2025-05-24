@@ -1,5 +1,5 @@
 import { useState } from "react"
-import OrganiserButton from "../buttons/OrganiserButton"
+import OrganiserButton from "../buttons/VotingOrganiserButton"
 import SampleQRButton from "../buttons/SampleQRButton"
 import AuthInput from "../inputs/AuthInput"
 import "./VoterCode.css"

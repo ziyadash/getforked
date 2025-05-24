@@ -18,9 +18,9 @@ export default function MainButton(props: MainButtonProps) {
 
     function button_click() {
         if (props.action == "Join Vote") {
-            navigate("/voter")
+            navigate("/voter/login")
         } else {
-            navigate("/manager")
+            navigate("/creator/login")
         }
     }
 

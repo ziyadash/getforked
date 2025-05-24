@@ -6,11 +6,12 @@ import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import { deleteElement, reorderElements } from "../helpers";
+import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function AddPositionsPage() {
     const [positions, setPositions] = useState([
-        'Treasurer', 
-        'GEDI Officer', 
+        'Treasurer',
+        'GEDI Officer',
         'Admin Officer',
         'Co-President (Project Operations)',
     ]);
@@ -25,10 +26,13 @@ export default function AddPositionsPage() {
 
     const navigate = useNavigate();
     const handleAddPositions = () => {
-        navigate('/create-vote/add-position')
+        navigate('/creator/create-vote/add-position')
     }
     const goBack = () => {
-        navigate('/create-vote')
+        navigate('/creator/create-vote')
+    }
+    const navigateAllVotes = () => {
+        navigate('/creator/view-voting-sessions')
     }
 
     return (
@@ -41,28 +45,29 @@ export default function AddPositionsPage() {
                 pt-[0rem]
                 p-[6rem]
             ">
-                <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+                <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
                     ←
                 </button>
-                <Heading text="Add Positions"/>
+                <Heading text="Add Positions" />
                 {positions.map((name, index) => (
                     <div className="flex flex-row justify-center items-center gap-[2vw]">
                         <WideButton text={name} margin="mt-[0]">
                             <div className="buttons-container">
-                                <SmallButton 
-                                    buttonType="up" 
-                                    onClick={() => handleReorder(index, 'up')} 
+                                <SmallButton
+                                    buttonType="up"
+                                    onClick={() => handleReorder(index, 'up')}
                                 />
-                                <SmallButton 
-                                    buttonType="down" 
-                                    onClick={() => handleReorder(index, 'down')} 
+                                <SmallButton
+                                    buttonType="down"
+                                    onClick={() => handleReorder(index, 'down')}
                                 />
                             </div>
                         </WideButton>
-                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)}/>
+                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)} />
                     </div>
                 ))}
                 <WideAddButton onClick={() => handleAddPositions()}></WideAddButton>
+                <ThinGradientButton text="Save" margin="mt-2 mr-22" onClick={navigateAllVotes} w={'w-25'} />
             </div>
         </StyledBackground>
     )

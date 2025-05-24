@@ -1,8 +1,10 @@
+import StyledBackground from "../components/background/StyledBackground";
+import AuthBox from "../components/containers/AuthBox";
 
 export default function VoterPage() {
     return (
-        <div>
-            Voter Page
-        </div>
+        <StyledBackground className='main'>
+            <AuthBox user='voter' />
+        </StyledBackground>
     )
 }
