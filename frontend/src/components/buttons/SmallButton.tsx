@@ -1,4 +1,3 @@
-import React from 'react';
 import smallButton from './smallButton.svg';
 import './SmallButton.css'
 import editIcon from '../../assets/svg/edit.svg'
@@ -16,11 +15,11 @@ import resultsIcon from '../../assets/svg/results.svg'
 // }
 
 type SmallButtonProps = {
-  buttonType: string;
-  onClick?: () => void;
+    buttonType: string;
+    onClick?: () => void;
 };
 
-export default function SmallButton({buttonType, onClick}: SmallButtonProps) {
+export default function SmallButton({ buttonType, onClick }: SmallButtonProps) {
     let buttonIcon
     if (buttonType == 'edit') {
         buttonIcon = editIcon
@@ -38,9 +37,9 @@ export default function SmallButton({buttonType, onClick}: SmallButtonProps) {
         buttonIcon = downIcon
     }
 
-	return (
+    return (
         <button className="small-button" onClick={onClick}>
-            <img src={smallButton} alt="Small button"/>
+            <img src={smallButton} alt="Small button" />
             <img className="small-button-icon" src={buttonIcon} />
         </button>
     )

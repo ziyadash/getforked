@@ -6,8 +6,6 @@ import MedHeading from "../components/buttons/MedHeading";
 import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
-import ThinButton from "../components/buttons/ThinGradientButton";
-import SmallThinButton from "../components/buttons/SmallThinButton";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function VoterVotingPage() {
