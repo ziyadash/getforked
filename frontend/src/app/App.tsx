@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import MainPage from '../pages/MainPage'
 import VoterPage from '../pages/VoterPage'
-import ManagerPage from '../pages/ManagerPage'
+import CreatorPage from '../pages/CreatorPage'
 import OrganiserPage from '../pages/OrganiserPage'
 import ViewVotingSessionsPage from '../pages/ViewVotingSessionsPage'
 import AddPositionsPage from '../pages/AddPositionsPage'
@@ -18,21 +18,23 @@ export default function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<MainPage />} />
+
                 <Route path="/voter/login" element={<VoterPage />} />
                 <Route path="/voter/signup" element={<VoterPage />} />
                 <Route path="/voter/join" element={<VoterJoinSessionPage />} />
                 <Route path="/voter/voting" element={<VoterVotingPage />} />
                 <Route path="/voter/finish" element={<VotingFinishPage />} />
 
-                <Route path="/manager/login" element={<ManagerPage />} />
-                <Route path="/manager/signup" element={<ManagerPage />} />
-                <Route path="/organiser" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
-                <Route path="/manager/viewVotingSessions" element={<ViewVotingSessionsPage />} />
-                <Route path="/manager/addPositions" element={<AddPositionsPage />} />
-                <Route path="/manager/results" element={<ResultsPage />} />
-                <Route path="/create-vote" element={<CreateVoteBasicInfo />} />
-                <Route path="/create-vote/add-position" element={<CreateVoteAddInfo />} />
-                <Route path="/create-vote/edit-candidate" element={<CreateVoteEditCandidate />} />
+                <Route path="/creator/login" element={<CreatorPage />} />
+                <Route path="/creator/signup" element={<CreatorPage />} />
+
+                <Route path="/creator/voting-in-session" element={<OrganiserPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
+                <Route path="/creator/view-voting-sessions" element={<ViewVotingSessionsPage />} />
+                <Route path="/creator/create-vote" element={<CreateVoteBasicInfo />} />
+                <Route path="/creator/add-positions" element={<AddPositionsPage />} />
+                <Route path="/creator/results" element={<ResultsPage />} />
+                <Route path="/creator/create-vote/add-position" element={<CreateVoteAddInfo />} />
+                <Route path="/creator/create-vote/edit-candidate" element={<CreateVoteEditCandidate />} />
             </Routes>
         </BrowserRouter>
     )

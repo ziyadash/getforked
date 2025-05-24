@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
-import ThinButton from '../components/buttons/ThinButton';
+import ThinButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 
 export default function CreateVoteEditCandidate() {
@@ -18,7 +18,7 @@ export default function CreateVoteEditCandidate() {
       <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
         ←
       </button>
-      
+
       <div className="w-full max-w-3xl mx-auto px-4 pt-16">
         <h1 className="title text-center mt-4 mb-8">Edit Candidate</h1>
 

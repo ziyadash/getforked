@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
-import ThinButton from '../components/buttons/ThinButton';
+import ThinButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 
 export default function CreateVoteBasicInfo() {
@@ -25,7 +25,7 @@ export default function CreateVoteBasicInfo() {
                 <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
                     ←
                 </button>
-                
+
                 <div className="w-full max-w-3xl mx-auto px-4">
                     <h1 className="title text-center mt-4 mb-8">Create Vote</h1>
 
@@ -95,9 +95,9 @@ export default function CreateVoteBasicInfo() {
                             <div className="flex items-center justify-between">
                                 <span className="text-white text-lg">Require zID verification for voters</span>
                                 <label className="relative inline-flex items-center cursor-pointer">
-                                    <input 
-                                        type="checkbox" 
-                                        className="sr-only peer" 
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
                                         checked={requireVerification}
                                         onChange={() => setRequireVerification(!requireVerification)}
                                     />
@@ -106,14 +106,14 @@ export default function CreateVoteBasicInfo() {
                             </div>
 
                             <div className="flex justify-center mt-6">
-                            <ThinButton text="Continue" margin="mt-2" onClick={() => goToAddPositions()} />
+                                <ThinButton text="Continue" margin="mt-2" onClick={() => goToAddPositions()} />
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-            
+
         </StyledBackground>
     );
 }
