@@ -2,7 +2,7 @@ import {
   // getSessions,
   // setSessions,
   // createAndStoreSession,
-  userDatabase,
+  getUserData,
   saveUserDataBaseToFile,
   createAndStoreSession
 } from '../data/dataStore';
@@ -14,7 +14,6 @@ import { write } from 'fs';
 import { rawListeners } from 'process';
 
 // get instance of mutex
-const { writeMutex } = require('../data/syncPrimitives');
 const USER_DATABASE_PATH = require('../data/userDatabase.json'); // not 100% sure if this is correct
 const fs = require('fs/promises');
 
@@ -109,27 +108,29 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
 
   const hashedName = getHashOf(result.displayName!);
 
-  const release = await writeMutex.acquire();
   let registerRes: { sessionId?: string; error?: string; status?: number } = {};
 
-  try {
-    if (userDatabase.has(userId)) {
+  await getUserData(map => {
+    if (map.has(userId)) {
       console.log("EORRRRRRRRRRRRRR")
-      release();
       return  { error: 'User already registered', status: StatusCodes.CONFLICT };
     }
-
-    userDatabase.set(userId, hashedName);
+    map.set(userId, hashedName);
     console.log("user database SAVEDD TO DATA, NOW TO PERSIST THE DATA");
-    await saveUserDataBaseToFile();
-  } finally {
-    release();
-  }
+  })
 
-  console.log("THIS IS THE USER ID " + userDatabase.get(userId));
+    // if (userDatabase.has(userId)) { // NEED TO REPLACE THIS WITH GET DATA
+    //   console.log("EORRRRRRRRRRRRRR")
+    //   return  { error: 'User already registered', status: StatusCodes.CONFLICT };
+    // }
+
+    // userDatabase.set(userId, hashedName);
+    // console.log("user database SAVEDD TO DATA, NOW TO PERSIST THE DATA");
+    await saveUserDataBaseToFile();
+
   const sessionId = createAndStoreSession(userId);
 
-  return registerRes;
+  return { sessionId };
 }
 
 // /**
@@ -138,27 +139,27 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
 //  * @param zPass 
 //  * @returns 
 //  */
-export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
-  // decrypt first
-  const decryptedZID = decryptData(zId);
-  const decryptedZPass = decryptData(zPass);
+// export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
+//   // decrypt first
+//   const decryptedZID = decryptData(zId);
+//   const decryptedZPass = decryptData(zPass);
 
-  const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
-  if (result.error) return result;
+//   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
+//   if (result.error) return result;
 
-  const userId = getHashOf(decryptedZID);
-  // const db = getData();
-  // const user = db.users.find((u) => u.userId === userId);
-  const user = userDatabase.get(userId);
+//   const userId = getHashOf(decryptedZID);
+//   // const db = getData();
+//   // const user = db.users.find((u) => u.userId === userId);
+//   const user = userDatabase.get(userId);
 
-  if (!user) {
-    return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
-  }
+//   if (!user) {
+//     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
+//   }
 
-  // const sessionId = createAndStoreSession(userId);
+//   // const sessionId = createAndStoreSession(userId);
 
-  return { };
-}
+//   return { };
+// }
 
 // /**
 //  * @param sessionId

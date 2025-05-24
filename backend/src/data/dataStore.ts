@@ -1,6 +1,11 @@
 import { DataStore, Election, Session, SessionStore, User } from '../../../shared/interfaces';
 import {generateUserId, generateSessionId, verifySessionId, getHashOf} from './dataUtil';
-import { promises as fs } from 'fs';
+import { promises as fs, write } from 'fs';
+// to create & share one instance of Mutex & Semaphore
+const {Mutex, Semaphore } = require('async-mutex');
+
+const writeMutex = new Mutex();
+const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
 
 // copied pretty much all of this code from devsoc mail!
 
@@ -18,7 +23,6 @@ let electionDatabase: Map<string, Election> = new Map();
 const USER_DATABASE_PATH = './src/data/userDatabase.json';
 const SESSIONSTORE_PATH = './src/data/sessions.json'
 // importing instance of mutex & semaphore
-const { writeMutex, readSemaphore } = require('./syncPrimitives');
 
 // TODO: move this to a .env file! and put the .env in .gitignore
 const secretKey = 'abcde12345';
@@ -94,6 +98,19 @@ export function setSessions(sessions: SessionStore) {
 //   saveData();
 // }
 
+// create a getUserData function to modify
+export const getUserData = async (
+  modifier: (map: Map<string, string>) => void
+): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    modifier(userDatabase);
+    // await saveUserDataBaseToFile(); // optionally persist changes
+  } finally {
+    release();
+  }
+};
+
 export const loadUserDatabaseFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
 
@@ -144,18 +161,29 @@ export const loadSessionFromFile = async (): Promise<void> => {
 }
 
 export const saveSessionToFile = async () => {
-  const json = JSON.stringify(sessionStore, null, 2);
-  await fs.writeFile(SESSIONSTORE_PATH, json, 'utf8');
-  console.log(`Session store saved to ${SESSIONSTORE_PATH}`);
+  const release = await writeMutex.acquire();
+  try {
+    const json = JSON.stringify(sessionStore, null, 2);
+    await fs.writeFile(SESSIONSTORE_PATH, json, 'utf8');
+    console.log(`Session store saved to ${SESSIONSTORE_PATH}`);
+  } catch (err) {
+    console.error('Error saving session store:', err);
+  } finally {
+    release();
+  }
 }
 
 export const saveUserDataBaseToFile = async (): Promise<void> => {
-  const obj = Object.fromEntries(userDatabase);
-  const json = JSON.stringify(obj, null, 2);
+  const release = await writeMutex.acquire();
+  try {
+    const obj = Object.fromEntries(userDatabase);
+    const json = JSON.stringify(obj, null, 2);
+    await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
+    console.log(`User database saved to ${USER_DATABASE_PATH}`);
 
-  console.log("JSONNN FROM SAVEUSERDATA: " + json);
-  await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
-  console.log(`User database saved to ${USER_DATABASE_PATH}`);
+  } finally {
+    release();
+  }
 } 
 
 export const clear = async (): Promise<void>  => {
