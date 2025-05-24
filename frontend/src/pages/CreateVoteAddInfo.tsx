@@ -5,6 +5,7 @@ import ThinButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
 import editIcon from '../assets/svg/edit.svg';
 import binIcon from '../assets/svg/bin.svg';
+import Heading from '../components/buttons/Heading';
 
 export default function CreateVoteAddInfo() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function CreateVoteAddInfo() {
   }
 
   const goBack = () => {
-    navigate('/manager/addPositions');
+    navigate('/creator/create-vote/positions');
   }
 
   const handleAddPosition = () => {
@@ -45,14 +46,16 @@ export default function CreateVoteAddInfo() {
         pt-[0rem]
         p-[6rem]
     ">
-        <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+        <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
           ←
         </button>
 
         <div className="w-full max-w-3xl mx-auto px-4">
-          <h1 className="title text-center mt-4 mb-8">Add Position</h1>
+          <div className='mb-4'>
+            <Heading text="Add a New Position" />
+          </div>
 
-          <div className="border-2 border-[#f1e9e9] bg-white/10 backdrop-blur-sm rounded-4xl p-6 md:p-8">
+          <div className="border-2 border-[#f1e9e9] bg-linear-130 from-transparent to-white/30  backdrop-blur-sm rounded-4xl p-6 md:p-8">
             <div className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="position" className="text-white text-lg">
@@ -118,7 +121,7 @@ export default function CreateVoteAddInfo() {
               </div>
 
               <div className="flex justify-center mt-6">
-                <ThinButton text="Continue" margin="mt-2" onClick={handleAddPosition} />
+                <ThinButton text="Continue" margin="mt-2" onClick={handleAddPosition} w={'w-40'} />
               </div>
             </div>
           </div>

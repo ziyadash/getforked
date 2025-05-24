@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinButton from '../components/buttons/ThinGradientButton';
 import '../components/logo/Banner.css';
+import Heading from '../components/buttons/Heading';
 
 export default function CreateVoteBasicInfo() {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function CreateVoteBasicInfo() {
     }
 
     const goToAddPositions = () => {
-        navigate('/manager/addPositions');
+        navigate('/creator/create-vote/positions');
     }
     return (
         <StyledBackground className='main'>
@@ -22,12 +23,16 @@ export default function CreateVoteBasicInfo() {
                 pt-[0rem]
                 p-[6rem]
             ">
-                <button className="text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
+                <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
                     ←
                 </button>
 
                 <div className="w-full max-w-3xl mx-auto px-4">
-                    <h1 className="text-4xl text-white text-center mt-4 mb-8">Create a New Vote</h1>
+                    {/* <h1 className="text-4xl text-white text-center mt-4 mb-8">Create a New Vote</h1> */}
+
+                    <div className='mb-4'>
+                        <Heading text="Create a New Vote" />
+                    </div>
 
                     <div className="border-2 border-[#f1e9e9] bg-linear-130 from-transparent to-white/30 backdrop-blur-sm rounded-4xl p-6 md:p-8">
                         <div className="space-y-6">
