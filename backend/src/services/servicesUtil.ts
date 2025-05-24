@@ -1,4 +1,4 @@
-import { getUserData, getElectionData } from '../data/dataStore';
+import { getUserData, getElectionData, getSessionData } from '../data/dataStore';
 import { User, Election, Candidate, Question } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
 
@@ -63,4 +63,26 @@ export function validatePositionId(
   }
 
   return { position };
+}
+
+/**
+ * Validates a session ID and returns the associated user ID.
+ */
+export async function validateSessionId(
+  sessionId: string
+): Promise<{ userId: string } | { error: string; status: number }> {
+  let sessionUserId: string | null = null;
+
+  await getSessionData(store => {
+    const session = store.sessions.find(s => s.sessionId === sessionId);
+    if (session) {
+      sessionUserId = session.userId;
+    }
+  });
+
+  if (!sessionUserId) {
+    return { error: 'Invalid session ID', status: StatusCodes.UNAUTHORIZED };
+  }
+
+  return { userId: sessionUserId };
 }

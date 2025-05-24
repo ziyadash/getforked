@@ -1,14 +1,13 @@
 // import { clear, getSessions} from "../data/dataStore";
-import { getHashOf, verifySessionId } from "../data/dataUtil";
 import { encryptWithPublicKey } from "../../../shared/src/encryptionBackend";
 import { post, OK, BAD_REQUEST, UNAUTHORISED } from './testUtil';
 import { registerRoute, loginRoute, logoutRoute } from "./testUtil";
 import { zidPlainText, zpassPlainText } from "./testUtil";
-import { clear, getSessions } from "../data/dataStore";
+import { clear, getSessionData } from "../data/dataStore";
 
 async function beforeEveryTest() {
-  await new Promise(res => setTimeout(res, 1000));
-  // clear();
+  await new Promise(res => setTimeout(res, 10));
+  // await clear();
 }
 
 ////////////////////////////// TEST CASES  ////////////////////////////////
@@ -47,7 +46,7 @@ describe('auth login tests!', () => {
     clear();
   });
 
-  test('Successful, logs in the user and returns a session id', () => {
+  test.only('Successful, logs in the user and returns a session id', async () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
     
@@ -57,7 +56,7 @@ describe('auth login tests!', () => {
 
     // log out
     const sessionId = regRes.body.sessionId;
-    const logoutRes = post(logoutRoute, { token: sessionId });
+    const logoutRes = post(logoutRoute, { sessionId });
 
     // then log back in again
     const loginRes = post(loginRoute, { zId, zPass });
@@ -86,31 +85,33 @@ describe('auth logout tests!', () => {
   beforeEach(async () => await beforeEveryTest());
 
   afterEach(() => {
-    clear();
+    // clear();
   });
 
   // you can manually check that this test works by using your own zid and zpass
   // (it works)
-  test.only('Successful logout', () => {
+  test('Successful logout', async () => {
     const zId = encryptWithPublicKey(zidPlainText);
-    const zPass = encryptWithPublicKey(zpassPlainText); // helper function directly encrypts, not testing encrypton from frontend
-
+    const zPass = encryptWithPublicKey(zpassPlainText);
+  
     const regRes = post(registerRoute, { zId, zPass });
     expect(regRes.statusCode).toEqual(OK);
-
-    console.log("hello1!")
-
+  
     const sessionId = regRes.body.sessionId;
-    const logoutRes = post(logoutRoute, { token: sessionId });
-
+  
+    const logoutRes = post(logoutRoute, { sessionId });
     expect(logoutRes.statusCode).toEqual(OK);
     expect(logoutRes.body).toEqual({ message: expect.any(String) });
-
+  
     // Confirm session is gone
-    const sessions = getSessions();
-    const stillActive = sessions.sessions.find(s => s.sessionId === sessionId);
-    expect(stillActive).toBeUndefined();
-  });
+    let stillActive: boolean = false;
+  
+    await getSessionData(store => {
+      stillActive = store.sessions.some(s => s.sessionId === sessionId);
+    });
+  
+    expect(stillActive).toBe(false);
+  });  
 
   test('Unsuccessful logout: missing token', () => {
     const res = post(logoutRoute, {});

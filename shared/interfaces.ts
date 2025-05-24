@@ -24,7 +24,7 @@ interface Election {
 } 
 
 enum QuestionType {
-    SelectOne,
+    // SelectOne, we are only doing preferential voting for the mvp!
     Preferential,
 }
 

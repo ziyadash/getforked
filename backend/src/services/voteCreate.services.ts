@@ -1,337 +1,395 @@
-// import {
-//   getSessions,
-// } from '../data/dataStore';
-// import { Question, Election, QuestionType, } from '../../../shared/interfaces';
-// import { Candidate } from '../../../shared/interfaces';
-// import { StatusCodes } from 'http-status-codes';
-// import { validateUserId, validateElectionId, validatePositionId } from './servicesUtil';
+import { getElectionData, saveElectionDatabaseToFile } from '../data/dataStore';
+import { Question, Election, QuestionType, Candidate } from '../../../shared/interfaces';
+import { StatusCodes } from 'http-status-codes';
+import { validateUserId, validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
 
-// // TODO: potentially refactor this code so that the createCandidate function is just called in 
-// // addPosition/editPosition? seems unnecessary to have a whole API server route for it
-// // but im not sure so il think about it and implement later once code has been merged together 
+// TODO: potentially refactor this code so that the createCandidate function is just called in 
+// addPosition/editPosition? seems unnecessary to have a whole API server route for it
+// but im not sure so il think about it and implement later once code has been merged together 
 
-// /**
-//  * User creates a vote session.
-//  * @param userSessionId 
-//  * @param title 
-//  * @param description
-//  * @param images
-//  * @param startDate
-//  * @param endDate
-//  * @param zid_requirement
-//  * @param locationOfVote
-//  * @returns new election ID
-//  */
+/**
+ * User creates a vote session.
+ * @param userSessionId 
+ * @param title 
+ * @param description
+ * @param images
+ * @param startDate
+ * @param endDate
+ * @param zid_requirement
+ * @param locationOfVote
+ * @returns new election ID
+ */
 
-// interface authCreateVoteSessionProps {
-//   userSessionId: string;
-//   title: string;
-//   description: string;
-//   images: string[];
-//   startDate: Date;
-//   endDate: Date;
-//   zid_requirement: boolean;
-//   locationOfVote?: string;
-// }
+interface CreateElectionProps {
+    userSessionId: string;
+    title: string;
+    description: string;
+    images: string[];
+    startDate: Date;
+    endDate: Date;
+    zid_requirement: boolean;
+    locationOfVote?: string;
+  }
 
-// export const authCreateVoteSession = (
-//   props: authCreateVoteSessionProps
-// ): number => {
-//   const db = getData();
-//   const sessions = getSessions();
-
-//   console.log('creating session');
-
-//   if (!db) {
-//     throw new Error('Failed to load data store');
-//   }
-
-//   // Find userId from session
-//   const session = sessions.sessions.find(
-//     (session) => session.sessionId === props.userSessionId
-//   );
-
-//   console.log('current sessions:');
-//   console.log(sessions);
-//   console.log('Found session:');
-//   console.log(session);
-//   console.log('User session ID:');
-//   console.log(props.userSessionId);
-
-//   if (!session) throw new Error('Invalid session ID');
-
-//   const userId = session.userId; // we store hashed zids, not raw zids
-
-//   if (props.title.trim().length === 0) {
-//     throw new Error('Title cannot be empty');
-//   }
-
-//   const questions: Question[] = [];
-
-//   const newElection: Election = {
-//     id: db.elections.length + 1, // subject to change
-//     authUserId: userId,
-//     name: props.title,
-//     description: props.description,
-//     images: props.images,
-//     location: props.locationOfVote,
-//     date_time_start: props.startDate,
-//     date_time_end: props.endDate,
-//     requires_zid: props.zid_requirement,
-//     questions,
-//   };
-
-//   db.elections.push(newElection);
-//   setData(db);
-
-//   return newElection.id;
-// };
-
-// // functionality for creating voting sessions is already done
-// // gonna add the functionality for:
-// // - viewing voting sessions, corresponding to the "Create Vote - View Voting Sessions"  page
-// // - viewing positions in a vote, corresponding to the "Create Vote - Add Positions"  page
-// // - adding a position to a vote, corresponding to the "Create Vote - Add Position"  page
-// // TODO: this is a stub for the addPosition HTTP route
-// interface addPositionProps {
-//   authuserId: number;
-//   voteId: number;
-//   title: string;
-//   questionType: QuestionType // e.g., "single" or "multiple"
-// }
-
-// // stub/hard code this function, patrick is implementing it
-// export function addPosition(positionData: addPositionProps) {
-//   const data = getData();
-//   const { authuserId, voteId, title, questionType } = positionData;
-
-//   // Find the matching election
-//   const election = data.elections.find(
-//     e => e.id === voteId && e.authUserId === String(authuserId)
-//   );
-
-//   if (!election) {
-//     throw new Error("Election not found. This should not happen in a stub.");
-//   }
-
-//   const newQuestionId = election.questions.length + 1;
-
-//   const newQuestion = {
-//     id: newQuestionId,
-//     title,
-//     candidates: [],
-//     questionType,
-//   };
-
-//   // Mutate election's questions
-//   election.questions.push(newQuestion);
-
-//   // Set updated data back
-//   setData(data);
-
-//   return { positionId: newQuestion.id };
-// }
-
-// // functionality for creating votes is already done
-// // functionality for creating positions in a vote is already done
-// // gonna add the functionality for:
-// // - viewing candidates for a position, corresponding to the "Create Vote - Add Position"  page
-// // - adding candidates for a position, corresponding to the "Create Vote - Add Position"  page
-// // - editing candidates for a position, corresponding to the "Create Vote - Edit Candidate"  page
-
-// interface createCandidateProps {
-//   authuserId: string,
-//   voteId: number,
-//   positionId: number,
-//   name: string,
-// };
-
-// // creates a candidate for a given position in a vote
-// // based on the figma, in creating a candidate we need only specify a name
-// // if we want to add more information to a candidate we can select it,
-// // and edit the name, description, and add an image 
-// export function createCandidate(candidateData: createCandidateProps): any {
-//   const userCheck = validateUserId(candidateData.authuserId);
-//   if ('error' in userCheck) return userCheck;
-
-//   const electionCheck = validateElectionId(
-//     candidateData.voteId,
-//     candidateData.authuserId
-//   );
-//   if ('error' in electionCheck) return electionCheck;
-
-//   const positionCheck = validatePositionId(
-//     electionCheck.election,
-//     candidateData.positionId
-//   );
-//   if ('error' in positionCheck) return positionCheck;
-
-//   const db = getData();
-//   const { position } = positionCheck;
-//   const newCandidateIndex = position.candidates.length + 1;
-
-//   const newCandidate: Candidate = {
-//     fullName: candidateData.name,
-//     description: '',
-//     image: '',
-//     votes: [],
-//     candidateIndex: newCandidateIndex
-//   };
-
-//   position.candidates.push(newCandidate);
-//   setData(db);
-
-//   return newCandidateIndex;
-// }
-
-// interface editCandidateProps {
-//   authuserId: string;
-//   voteId: number;
-//   positionId: number;
-//   candidateIndex: number;
-//   name: string;
-//   description: string;
-//   image: string;
-// }
-
-// export function editCandidate(candidateData: editCandidateProps): any {
-//   const userCheck = validateUserId(candidateData.authuserId);
-//   if ('error' in userCheck) return userCheck;
-
-//   const electionCheck = validateElectionId(
-//     candidateData.voteId,
-//     candidateData.authuserId
-//   );
-//   if ('error' in electionCheck) return electionCheck;
-
-//   const positionCheck = validatePositionId(
-//     electionCheck.election,
-//     candidateData.positionId
-//   );
-//   if ('error' in positionCheck) return positionCheck;
-
-//   const db = getData();
-//   const { position } = positionCheck;
+/**
+ * Creates a new election and returns its unique ID.
+ */
+export const createElection = async (
+    props: CreateElectionProps
+  ): Promise<number> => {
+    const sessionValidation = await validateSessionId(props.userSessionId);
+    if ('error' in sessionValidation) {
+      throw new Error(sessionValidation.error);
+    }
   
-//   const candidate = position.candidates.find(
-//     c => c.candidateIndex === candidateData.candidateIndex
-//   );
+    const userId = sessionValidation.userId;
   
-
-//   if (!candidate) {
-//     return { error: 'Candidate not found', status: StatusCodes.NOT_FOUND };
-//   }
-
-//   candidate.fullName = candidateData.name;
-//   candidate.description = candidateData.description;
-//   candidate.image = candidateData.image;
-
-//   setData(db);
-//   return 0;
-// }
-
-// interface deleteCandidateProps {
-//   authuserId: string;
-//   voteId: number;
-//   positionId: number;
-//   candidateIndex: number;
-// }
-
-// export function deleteCandidate(candidateData: deleteCandidateProps): any {
-//   console.log("we are in delete candidate, service layer!");
-//   const userCheck = validateUserId(candidateData.authuserId);
-//   if ('error' in userCheck) return userCheck;
-//   console.log('1');
-//   const electionCheck = validateElectionId(
-//     candidateData.voteId,
-//     candidateData.authuserId
-//   );
-//   if ('error' in electionCheck) return electionCheck;
-//   console.log('2')
-//   const positionCheck = validatePositionId(
-//     electionCheck.election,
-//     candidateData.positionId
-//   );
-//   if ('error' in positionCheck) return positionCheck;
-//   console.log('3')
-
-//   const db = getData();
-//   const { position } = positionCheck;
-
-//   const foundIndex = position.candidates.findIndex(
-//     c => c.candidateIndex === candidateData.candidateIndex
-//   );
+    if (props.title.trim().length === 0) {
+      throw new Error('Title cannot be empty');
+    }
   
-//   if (foundIndex === -1) {
-//     return { error: 'Candidate not found', status: StatusCodes.NOT_FOUND };
-//   }
-//   console.log('4')
+    let newElectionId: number = 1;
+  
+    await getElectionData(map => {
+      const maxId = Math.max(0, ...Array.from(map.values()).map(e => e.id));
+      newElectionId = maxId + 1;
+  
+      const newElection: Election = {
+        id: newElectionId,
+        authUserId: userId,
+        name: props.title,
+        description: props.description,
+        images: props.images,
+        location: props.locationOfVote,
+        date_time_start: props.startDate,
+        date_time_end: props.endDate,
+        requires_zid: props.zid_requirement,
+        questions: [],
+      };
+  
+      map.set(newElectionId.toString(), newElection);
+    });
+  
+    await saveElectionDatabaseToFile();
+    return newElectionId;
+  };
 
-//   console.log("before: "+db.elections[0].questions[0].candidates);
-//   position.candidates.splice(foundIndex, 1);
-//   console.log("after: "+db.elections[0].questions[0].candidates);
-//   setData(db);
-//   return 0;  
-// }
+// functionality for creating voting sessions is already done
+// gonna add the functionality for:
+// - viewing voting sessions, corresponding to the "Create Vote - View Voting Sessions"  page
+// - viewing positions in a vote, corresponding to the "Create Vote - Add Positions"  page
+// - adding a position to a vote, corresponding to the "Create Vote - Add Position"  page
+// TODO: this is a stub for the addPosition HTTP route
+interface CreatePositionProps {
+    userSessionId: string;
+    voteId: number;
+    title: string;
+    questionType: QuestionType;
+  }
+
+/**
+ * Adds a new question/position to an election.
+ */
+export const createPosition = async (
+    props: CreatePositionProps
+  ): Promise<{ positionId: number }> => {
+    const sessionValidation = await validateSessionId(props.userSessionId);
+    if ('error' in sessionValidation) {
+      throw new Error(sessionValidation.error);
+    }
+  
+    const userId = sessionValidation.userId;
+  
+    const electionValidation = await validateElectionId(props.voteId, userId);
+    if ('error' in electionValidation) {
+      throw new Error(electionValidation.error);
+    }
+  
+    await getElectionData(map => {
+      const election = map.get(String(props.voteId));
+      if (!election) throw new Error('Election unexpectedly not found');
+  
+      const newQuestionId = election.questions.length + 1;
+  
+      const newQuestion = {
+        id: newQuestionId,
+        title: props.title,
+        candidates: [],
+        questionType: props.questionType,
+      };
+  
+      election.questions.push(newQuestion);
+    });
+  
+    await saveElectionDatabaseToFile();
+  
+    return { positionId: props.voteId };
+  };
+
+// functionality for creating votes is already done
+// functionality for creating positions in a vote is already done
+// gonna add the functionality for:
+// - viewing candidates for a position, corresponding to the "Create Vote - Add Position"  page
+// - adding candidates for a position, corresponding to the "Create Vote - Add Position"  page
+// - editing candidates for a position, corresponding to the "Create Vote - Edit Candidate"  page
 
 
-// interface viewCandidateProps {
-//   authuserId: string;
-//   voteId: number;
-//   positionId: number;
-// }
+interface CreateCandidateProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+  name: string;
+}
 
-// export function viewCandidates(positionData: viewCandidateProps): any {
+/**
+ * Adds a new candidate to a given position in a vote.
+ */
+export const createCandidate = async (
+    candidateData: CreateCandidateProps
+  ): Promise<{ candidateIndex?: number; error?: string; status?: number }> => {
+    // Validate session
+    const sessionCheck = await validateSessionId(candidateData.userSessionId);
+    if ('error' in sessionCheck) return sessionCheck;
+  
+    const userId = sessionCheck.userId;
+  
+    // Validate election ownership
+    const electionCheck = await validateElectionId(candidateData.voteId, userId);
+    if ('error' in electionCheck) return electionCheck;
+  
+    const { election } = electionCheck;
+  
+    // Validate position exists
+    const positionCheck = validatePositionId(election, candidateData.positionId);
+    if ('error' in positionCheck) return positionCheck;
+  
+    // Modify election database
+    await getElectionData(map => {
+      const updatedElection = map.get(String(candidateData.voteId));
+      if (!updatedElection) throw new Error('Election unexpectedly missing from database');
+  
+      const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
+      if (!position) throw new Error('Position unexpectedly missing');
+  
+      const newCandidateIndex = position.candidates.length + 1;
+  
+      const newCandidate: Candidate = {
+        fullName: candidateData.name,
+        description: '',
+        image: '',
+        votes: [],
+        candidateIndex: newCandidateIndex,
+      };
+  
+      position.candidates.push(newCandidate);
+    });
+  
+    await saveElectionDatabaseToFile();
+  
+    return { candidateIndex: election.questions
+      .find(q => q.id === candidateData.positionId)!
+      .candidates.length };
+  };
 
-//   const userCheck = validateUserId(positionData.authuserId);
-//   if ('error' in userCheck) return userCheck;
+interface EditCandidateProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+  candidateIndex: number;
+  name: string;
+  description: string;
+  image: string;
+}
 
-//   const electionCheck = validateElectionId(
-//     positionData.voteId,
-//     positionData.authuserId
-//   );
-//   if ('error' in electionCheck) return electionCheck;
+/**
+ * Edits an existing candidate's details (name, description, image).
+ */
+export const editCandidate = async (
+  candidateData: EditCandidateProps
+): Promise<{ error?: string; status?: number } | 0> => {
+  // Validate session
+  const sessionCheck = await validateSessionId(candidateData.userSessionId);
+  if ('error' in sessionCheck) return sessionCheck;
 
-//   const positionCheck = validatePositionId(
-//     electionCheck.election,
-//     positionData.positionId
-//   );
-//   if ('error' in positionCheck) return positionCheck;
+  const userId = sessionCheck.userId;
 
-//   const { position } = positionCheck;
-//   return position.candidates;
-// }
+  // Validate election ownership
+  const electionCheck = await validateElectionId(candidateData.voteId, userId);
+  if ('error' in electionCheck) return electionCheck;
 
-// interface deleteAllCandidatesprops {
-//   authuserId: string;
-//   voteId: number;
-//   positionId: number;
-// }
+  const { election } = electionCheck;
 
-// // util function, to be removed later?
-// export function deleteAllCandidates(positionData: deleteAllCandidatesprops) {
-//   const userCheck = validateUserId(positionData.authuserId);
-//   if ('error' in userCheck) return userCheck;
+  // Validate position
+  const positionCheck = validatePositionId(election, candidateData.positionId);
+  if ('error' in positionCheck) return positionCheck;
 
-//   const electionCheck = validateElectionId(
-//     positionData.voteId,
-//     positionData.authuserId
-//   );
-//   if ('error' in electionCheck) return electionCheck;
+  const { position } = positionCheck;
 
-//   const positionCheck = validatePositionId(
-//     electionCheck.election,
-//     positionData.positionId
-//   );
-//   if ('error' in positionCheck) return positionCheck;
+  // Mutate candidate
+  let found = false;
 
-//   const { position } = positionCheck;
+  await getElectionData(map => {
+    const storedElection = map.get(String(candidateData.voteId));
+    if (!storedElection) throw new Error('Election unexpectedly missing');
 
-//   // delete all candidates from this position
-//   position.candidates = []
+    const storedPosition = storedElection.questions.find(q => q.id === candidateData.positionId);
+    if (!storedPosition) throw new Error('Position unexpectedly missing');
 
-//   return position.candidates;
+    const candidate = storedPosition.candidates.find(
+      c => c.candidateIndex === candidateData.candidateIndex
+    );
+
+    if (!candidate) return;
+
+    candidate.fullName = candidateData.name;
+    candidate.description = candidateData.description;
+    candidate.image = candidateData.image;
+    found = true;
+  });
+
+  if (!found) {
+    return { error: 'Candidate not found', status: StatusCodes.NOT_FOUND };
+  }
+
+  await saveElectionDatabaseToFile();
+  return 0;
+};
+
+interface DeleteCandidateProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+  candidateIndex: number;
+}
+
+/**
+ * Deletes a candidate from a position within an election.
+ */
+export const deleteCandidate = async (
+  candidateData: DeleteCandidateProps
+): Promise<{ error?: string; status?: number } | 0> => {
+  // Validate session
+  const sessionCheck = await validateSessionId(candidateData.userSessionId);
+  if ('error' in sessionCheck) return sessionCheck;
+
+  const userId = sessionCheck.userId;
+
+  // Validate election ownership
+  const electionCheck = await validateElectionId(candidateData.voteId, userId);
+  if ('error' in electionCheck) return electionCheck;
+
+  const { election } = electionCheck;
+
+  // Validate position
+  const positionCheck = validatePositionId(election, candidateData.positionId);
+  if ('error' in positionCheck) return positionCheck;
+
+  const { position } = positionCheck;
+
+  let removed = false;
+
+  await getElectionData(map => {
+    const storedElection = map.get(String(candidateData.voteId));
+    if (!storedElection) throw new Error('Election unexpectedly missing');
+
+    const storedPosition = storedElection.questions.find(q => q.id === candidateData.positionId);
+    if (!storedPosition) throw new Error('Position unexpectedly missing');
+
+    const foundIndex = storedPosition.candidates.findIndex(
+      c => c.candidateIndex === candidateData.candidateIndex
+    );
+
+    if (foundIndex === -1) return;
+
+    storedPosition.candidates.splice(foundIndex, 1);
+    removed = true;
+  });
+
+  if (!removed) {
+    return { error: 'Candidate not found', status: StatusCodes.NOT_FOUND };
+  }
+
+  await saveElectionDatabaseToFile();
+  return 0;
+};
 
 
-//   return;
-// }
+interface ViewCandidateProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+}
+
+/**
+ * Returns the list of candidates for a specific position in an election.
+ */
+export const viewCandidates = async (
+  positionData: ViewCandidateProps
+): Promise<{ error?: string; status?: number } | any[]> => {
+  const sessionCheck = await validateSessionId(positionData.userSessionId);
+  if ('error' in sessionCheck) return sessionCheck;
+
+  const userId = sessionCheck.userId;
+
+  const electionCheck = await validateElectionId(
+    positionData.voteId,
+    userId
+  );
+  if ('error' in electionCheck) return electionCheck;
+
+  const positionCheck = validatePositionId(
+    electionCheck.election,
+    positionData.positionId
+  );
+  if ('error' in positionCheck) return positionCheck;
+
+  const { position } = positionCheck;
+  return position.candidates;
+};
+
+interface DeleteAllCandidatesProps {
+  userSessionId: string;
+  voteId: number;
+  positionId: number;
+}
+
+/**
+ * Deletes all candidates from a specified position in an election.
+ */
+export const deleteAllCandidates = async (
+  positionData: DeleteAllCandidatesProps
+): Promise<{ error?: string; status?: number } | any[]> => {
+  const sessionCheck = await validateSessionId(positionData.userSessionId);
+  if ('error' in sessionCheck) return sessionCheck;
+
+  const userId = sessionCheck.userId;
+
+  const electionCheck = await validateElectionId(
+    positionData.voteId,
+    userId
+  );
+  if ('error' in electionCheck) return electionCheck;
+
+  const positionCheck = validatePositionId(
+    electionCheck.election,
+    positionData.positionId
+  );
+  if ('error' in positionCheck) return positionCheck;
+
+  let newCandidateList: any[] = [];
+
+  await getElectionData(map => {
+    const storedElection = map.get(String(positionData.voteId));
+    if (!storedElection) throw new Error('Election unexpectedly missing');
+
+    const storedPosition = storedElection.questions.find(q => q.id === positionData.positionId);
+    if (!storedPosition) throw new Error('Position unexpectedly missing');
+
+    storedPosition.candidates = [];
+    newCandidateList = storedPosition.candidates;
+  });
+
+  await saveElectionDatabaseToFile();
+
+  return newCandidateList;
+};

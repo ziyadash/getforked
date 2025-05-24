@@ -10,16 +10,14 @@ const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
 // copied pretty much all of this code from devsoc mail!
 
 // TODO: change the type of session store, using any is bad practice.
-let sessionStore: SessionStore = { sessions: [] };
-let database: DataStore = { users: [], elections: [] };
-
+export let sessionDatabase: SessionStore = { sessions: [] };
 export let userDatabase: Map<string, string> = new Map();
-let electionDatabase: Map<string, Election> = new Map();
+export let electionDatabase: Map<string, Election> = new Map();
 
 // const SESSION_PATH = "./src/data/sessions.json";
 const USER_DATABASE_PATH = './src/data/userDatabase.json';
 const ELECTION_DATABASE_PATH = './src/data/electionDatabase.json';
-const SESSIONSTORE_PATH = './src/data/sessions.json'
+const SESSION_DATABASE_PATH = './src/data/sessions.json';
 // importing instance of mutex & semaphore
 
 // TODO: move this to a .env file! and put the .env in .gitignore
@@ -46,7 +44,7 @@ const secretKey = 'abcde12345';
  * Creates and registers a session for a given userId.
  * Returns the generated sessionId (JWT).
  */
-export function createAndStoreSession(userId: string): string {
+export async function createAndStoreSession(userId: string): Promise<string> {
   const sessionId = generateSessionId(userId);
   const session: Session = {
     sessionId,
@@ -54,20 +52,12 @@ export function createAndStoreSession(userId: string): string {
     createdAt: new Date(),
   };
 
-  const sessions = getSessions();
-  sessions.sessions.push(session);
-  setSessions(sessions);
+  await getSessionData(store => {
+    store.sessions.push(session);
+  });
 
+  await saveSessionToFile();
   return sessionId;
-}
-
-export function getSessions(): SessionStore {
-  return sessionStore;
-}
-
-export function setSessions(sessions: SessionStore) {
-  sessionStore = sessions;
-  saveSessionToFile();
 }
 
 ////////////////////////////// DATA UTILS  ///////////////////////////////////
@@ -151,20 +141,32 @@ export const saveUserDataBaseToFile = async (): Promise<void> => {
 } 
 
 // ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
+export const getSessionData = async (
+  modifier: (store: SessionStore) => void
+): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    console.log('Session database read:', JSON.stringify(sessionDatabase, null, 2)); // print out db just to see
+    modifier(sessionDatabase);
+  } finally {
+    release();
+  }
+};
+
 export const loadSessionFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
 
   try {
-    const data = await fs.readFile(SESSIONSTORE_PATH, 'utf8');
+    const data = await fs.readFile(SESSION_DATABASE_PATH, 'utf8');
 
     if (!data.trim()) {
       console.warn('Session file is empty. Starting with an empty sessionStore.');
-      sessionStore = { sessions: [] };
+      sessionDatabase = { sessions: [] };
       return;
     }
 
     const obj = JSON.parse(data) as SessionStore;
-    sessionStore = obj;
+    sessionDatabase = obj;
     console.log('Session store loaded from file.');
   } catch (err) {
     console.error('Error loading session store:', err);
@@ -176,9 +178,9 @@ export const loadSessionFromFile = async (): Promise<void> => {
 export const saveSessionToFile = async () => {
   const release = await writeMutex.acquire();
   try {
-    const json = JSON.stringify(sessionStore, null, 2);
-    await fs.writeFile(SESSIONSTORE_PATH, json, 'utf8');
-    console.log(`Session store saved to ${SESSIONSTORE_PATH}`);
+    const json = JSON.stringify(sessionDatabase, null, 2);
+    await fs.writeFile(SESSION_DATABASE_PATH, json, 'utf8');
+    console.log(`Session store saved to ${SESSION_DATABASE_PATH}`);
   } catch (err) {
     console.error('Error saving session store:', err);
   } finally {
@@ -241,40 +243,23 @@ export const saveElectionDatabaseToFile = async (): Promise<void> => {
   }
 };
 
-export const clear = async (): Promise<void>  => {
-  // Acquire mutex to safely modify shared data
+export const clear = async (): Promise<void> => {
   const release = await writeMutex.acquire();
-
   try {
-    // Clear in-memory stores
+    // Clear all in-memory stores
     userDatabase.clear();
+    electionDatabase.clear();
+    sessionDatabase.sessions = [];
 
-    // Persist cleared user database
-    await saveUserDataBaseToFile();
+    // Persist all cleared data to disk
+    await Promise.all([
+      saveUserDataBaseToFile(),
+      saveElectionDatabaseToFile(),
+      saveSessionToFile()
+    ]);
 
-    // If you decide to persist sessions or elections to disk, you'd also save them here
-    // Example:
-    // saveSessions(); 
-    // saveElectionDatabase(); 
-    console.log('All in-memory data cleared and user database file reset.');
+    console.log('All in-memory data cleared and persisted to disk.');
   } finally {
     release();
   }
-}
-
-////////////////////////////// DELETE UTILS  ////////////////////////////////
-// clears the entire database, as well as clears out all existing sessions.
-// export function clear() {
-//   // Reset both memory and files
-//   const data = getData();
-//   data.users = [];
-//   data.elections = [];
-
-  const session = getSessions();
-//   session.sessions = [];
-  
-//   setData(data);
-//   setSessions(session);
-
-//   return {};
-// }
+};

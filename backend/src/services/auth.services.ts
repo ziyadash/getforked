@@ -5,8 +5,8 @@ import {
   getUserData,
   saveUserDataBaseToFile,
   createAndStoreSession,
-  getSessions,
-  setSessions
+  getSessionData,
+  saveSessionToFile
 } from '../data/dataStore';
 import { getHashOf, } from '../data/dataUtil';
 import { StatusCodes } from 'http-status-codes';
@@ -90,8 +90,11 @@ async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displ
  * @param zPass 
  * @returns 
  */
-export async function authRegister(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
-  // decrypt first
+export async function authRegister(
+  zId: string,
+  zPass: string
+): Promise<{ sessionId?: string; error?: string; status?: number }> {
+  console.log("registering user!")
   const decryptedZID = decryptData(zId);
   const decryptedZPass = decryptData(zPass);
 
@@ -99,28 +102,49 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
   if (result.error) return result;
 
   const userId = getHashOf(decryptedZID);
-
   const hashedName = getHashOf(result.displayName!);
 
+  let userAlreadyExists = false;
+
   await getUserData(map => {
-    if (map.has(userId)) {
-      return  { error: 'User already registered', status: StatusCodes.CONFLICT };
+    userAlreadyExists = map.has(userId);
+    if (!userAlreadyExists) {
+      map.set(userId, hashedName);
     }
-    map.set(userId, hashedName);
-  })
+  });
 
-    await saveUserDataBaseToFile();
+  // If user is already registered, check if they are already logged in
+  if (userAlreadyExists) {
+    let alreadyLoggedIn = false;
+    await getSessionData(store => {
+      alreadyLoggedIn = store.sessions.some(session => session.userId === userId);
+    });
 
-  const sessionId = createAndStoreSession(userId);
+    if (alreadyLoggedIn) {
+      return {
+        error: 'User already logged in',
+        status: StatusCodes.CONFLICT,
+      };
+    }
 
+    return {
+      error: 'User already registered',
+      status: StatusCodes.CONFLICT,
+    };
+  }
+
+  await saveUserDataBaseToFile();
+  const sessionId = await createAndStoreSession(userId);
   return { sessionId };
 }
+
 
 /**
  * Logs in an existing user and returns a session ID.
  * Prevents multiple sessions for the same user.
  */
 export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
+  console.log("logging in user!")
   // Decrypt inputs
   const decryptedZID = decryptData(zId);
   const decryptedZPass = decryptData(zPass);
@@ -143,32 +167,41 @@ export async function authLogin(zId: string, zPass: string): Promise<{ sessionId
   }
 
   // Check if user already has an active session
-  const sessions = getSessions().sessions;
-  const existingSession = sessions.find(session => session.userId === userId);
+  let alreadyLoggedIn = false;
+  await getSessionData(store => {
+    alreadyLoggedIn = store.sessions.some(session => session.userId === userId);
+  });
 
-  if (existingSession) {
+  if (alreadyLoggedIn) {
     return { error: 'User already logged in', status: StatusCodes.CONFLICT };
   }
 
   // Create and return new session
-  const sessionId = createAndStoreSession(userId);
+  const sessionId = await createAndStoreSession(userId);
   return { sessionId };
 }
 
 /**
  * Logs out the user by removing their session.
  */
-export function authLogout(sessionId: string): { error?: string; status?: number } | void {
-  const sessions = getSessions();
-  const index = sessions.sessions.findIndex(s => s.sessionId === sessionId);
+export async function authLogout(sessionId: string): Promise<{ error?: string; status?: number } | void> {
+  console.log("logging out user!")
+  let removed = false;
 
-  if (index === -1) {
+  await getSessionData(store => {
+    const index = store.sessions.findIndex(s => s.sessionId === sessionId);
+    if (index !== -1) {
+      store.sessions.splice(index, 1);
+      removed = true;
+    }
+  });
+
+  if (!removed) {
     return {
       error: 'Invalid session token',
       status: StatusCodes.UNAUTHORIZED,
     };
   }
 
-  sessions.sessions.splice(index, 1);
-  setSessions(sessions);
+  await saveSessionToFile();
 }
