@@ -18,6 +18,7 @@ let electionDatabase: Map<string, Election> = new Map();
 
 // const SESSION_PATH = "./src/data/sessions.json";
 const USER_DATABASE_PATH = './src/data/userDatabase.json';
+const ELECTION_DATABASE_PATH = './src/data/electionDatabase.json';
 const SESSIONSTORE_PATH = './src/data/sessions.json'
 // importing instance of mutex & semaphore
 
@@ -95,6 +96,8 @@ export function setSessions(sessions: SessionStore) {
 //   saveData();
 // }
 
+// ///////////////// USER_DB RELATED FUNCTIONALITY /////////////////
+
 // create a getUserData function to modify
 export const getUserData = async (
   modifier: (map: Map<string, string>) => void
@@ -134,6 +137,20 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
   }
 };
 
+export const saveUserDataBaseToFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    const obj = Object.fromEntries(userDatabase);
+    const json = JSON.stringify(obj, null, 2);
+    await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
+    console.log(`User database saved to ${USER_DATABASE_PATH}`);
+    
+  } finally {
+    release();
+  }
+} 
+
+// ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
 export const loadSessionFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
 
@@ -169,18 +186,60 @@ export const saveSessionToFile = async () => {
   }
 }
 
-export const saveUserDataBaseToFile = async (): Promise<void> => {
+// ///////////////// ELECTION_DB RELATED FUNCTIONALITY /////////////////
+
+export const getElectionData = async (
+  modifier: (map: Map<string, Election>) => void
+): Promise<void> => {
   const release = await writeMutex.acquire();
   try {
-    const obj = Object.fromEntries(userDatabase);
-    const json = JSON.stringify(obj, null, 2);
-    await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
-    console.log(`User database saved to ${USER_DATABASE_PATH}`);
-
+    modifier(electionDatabase);
+    // await saveElectionDatabaseToFile(); // optionally persist changes
   } finally {
     release();
   }
-} 
+};
+
+export const loadElectionDatabaseFromFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    const data = await fs.readFile(ELECTION_DATABASE_PATH, 'utf8');
+
+    // Handle empty file gracefully
+    if (!data.trim()) {
+      console.warn('Election database file is empty. Starting with an empty electionDatabase.');
+      electionDatabase.clear();
+      return;
+    }
+
+    const obj = JSON.parse(data) as Record<string, Election>;
+
+    electionDatabase.clear();
+    for (const [id, election] of Object.entries(obj)) {
+      electionDatabase.set(id, election);
+    }
+
+    console.log('Election database loaded from file.');
+  } catch (err) {
+    console.error('Error loading election database:', err);
+  } finally {
+    release();
+  }
+};
+
+export const saveElectionDatabaseToFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    const obj = Object.fromEntries(electionDatabase);
+    const json = JSON.stringify(obj, null, 2);
+    await fs.writeFile(ELECTION_DATABASE_PATH, json, 'utf8');
+    console.log(`Election database saved to ${ELECTION_DATABASE_PATH}`);
+  } catch (err) {
+    console.error('Error saving election database:', err);
+  } finally {
+    release();
+  }
+};
 
 export const clear = async (): Promise<void>  => {
   // Acquire mutex to safely modify shared data
@@ -211,7 +270,7 @@ export const clear = async (): Promise<void>  => {
 //   data.users = [];
 //   data.elections = [];
 
-//   const session = getSessions();
+  const session = getSessions();
 //   session.sessions = [];
   
 //   setData(data);
