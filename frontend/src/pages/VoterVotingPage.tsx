@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from 'react-router';
 import StyledBackground from "../components/background/StyledBackground";
 import Heading from "../components/buttons/Heading";
 import MedHeading from "../components/buttons/MedHeading";
@@ -9,10 +9,11 @@ import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function VoterVotingPage() {
-    
+          const { id } = useParams();
+
     const navigate = useNavigate();
 
-    const originalCandidates = [
+    const placeHolderCandidates = [
         {
             position: 'Treasurer',
             candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper']
@@ -23,6 +24,42 @@ export default function VoterVotingPage() {
         }
     ]
 
+    useEffect(() => {
+    const fetchPositions = async () => {
+    const userSessionId = localStorage.getItem('user-session-id');
+    const sessionCode = id; 
+
+    try {
+        const API_URL = import.meta.env.VITE_BACKEND_URL;
+        const response = await fetch(`${API_URL}/api/voters/viewPositionsPublic`, {
+       headers: {
+          'Content-Type': 'application/json',
+        },
+                method: 'POST',
+
+        body: JSON.stringify({ userSessionId: userSessionId, sessionCode: sessionCode }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // data.result.positions contains the questions
+      const loadedCandidates = data.result.positions.map(q => ({
+            position: q.title,
+            candidates: q.candidates.map(c => c.name),
+        }));
+      setOriginalCandidates(loadedCandidates);
+    } catch (err) {
+        console.log(err)
+    }
+  };
+  fetchPositions();
+  }, []);
+
+    const [originalCandidates, setOriginalCandidates] = useState(placeHolderCandidates);
     const [candidates, setCandidates] = useState(originalCandidates);
     const [positionIndex, setPositionIndex] = useState(0);
 
