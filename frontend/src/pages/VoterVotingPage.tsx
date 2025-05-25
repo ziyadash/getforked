@@ -7,13 +7,22 @@ import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
+import { Question } from "../../../shared/interfaces";
 
 export default function VoterVotingPage() {
-          const { id } = useParams();
+const { id} = useParams();
+if (!id) {
+    // handle missing index, e.g. show error or fallback
+    throw new Error("Index parameter is missing");
+  }
 
     const navigate = useNavigate();
 
-    const placeHolderCandidates = [
+    interface thisPagesCandidates {
+        position: string,
+        candidates: string[],
+    }
+    const placeHolderCandidates:thisPagesCandidates[] = [
         {
             position: 'Treasurer',
             candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper']
@@ -45,13 +54,15 @@ export default function VoterVotingPage() {
       }
 
       const data = await response.json();
-
+console.log(data)
+const positions:Question[] = data.result.positions;
       // data.result.positions contains the questions
-      const loadedCandidates = data.result.positions.map(q => ({
+      const loadedCandidates:thisPagesCandidates[] = positions.map(q => ({
             position: q.title,
             candidates: q.candidates.map(c => c.name),
         }));
-      setOriginalCandidates(loadedCandidates);
+    setOriginalCandidates(loadedCandidates);
+    setCandidates(loadedCandidates)
     } catch (err) {
         console.log(err)
     }
@@ -61,8 +72,10 @@ export default function VoterVotingPage() {
 
     const [originalCandidates, setOriginalCandidates] = useState(placeHolderCandidates);
     const [candidates, setCandidates] = useState(originalCandidates);
-    const [positionIndex, setPositionIndex] = useState(0);
-
+    //const [positionIndex, setPositionIndex] = useState(index);
+    const indexParam = useParams().index ?? "0"; // fallback to "0"
+    const positionIndex = parseInt(indexParam, 10);
+    
     const positionName = candidates[positionIndex].position;
     const currentCandidates = candidates[positionIndex].candidates;
 
@@ -94,7 +107,7 @@ export default function VoterVotingPage() {
 
     const handleConfirm = () => {
         if (positionIndex < candidates.length - 1) {
-            setPositionIndex(positionIndex + 1);
+            navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {
             navigate("/voter/finish");
         }
@@ -102,9 +115,9 @@ export default function VoterVotingPage() {
 
     const handleAbstain = () => {
         if (positionIndex < candidates.length - 1) {
-            setPositionIndex(positionIndex + 1);
+            navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {
-            navigate("/finish");
+            navigate("/voter/finish");
         }
     };
 
