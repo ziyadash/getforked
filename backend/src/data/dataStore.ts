@@ -1,4 +1,4 @@
-import { DataStore, Election, Session, SessionStore, User } from '../../../shared/interfaces';
+import { DataStore, Election, Session, SessionStore, User, Userv2 } from '../../../shared/interfaces';
 import {generateUserId, generateSessionId, verifySessionId, getHashOf} from './dataUtil';
 import { promises as fs, write } from 'fs';
 // to create & share one instance of Mutex & Semaphore
@@ -8,7 +8,7 @@ const writeMutex = new Mutex();
 const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
 
 export let sessionDatabase: SessionStore = { sessions: [] };
-export let userDatabase: Map<string, string> = new Map();
+export let userDatabase: Map<string, Userv2> = new Map();
 export let electionDatabase: Map<string, Election> = new Map();
 
 // const SESSION_PATH = "./src/data/sessions.json";
@@ -58,7 +58,7 @@ getter function, which handles concurrency.
   });
 */
 export const getUserData = async (
-  modifier: (map: Map<string, string>) => void
+  modifier: (map: Map<string, Userv2>) => void
 ): Promise<void> => {
   const release = await writeMutex.acquire();
   try {
@@ -73,14 +73,14 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
 
   try {
     const data = await fs.readFile(USER_DATABASE_PATH, 'utf8');
-  
+
     if (!data.trim()) {
       console.warn('User database file is empty. Starting with an empty userDatabase.');
       userDatabase.clear();
       return;
     }
-  
-    const obj = JSON.parse(data) as Record<string, string>;
+
+    const obj = JSON.parse(data) as Record<string, Userv2>;
 
     userDatabase.clear();
     for (const [id, user] of Object.entries(obj)) {
@@ -89,7 +89,7 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
 
     console.log('User database loaded from file.');
   } catch (err) {
-    console.error('Error loading user database:');
+    console.error('Error loading user database:', err);
   } finally {
     release();
   }
@@ -102,11 +102,11 @@ export const saveUserDataBaseToFile = async (): Promise<void> => {
     const json = JSON.stringify(obj, null, 2);
     await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
     console.log(`User database saved to ${USER_DATABASE_PATH}`);
-    
   } finally {
     release();
   }
-} 
+};
+
 
 // ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
 /** 

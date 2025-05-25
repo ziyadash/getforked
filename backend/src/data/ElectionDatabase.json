@@ -1,0 +1,30 @@
+{
+  "186588018": {
+    "id": 186588018,
+    "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
+    "name": "Election 2",
+    "description": "Test election",
+    "images": [],
+    "location": "unsw",
+    "date_time_start": "2025-05-25T13:12:52.028Z",
+    "date_time_end": "2025-05-25T13:12:52.028Z",
+    "requires_zid": false,
+    "questions": [],
+    "isActive": false,
+    "voters": []
+  },
+  "704949588": {
+    "id": 704949588,
+    "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
+    "name": "Election 1",
+    "description": "Test election",
+    "images": [],
+    "location": "unsw",
+    "date_time_start": "2025-05-25T13:12:52.024Z",
+    "date_time_end": "2025-05-25T13:12:52.024Z",
+    "requires_zid": false,
+    "questions": [],
+    "isActive": false,
+    "voters": []
+  }
+}
