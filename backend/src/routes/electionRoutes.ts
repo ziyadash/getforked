@@ -7,4 +7,6 @@ router.post('/activateSession/:electionId', activateElection);
 router.get('/results/:electionId', getResults);
 
 
+
+
 export default router;

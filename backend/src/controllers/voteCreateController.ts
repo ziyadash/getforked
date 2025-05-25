@@ -307,6 +307,8 @@ export const activateElection = async (
   }
 };
 
+
+
 export const getResults = async (
   req: Request,
   res: Response,
@@ -318,6 +320,9 @@ export const getResults = async (
     res.status(400).json({ error: 'Missing election ID' });
     return;
   }
+
+
+  console.log("ELECTION CONTENT HERE -1")
 
   try {
     const result = await electionSessionService.getResult(electionId);

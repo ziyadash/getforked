@@ -131,11 +131,10 @@ describe('POST /createElection', () => {
     // expect(res1.statusCode).toEqual(200);
     // expect(res1.body.sessionCode).toBeDefined();
 
-    const voteId = '232641437';
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const res3 = await request(app)
-        .get(`/api/elections/results/${voteId}`)
+        .get(`/api/elections/results/232641437`)
     console.log(res3.body)
     // ACTUALLY TEST GET RESULTS
   });
