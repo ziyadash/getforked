@@ -217,3 +217,26 @@ export async function authLogout(sessionId: string): Promise<{ error?: string; s
 
   await saveSessionToFile();
 }
+
+
+/**
+ * ChecksifAsessionExists
+ */
+export async function authValidSession(sessionId: string): Promise<{ error?: string; status?: number } | void> {
+  console.log("Checking session vali")
+  let found = false;
+
+  await getSessionData(store => {
+    const index = store.sessions.findIndex(s => s.sessionId === sessionId);
+    if (index !== -1) {
+        found = true;
+    }
+  });
+
+  if (found) {
+    return {
+      error: 'Invalid session token',
+      status: StatusCodes.UNAUTHORIZED,
+    };
+  }
+}

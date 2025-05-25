@@ -75,3 +75,22 @@ export const logout = async (req: Request, res: Response) => {
 
   res.status(200).json({ message: 'Logged out successfully' });
 };
+
+
+export const checkSession = async (req: Request, res: Response, next: NextFunction) => {
+  const { sessionId } = req.body;
+
+  // if (!sessionId) {
+  //   res.status(400).json({ error: 'Missing session token' });
+  //   return;
+  // }
+
+  const result = await authService.authValidSession(sessionId);
+
+  if (result?.error) {
+    res.status(result.status ?? 500).json({ error: result.error });
+    return;
+  }
+
+  res.status(200).json({ message: 'Session is valid' });
+};

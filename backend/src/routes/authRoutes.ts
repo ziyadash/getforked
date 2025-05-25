@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, logout } from '../controllers/authController';
+import { register, login, logout, checkSession  } from '../controllers/authController';
 import {createElection, viewElections, createPosition, deletePosition, reorderPositions, viewPositions, createCandidate, editCandidate, viewCandidates, deleteCandidate } from '../controllers/voteCreateController'
 // import {} from '../controllers/voteCreateController';
 // import { createVoteSession, createPosition, createCandidate, editCandidate, deleteCandidate, viewCandidates, } from '../controllers/voteCreateController';
@@ -9,6 +9,7 @@ const router = Router();
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
+router.post('/checkSession',checkSession );
 
 // TODO: move these to a new file called createVoteRoutes.ts or something
 // because this functionality is separate from auth
