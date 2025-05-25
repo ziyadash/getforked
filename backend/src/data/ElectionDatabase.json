@@ -192,7 +192,12 @@
         "ballot": []
       }
     ],
-    "isActive": false,
-    "voters": []
+    "isActive": true,
+    "sessionCode": "test",
+    "voters": [
+      {
+        "zid": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9"
+      }
+    ]
   }
 }

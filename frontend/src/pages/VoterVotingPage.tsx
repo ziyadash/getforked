@@ -9,6 +9,7 @@ import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
 
 export default function VoterVotingPage() {
+    
     const navigate = useNavigate();
 
     const originalCandidates = [

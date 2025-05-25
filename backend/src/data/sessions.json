@@ -1,20 +1,9 @@
 {
   "sessions": [
     {
-<<<<<<< HEAD
-      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhOTk2MmIyZWRjNTZmYzZhNWRjNGYzOWZiYjFmNzI3NmVhMGE5Njg4ZWMzYzg0MDMyMmUwNjljOGRmMTEyOGI5IiwiaWF0IjoxNzQ4MjAwNzYzfQ.vsKcoNYJ9RRbQnxMuxGvZMn0C6rBr_MfZMTp28naa1Y",
+      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhOTk2MmIyZWRjNTZmYzZhNWRjNGYzOWZiYjFmNzI3NmVhMGE5Njg4ZWMzYzg0MDMyMmUwNjljOGRmMTEyOGI5IiwiaWF0IjoxNzQ4MjA3NDU5fQ.zw1iH1_SUQ2GAXPnzxi0PEknAr9Rg-ADlwTlWFA_-28",
       "userId": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9",
-      "createdAt": "2025-05-25T19:19:23.900Z"
-=======
-      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmY3NjY5ZDRjZWE2MTc1MjQ5YTBkMjc4YWQ0MDZhMjRhYzU4MjIyODMyNzQwNjRkZGE5MDlhYzA5OTViZDM2IiwiaWF0IjoxNzQ4MjAwNTEzfQ.QfbLH220ek7MU1loLuYblOiioBdccxqbQVWKyKw9em0",
-      "userId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
-      "createdAt": "2025-05-25T19:15:13.004Z"
-    },
-    {
-      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmY3NjY5ZDRjZWE2MTc1MjQ5YTBkMjc4YWQ0MDZhMjRhYzU4MjIyODMyNzQwNjRkZGE5MDlhYzA5OTViZDM2IiwiaWF0IjoxNzQ4MjA1MDM4fQ.QIk7sPxiKJeEEF4iN9r8sT6c5R4eRkK2Q1QyVamJIXg",
-      "userId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
-      "createdAt": "2025-05-25T20:30:38.990Z"
->>>>>>> brandan-latest-frontend-voter-flow
+      "createdAt": "2025-05-25T21:10:59.302Z"
     }
   ]
 }

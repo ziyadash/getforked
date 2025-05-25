@@ -26,3 +26,31 @@ import * as electionSessionService from '../services/electionSession.services'
                    
 
   };
+
+  export const viewPositionsPublic = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+          const { userSessionId, sessionCode } = req.body;
+
+  
+    if (!userSessionId || !sessionCode) {
+      res.status(400).json({ error: 'Missing user session ID or sessionCode' });
+      return;
+    }
+  
+    try {
+      const result = await voterServices.viewPositions(
+        userSessionId,
+        sessionCode,
+      );
+  
+      res.status(200).json({ result });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+
+  
