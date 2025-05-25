@@ -9,11 +9,17 @@ import stopIcon from '../../assets/svg/stop.svg'
 import resultsIcon from '../../assets/svg/results.svg'
 
 
-interface SmallButtonInputs {
-	buttonType: string,
-}
 
-export default function SmallButton({buttonType}: SmallButtonInputs) {
+// interface SmallButtonInputs {
+// 	buttonType: string,
+// }
+
+type SmallButtonProps = {
+    buttonType: string;
+    onClick?: () => void;
+};
+
+export default function SmallButton({ buttonType, onClick }: SmallButtonProps) {
     let buttonIcon
     if (buttonType == 'edit') {
         buttonIcon = editIcon
@@ -31,9 +37,9 @@ export default function SmallButton({buttonType}: SmallButtonInputs) {
         buttonIcon = downIcon
     }
 
-	return (
-        <button className="small-button">
-            <img src={smallButton} alt="Small button"/>
+    return (
+        <button className="small-button" onClick={onClick}>
+            <img src={smallButton} alt="Small button" />
             <img className="small-button-icon" src={buttonIcon} />
         </button>
     )
