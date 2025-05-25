@@ -86,7 +86,7 @@ export interface User {
 // different kinds of sessions maybe for voting vs creating votes?
 export interface Session {
     sessionId: string; // this is the JWT
-    userId: string;
+    userId: string; // hash zid
     createdAt: Date;
 }  
 

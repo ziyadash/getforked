@@ -37,12 +37,30 @@ function addUsertoActiveElectionSession(electionId: number, sessionCode: string,
 
 /**
  * Delete zId from authorised votes in election
+ * return boolean
  */
+const deleteVoter = (electionId: number, sessionCode: string, userSessionId: string): boolean => {
+    return true;
+}
+
 
 /**
  * End an election
+ * checks if election session is live
+ * side effects: update sessionIsLive flag to false
  */
-
+const endElection = (electionId: number): boolean => {
+    return true;
+}
 /**
  * Get results of an election. Election must have ended
+ * 
+ * have helper function to calculate winner for preferential votes
+ * take in question and returns winner
+ * 
+ * return hashmap: 
+ *  key: question, value: winner (string)
  */
+const getResult = (electionId: number) => {
+    
+}

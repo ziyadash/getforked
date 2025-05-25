@@ -3,13 +3,28 @@
  */
 
 /**
- * Start voter's session
+ * Start voter's session --> user session id?
  */
 
 /**
  * Record vote for a specific position. Should accept an ordered list of candidates
  * or an abstention.
+ * 
+ * take userSessionId, hashmap:
+ * 
+ * sanity check:
+ *  if election is an active session 
+ *  if userSessionId's userId exist in election.voters[]
+ * 
+ * when user submit vote
+ * pushes their ballot into question.ballot array
+ * 
  */
+
+const submitVote = (userSessionId: string, electionId: number): boolean => {
+  // check if sesId is invalid -> throw error 
+  return true;
+}
 
 /**
  * Other functions such as:
