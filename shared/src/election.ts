@@ -1,5 +1,5 @@
 /**
- * Get election status. States: Ready to start | In progress | Ended
+ * Get election status.
  * An election is ready to start if it has at least one position
  */
 
