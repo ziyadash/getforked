@@ -18,6 +18,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   }
 
   const result = await authService.authRegister(zId, zPass);
+
+  console.log("RESULT")
+  console.log(result)
+  console.log("\n\n")
   if ('error' in result) {
     console.log("found error")
 

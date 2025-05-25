@@ -95,8 +95,12 @@ export async function authRegister(
   zPass: string
 ): Promise<{ sessionId?: string; error?: string; status?: number }> {
   console.log("registering user!")
-  const decryptedZID = decryptData(zId);
-  const decryptedZPass = decryptData(zPass);
+  // const decryptedZID = decryptData(zId);
+  // const decryptedZPass = decryptData(zPass);
+
+
+  const decryptedZID = (zId);
+  const decryptedZPass = (zPass);
 
   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
   if (result.error) return result;
@@ -146,8 +150,11 @@ export async function authRegister(
 export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
   console.log("logging in user!")
   // Decrypt inputs
-  const decryptedZID = decryptData(zId);
-  const decryptedZPass = decryptData(zPass);
+  // const decryptedZID = decryptData(zId);
+  // const decryptedZPass = decryptData(zPass);
+
+  const decryptedZID = (zId);
+  const decryptedZPass = (zPass);
 
   // Verify credentials (e.g. against UNSW API or dummy auth)
   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
@@ -166,20 +173,22 @@ export async function authLogin(zId: string, zPass: string): Promise<{ sessionId
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  // Check if user already has an active session
-  let alreadyLoggedIn = false;
+  // Check for existing session
+  let existingSessionId: string | undefined;
   await getSessionData(store => {
-    alreadyLoggedIn = store.sessions.some(session => session.userId === userId);
+    const session = store.sessions.find(session => session.userId === userId);
+    if (session) existingSessionId = session.sessionId;
   });
 
-  if (alreadyLoggedIn) {
-    return { error: 'User already logged in', status: StatusCodes.CONFLICT };
+  if (existingSessionId) {
+    return { sessionId: existingSessionId };
   }
 
   // Create and return new session
   const sessionId = await createAndStoreSession(userId);
   return { sessionId };
 }
+
 
 /**
  * Logs out the user by removing their session.
