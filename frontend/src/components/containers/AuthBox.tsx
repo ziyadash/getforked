@@ -45,8 +45,10 @@ export default function AuthBox({ user }: AuthBoxInput) {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(
-				{ zId: username, 
-					zPass: password }),
+				{
+					zId: username,
+					zPass: password
+				}),
 		});
 		const data = await res.json();
 		// if (!res.ok) throw new Error(data.error || 'Login failed');
@@ -60,8 +62,10 @@ export default function AuthBox({ user }: AuthBoxInput) {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(
-				{ zId: username, 
-					zPass: password }),
+				{
+					zId: username,
+					zPass: password
+				}),
 		});
 		const data = await res.json();
 		// if (!res.ok) throw new Error(data.error || 'Login failed');
@@ -80,16 +84,17 @@ export default function AuthBox({ user }: AuthBoxInput) {
 	function HandleFoundSessionid(sessionId: string) {
 		console.log("HANDLING SESSION ID");
 		console.log(sessionId)
+		localStorage.setItem('user-session-id', sessionId); // session id stored in local storage
 	}
 
 	const submit = async () => {
-		if (debounceRef.current) return; 
+		if (debounceRef.current) return;
 
 		debounceRef.current = true;
 
 		setTimeout(() => {
-			debounceRef.current = false; 
-		}, 1000); 
+			debounceRef.current = false;
+		}, 1000);
 
 		try {
 			console.table([username, password]);
@@ -97,7 +102,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 			const res2 = await login();
 			console.log("LOGIN RES", res2);
 
-			if (res2.error){
+			if (res2.error) {
 				console.log("ERROR")
 				console.log(res2.error)
 
@@ -115,11 +120,15 @@ export default function AuthBox({ user }: AuthBoxInput) {
 				}
 			} else {
 				if (res2.sessionId) {
-						HandleFoundSessionid(res2.sessionId)
+					HandleFoundSessionid(res2.sessionId)
 				}
 			}
 
-
+			if (route.includes('creator')) {
+				navigate(`/creator/view-voting-sessions`);
+			} else if (route.includes('voter')) {
+				navigate('/voter/join');
+			}
 
 		} catch (err) {
 			console.error("Login failed:", err);

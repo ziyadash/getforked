@@ -4,7 +4,7 @@ import authRoutes from './routes/authRoutes';
 import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorHandler';
 
-import cors from 'cors'
+import cors from 'cors';
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(morgan('combined'));
 app.use('/api/items', itemRoutes);
 
 // Added auth routes
-app.use('/api/auth', authRoutes); 
+app.use('/api/auth', authRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);

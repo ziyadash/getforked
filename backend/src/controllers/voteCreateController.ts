@@ -8,10 +8,9 @@ export const createElection = async (
 ) => {
   const userSessionId = req.headers['x-session-id'] as string;
 
-  if (!userSessionId) {
-    res.status(400).json({ error: 'Missing user session ID' });
-    return;
-  }
+  // console.log(req.headers);
+  console.log('being run');
+  console.log(req.body);
 
   const {
     title,
@@ -23,6 +22,8 @@ export const createElection = async (
     locationOfVote,
   } = req.body;
 
+  console.log('being run 2')
+  console.log(req.body);
   const props: voteCreateService.CreateElectionProps = {
     userSessionId,
     title,
@@ -33,6 +34,14 @@ export const createElection = async (
     zid_requirement,
     locationOfVote,
   };
+  console.log('being run 3')
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  console.log('myprops', props);
 
   try {
     const result = await voteCreateService.createElection(props);
@@ -43,37 +52,37 @@ export const createElection = async (
 };
 
 export const createPosition = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const userSessionId = req.headers['x-session-id'] as string;
-  
-    if (!userSessionId) {
-      res.status(400).json({ error: 'Missing user session ID' });
-      return;
-    }
-  
-    const {
-      voteId,
-      title,
-      questionType,
-    } = req.body;
-  
-    const props: voteCreateService.CreatePositionProps = {
-      userSessionId,
-      voteId,
-      title,
-      questionType,
-    };
-  
-    try {
-      const result = await voteCreateService.createPosition(props);
-      res.status(200).json({ result });
-    } catch (e) {
-      next(e);
-    }
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  const {
+    voteId,
+    title,
+    questionType,
+  } = req.body;
+
+  const props: voteCreateService.CreatePositionProps = {
+    userSessionId,
+    voteId,
+    title,
+    questionType,
   };
+
+  try {
+    const result = await voteCreateService.createPosition(props);
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
 
 export const deletePosition = async (
   req: Request,

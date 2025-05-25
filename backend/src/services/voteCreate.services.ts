@@ -1,6 +1,6 @@
 import { getElectionData, saveElectionDatabaseToFile } from '../data/dataStore';
 import { Question, Election, QuestionType, Candidate } from '../../../shared/interfaces';
-import {  } from '../../../shared/interfaces';
+import { } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
 import { validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
 import { randomUUID } from 'crypto';
@@ -8,7 +8,7 @@ import { randomUUID } from 'crypto';
 // helper functions to generate ids better since i noticed this was done quite poorly previously
 const generateElectionId = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9));
 const generatePositionId = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9));
-const generateCandidateIndex = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9)); 
+const generateCandidateIndex = () => parseInt(randomUUID().replace(/\D/g, '').slice(0, 9));
 
 /**
  * User creates a vote session.
@@ -24,57 +24,58 @@ const generateCandidateIndex = () => parseInt(randomUUID().replace(/\D/g, '').sl
  */
 
 export interface CreateElectionProps {
-    userSessionId: string;
-    title: string;
-    description: string;
-    images: string[];
-    startDate: Date;
-    endDate: Date;
-    zid_requirement: boolean;
-    locationOfVote?: string;
-  }
+  userSessionId: string;
+  title: string;
+  description: string;
+  images: string[];
+  startDate: Date;
+  endDate: Date;
+  zid_requirement: boolean;
+  locationOfVote?: string;
+}
 
 /**
  * Creates a new election and returns its unique ID.
  */
 export const createElection = async (
-    props: CreateElectionProps
-  ): Promise<number> => {
-    const sessionValidation = await validateSessionId(props.userSessionId);
-    if ('error' in sessionValidation) {
-      throw new Error(sessionValidation.error);
-    }
-  
-    const userId = sessionValidation.userId;
-  
-    if (props.title.trim().length === 0) {
-      throw new Error('Title cannot be empty');
-    }
-  
-    const newElectionId: number = generateElectionId();
-  
-    await getElectionData(map => {  
-      const newElection: Election = {
-        id: newElectionId,
-        authUserId: userId,
-        name: props.title,
-        description: props.description,
-        images: props.images,
-        location: props.locationOfVote,
-        date_time_start: props.startDate,
-        date_time_end: props.endDate,
-        requires_zid: props.zid_requirement,
-        questions: [],
-        isActive: false,
-        voters: [],
-      };
-  
-      map.set(newElectionId.toString(), newElection);
-    });
-  
-    await saveElectionDatabaseToFile();
-    return newElectionId;
-  };
+  props: CreateElectionProps
+): Promise<number> => {
+  console.log('my props bro', props)
+  const sessionValidation = await validateSessionId(props.userSessionId);
+  if ('error' in sessionValidation) {
+    throw new Error(sessionValidation.error);
+  }
+
+  const userId = sessionValidation.userId;
+
+  if (props.title.trim().length === 0) {
+    throw new Error('Title cannot be empty');
+  }
+
+  const newElectionId: number = generateElectionId();
+
+  await getElectionData(map => {
+    const newElection: Election = {
+      id: newElectionId,
+      authUserId: userId,
+      name: props.title,
+      description: props.description,
+      images: props.images,
+      location: props.locationOfVote,
+      date_time_start: props.startDate,
+      date_time_end: props.endDate,
+      requires_zid: props.zid_requirement,
+      questions: [],
+      isActive: false,
+      voters: [],
+    };
+
+    map.set(newElectionId.toString(), newElection);
+  });
+
+  await saveElectionDatabaseToFile();
+  return newElectionId;
+};
 
 // functionality for creating voting sessions is already done
 // gonna add the functionality for:
@@ -119,7 +120,7 @@ export const createPosition = async (
       candidates: [],
       questionType: props.questionType, // store as string
       ballot: [],
-    };      
+    };
 
     election.questions.push(newQuestion);
   });
@@ -134,7 +135,7 @@ interface DeletePositionProps {
   voteId: number;
   positionId: number;
 }
-  
+
 export const deletePosition = async (
   props: DeletePositionProps
 ): Promise<{ success: true }> => {
@@ -252,51 +253,51 @@ export interface CreateCandidateProps {
  * Adds a new candidate to a given position in a vote.
  */
 export const createCandidate = async (
-    candidateData: CreateCandidateProps
-  ): Promise<{ candidateIndex?: number; error?: string; status?: number }> => {
-    // Validate session
-    const sessionCheck = await validateSessionId(candidateData.userSessionId);
-    if ('error' in sessionCheck) return sessionCheck;
-  
-    const userId = sessionCheck.userId;
-  
-    // Validate election ownership
-    const electionCheck = await validateElectionId(candidateData.voteId, userId);
-    if ('error' in electionCheck) return electionCheck;
-  
-    const { election } = electionCheck;
-  
-    // Validate position exists
-    const positionCheck = validatePositionId(election, candidateData.positionId);
-    if ('error' in positionCheck) return positionCheck;
+  candidateData: CreateCandidateProps
+): Promise<{ candidateIndex?: number; error?: string; status?: number }> => {
+  // Validate session
+  const sessionCheck = await validateSessionId(candidateData.userSessionId);
+  if ('error' in sessionCheck) return sessionCheck;
 
-    const newCandidateIndex = generateCandidateIndex();
+  const userId = sessionCheck.userId;
 
-    // Modify election database
-    await getElectionData(map => {
-      const updatedElection = map.get(String(candidateData.voteId));
-      if (!updatedElection) throw new Error('Election unexpectedly missing from database');
-  
-      const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
-      if (!position) throw new Error('Position unexpectedly missing');
-  
-      
-  
-      const newCandidate: Candidate = {
-        fullName: candidateData.name,
-        description: '',
-        image: '',
-        votes: [],
-        candidateIndex: newCandidateIndex,
-      };
-  
-      position.candidates.push(newCandidate);
-    });
-  
-    await saveElectionDatabaseToFile();
-  
-    return { candidateIndex: newCandidateIndex };
-  };
+  // Validate election ownership
+  const electionCheck = await validateElectionId(candidateData.voteId, userId);
+  if ('error' in electionCheck) return electionCheck;
+
+  const { election } = electionCheck;
+
+  // Validate position exists
+  const positionCheck = validatePositionId(election, candidateData.positionId);
+  if ('error' in positionCheck) return positionCheck;
+
+  const newCandidateIndex = generateCandidateIndex();
+
+  // Modify election database
+  await getElectionData(map => {
+    const updatedElection = map.get(String(candidateData.voteId));
+    if (!updatedElection) throw new Error('Election unexpectedly missing from database');
+
+    const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
+    if (!position) throw new Error('Position unexpectedly missing');
+
+
+
+    const newCandidate: Candidate = {
+      fullName: candidateData.name,
+      description: '',
+      image: '',
+      votes: [],
+      candidateIndex: newCandidateIndex,
+    };
+
+    position.candidates.push(newCandidate);
+  });
+
+  await saveElectionDatabaseToFile();
+
+  return { candidateIndex: newCandidateIndex };
+};
 
 export interface EditCandidateProps {
   userSessionId: string;

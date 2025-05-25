@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinGradientButton from '../components/buttons/ThinGradientButton';
@@ -20,28 +20,34 @@ export default function CreateVoteBasicInfo() {
         navigate('/creator/view-voting-sessions');
     }
 
+    const debounceRef = useRef<boolean>(false);
+
     const createElectionWithDetails = useCallback(async (): Promise<void> => {
-        console.log(startDate); // ''
+        // console.log(startDate); // ''
+
         const DateObj = new Date(startDate); // e.g. 5 October 2014 / 14:00
+        console.log(localStorage.getItem('user-session-id'));
+        console.log('cather', electionName, description, images, startDate, requireVerification, locationOfVote);
         // const ISODate = stringDate.toISOString();
         const params = {
             method: "POST",
             headers: {
-                "x-session-id": "",
+                'Content-Type': 'application/json',
+                'x-session-id': localStorage.getItem('user-session-id') || ''
             },
             body: JSON.stringify({
-                "title": electionName,
-                "description": description,
-                "images": images,
-                "startDate": DateObj,
-                "endDate": DateObj, /* for now */
-                "zid_requirement": requireVerification,
-                "locationOfVote": locationOfVote,
+                title: electionName,
+                description: description,
+                images: images,
+                startDate: DateObj,
+                endDate: DateObj, /* for now */
+                zid_requirement: requireVerification,
+                locationOfVote: locationOfVote
             }),
         };
         // submit form on continue
         try {
-            const fetchResponse = await fetch(`http://localhost:9000/api/auth/createElection`, params);
+            const fetchResponse = await fetch(`http://localhost:3000/api/auth/createElection`, params);
             const data = await fetchResponse.json();
             console.log(data);
             return data;
@@ -58,7 +64,15 @@ export default function CreateVoteBasicInfo() {
         console.log(electionName, description, images, startDate, requireVerification, locationOfVote);
     }, [electionName, description, images, startDate, requireVerification, locationOfVote]);
 
-    const goToAddPositions = () => {
+    const goToAddPositions = () => { // submit
+        if (debounceRef.current) return;
+
+        debounceRef.current = true;
+
+        setTimeout(() => {
+            debounceRef.current = false;
+        }, 1000);
+
         createElectionWithDetails();
         // navigate('/creator/create-vote/positions');
     }

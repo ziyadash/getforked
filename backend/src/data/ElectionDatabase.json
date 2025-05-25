@@ -1,14 +1,28 @@
 {
-  "846093132": {
-    "id": 846093132,
-    "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
-    "name": "Test Election",
-    "description": "This is a test election",
+  "196383744": {
+    "id": 196383744,
+    "authUserId": "e41d4eed57c791d36e02cdd2bb8291cef40982dc7d78152772ee0c001071e498",
+    "name": "a",
+    "description": "a",
     "images": [],
-    "location": "library",
-    "date_time_start": "2025-05-25T11:26:06.101Z",
-    "date_time_end": "2025-05-25T11:26:06.101Z",
-    "requires_zid": false,
+    "location": "a",
+    "date_time_start": "2014-10-02T02:00:00.000Z",
+    "date_time_end": "2014-10-02T02:00:00.000Z",
+    "requires_zid": true,
+    "questions": [],
+    "isActive": false,
+    "voters": []
+  },
+  "819933440": {
+    "id": 819933440,
+    "authUserId": "e41d4eed57c791d36e02cdd2bb8291cef40982dc7d78152772ee0c001071e498",
+    "name": "a",
+    "description": "a",
+    "images": [],
+    "location": "a",
+    "date_time_start": "2014-10-02T02:00:00.000Z",
+    "date_time_end": "2014-10-02T02:00:00.000Z",
+    "requires_zid": true,
     "questions": [],
     "isActive": false,
     "voters": []
