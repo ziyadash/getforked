@@ -1,7 +1,7 @@
 import { error } from "node:console";
 import { getHashOf } from "src/data/dataUtil";
 import { getElectionData, getSessionData, saveElectionDatabaseToFile } from "../data/dataStore";
-import { Ballot, Voter } from '../../../shared/interfaces';
+import { Ballot, ElectionState, Voter } from '../../../shared/interfaces';
 import { StatusCodes } from "http-status-codes";
 import { validateElectionId } from "./servicesUtil";
 import { checkElectionSessionCode } from "src/controllers/voteCreateController";
@@ -38,7 +38,7 @@ export async function activateElectionSession(electionId: string): Promise<strin
         if (!election) {
             throw new Error("invalid election id");
         }
-        election.isActive = true;
+        election.electionState = ElectionState.Ongoing;
 
         sessionCode = Math.random().toString(36).slice(2, 7);
         // add verification to make sure it is unique
@@ -147,7 +147,7 @@ export const getResult = async (electionId: string) => {
             throw new Error("invalid election id");
         }
 
-        if (election.isActive) {
+        if (election.electionState !== ElectionState.Stopped) {
             throw new Error("election not ended");
         }
 

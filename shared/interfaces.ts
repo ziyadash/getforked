@@ -7,6 +7,12 @@ interface Image {
     file_id: string,
 }
 
+export enum ElectionState {
+    WaitingToStart,
+    Ongoing,
+    Stopped,
+}
+
 // have a flag called isActive
 // move other variables into election object once isActive
 interface Election {
@@ -22,7 +28,8 @@ interface Election {
     requires_zid: boolean,
 
     // fields that are used once election is activated
-    isActive: boolean,
+    // isActive: boolean,
+    electionState: ElectionState
     questions: Question[],
     sessionCode?: string, // voters enter this to join session
     voters: Voter[], // array of voters' zids

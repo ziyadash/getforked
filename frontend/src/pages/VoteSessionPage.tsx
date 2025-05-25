@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StyledBackground from "../components/background/StyledBackground";
 import ListVoters from "../components/containers/ListVoters";
 import { useNavigate } from "react-router";
@@ -7,17 +7,37 @@ interface OrganiserInput {
   name: string,
 }
 
+
+enum VoteState {
+  Loading,
+  WaitingToStart,
+  Ongoing,
+  Stopped
+}
+
 export default function VoteSessionPage({ name }: OrganiserInput) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [count, setCount] = useState<number>(0); // number of voters in the session
+
+  const [voteState, setVoteState] = useState()
+
+    const [loading, setLoading] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
+    // const [positions, setPositions] = useState<>([]);
+    const debounceRef = useRef<boolean>(false);
+      // zidList is for DISPLAYING in the view/list.
+  const [zidList, setZidList] = useState<string[]>([]); // [z1234567, z2345678]
+
+  const [count, setCount] = useState<number>(-1); // number of voters in the session
 
   const navigate = useNavigate();
+
+
+
+
+
 
   // for session ids?
   // const [zidList, setZidList] = useState<string[]>([]); // [userSessionID2, userSessionID1]
 
-  // zidList is for DISPLAYING in the view/list.
-  const [zidList, setZidList] = useState<string[]>([]); // [z1234567, z2345678]
 
   useEffect(() => {
     setLoading(false) // once correct information has been loaded, change to false
