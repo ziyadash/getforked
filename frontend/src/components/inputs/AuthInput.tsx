@@ -2,27 +2,30 @@
 // and has an onchange function
 
 interface AuthInputs {
+	type: string;
 	label: string;
 	placeholder: string;
 	marginStyle: string;
-	value: string;
-	onChange: (val: string) => void;
-  }
-  
-  export default function AuthInput({ label, placeholder, marginStyle, value, onChange }: AuthInputs) {
+	w: string;
+	h: string;
+	setInput: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function AuthInput({ type, label, placeholder, marginStyle, w, h, setInput }: AuthInputs) {
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// console.log('zid is', e.target.value);
+		setInput(e.target.value);
+		// TODO: when Add Button has been clicked
+		// setInput("");
+	}
+
 	return (
-	  <div className={`flex justify-center ${marginStyle}`}>
-		<div className="flex flex-col">
-		  <div className="text-[#f1e9e9]"> {label} </div>
-		  <input
-			style={{ fontFamily: "Lexend" }}
-			placeholder={placeholder}
-			className="p-4 w-[23em] h-[2.5em] border-2 border-[#f1e9e9] bg-[#f1e9e9] rounded-xl"
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
-		  />
-		</div>
-	  </div>
+		<div className={`flex justify-center ${marginStyle}`}>
+			<div className="flex flex-col">
+				<div className="text-[#f1e9e9]"> {label} </div>
+				<input style={{ fontFamily: "Lexend" }} placeholder={placeholder} className="p-4 w-[23em] h-[2.5em] border-2 border-[#f1e9e9] bg-[#f1e9e9] rounded-xl" />
+			</div>
+		</div >
 	);
   }
   

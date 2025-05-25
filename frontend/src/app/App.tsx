@@ -1,20 +1,41 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import MainPage from '../pages/MainPage'
 import VoterPage from '../pages/VoterPage'
-import ManagerPage from '../pages/ManagerPage'
+import CreatorPage from '../pages/CreatorPage'
+import VoteSessionPage from '../pages/VoteSessionPage'
 import ViewVotingSessionsPage from '../pages/ViewVotingSessionsPage'
 import AddPositionsPage from '../pages/AddPositionsPage'
-
+import CreateVoteBasicInfo from '../pages/CreateVoteBasicInfo'
+import CreateVoteAddInfo from '../pages/CreateVoteAddInfo'
+import CreateVoteEditCandidate from '../pages/CreateVoteEditCandidate'
+import VoterVotingPage from '../pages/VoterVotingPage'
+import VotingFinishPage from '../pages/VotingFinishPage'
+import ResultsPage from '../pages/ResultsPage'
+import VoterJoinSessionPage from '../pages/VoterJoinSessionPage'
 
 export default function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<MainPage />} />
-                <Route path="/voter" element={<VoterPage />} />
-                <Route path="/manager" element={<ManagerPage />}/>
-                <Route path="/manager/viewVotingSessions" element={<ViewVotingSessionsPage />} />
-                <Route path="/manager/addPositions" element={<AddPositionsPage />} />
+
+                <Route path="/voter/login" element={<VoterPage />} />
+                <Route path="/voter/signup" element={<VoterPage />} />
+                <Route path="/voter/join" element={<VoterJoinSessionPage />} />
+                <Route path="/voter/voting/:id" element={<VoterVotingPage />} />
+                <Route path="/voter/finish" element={<VotingFinishPage />} />
+
+                <Route path="/creator/login" element={<CreatorPage />} />
+                <Route path="/creator/signup" element={<CreatorPage />} />
+
+                <Route path="/creator/view-voting-sessions" element={<ViewVotingSessionsPage />} />
+                <Route path="/creator/create-vote" element={<CreateVoteBasicInfo />} />
+                <Route path="/creator/create-vote/positions" element={<AddPositionsPage />} />
+                <Route path="/creator/create-vote/add-position" element={<CreateVoteAddInfo />} />
+                <Route path="/creator/create-vote/edit-candidate/:id" element={<CreateVoteEditCandidate />} />
+
+                <Route path="/creator/voting-in-session/:id" element={<VoteSessionPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
+                <Route path="/creator/results/:id" element={<ResultsPage />} />
             </Routes>
         </BrowserRouter>
     )
