@@ -310,7 +310,7 @@ export const createCandidate = async (
       
   
       const newCandidate: Candidate = {
-        fullName: candidateData.name,
+        name: candidateData.name,
         description: '',
         image: '',
         candidateIndex: newCandidateIndex,
@@ -374,7 +374,7 @@ export const editCandidate = async (
 
     if (!candidate) return;
 
-    candidate.fullName = candidateData.name;
+    candidate.name = candidateData.name;
     candidate.description = candidateData.description;
     candidate.image = candidateData.image;
     found = true;

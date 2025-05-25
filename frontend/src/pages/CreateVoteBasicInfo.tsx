@@ -50,6 +50,13 @@ export default function CreateVoteBasicInfo() {
             const fetchResponse = await fetch(`http://localhost:3000/api/auth/createElection`, params);
             const data = await fetchResponse.json();
             console.log(data);
+
+            if (data && data.electionId) {
+                let gotoURL = (`/creator/create-vote/${data.electionId}/positions`)
+                console.log(gotoURL)
+                navigate(gotoURL)
+            } 
+
             return data;
         } catch (e) {
             console.log('caught')

@@ -56,7 +56,7 @@ interface VoteAnswer {
 // NOTE: 
 interface Candidate {
     zId?: number;
-    fullName: string;
+    name: string;
     description: string;
     image: string;
     candidateIndex: number,

@@ -159,7 +159,7 @@ export const getResult = async (electionId: string) => {
             }
             const winnerObj = q.candidates.find(c => c.candidateIndex === winnerId);
             if (winnerObj) {
-                resultMap[q.title] = winnerObj.fullName;
+                resultMap[q.title] = winnerObj.name;
             }
         }
 
