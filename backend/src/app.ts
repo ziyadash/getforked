@@ -4,7 +4,13 @@ import authRoutes from './routes/authRoutes';
 import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorHandler';
 
+import cors from 'cors'
+
 const app = express();
+
+app.use(cors({
+    origin: '*',
+}))
 
 app.use(express.json());
 

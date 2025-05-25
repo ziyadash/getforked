@@ -95,8 +95,12 @@ export async function authRegister(
   zPass: string
 ): Promise<{ sessionId?: string; error?: string; status?: number }> {
   console.log("registering user!")
-  const decryptedZID = decryptData(zId);
-  const decryptedZPass = decryptData(zPass);
+  // const decryptedZID = decryptData(zId);
+  // const decryptedZPass = decryptData(zPass);
+
+
+  const decryptedZID = (zId);
+  const decryptedZPass = (zPass);
 
   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
   if (result.error) return result;
@@ -146,8 +150,11 @@ export async function authRegister(
 export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
   console.log("logging in user!")
   // Decrypt inputs
-  const decryptedZID = decryptData(zId);
-  const decryptedZPass = decryptData(zPass);
+  // const decryptedZID = decryptData(zId);
+  // const decryptedZPass = decryptData(zPass);
+
+  const decryptedZID = (zId);
+  const decryptedZPass = (zPass);
 
   // Verify credentials (e.g. against UNSW API or dummy auth)
   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
