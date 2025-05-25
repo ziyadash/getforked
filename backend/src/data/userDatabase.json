@@ -1,16 +1,6 @@
 {
-  "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e": {
-    "name": "6c5330eb62b694ff43e104d39aaeb6620b53dcfacab8de05e4f4a4fba76db71c",
-    "zid": "z5549057"
-  },
-<<<<<<< HEAD
   "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9": {
     "name": "d537087e746dd906ca6c1e6a79fcff91e4e23f1b6c88d8940227f45151e2fdca",
     "zid": "z5428849"
-=======
-  "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36": {
-    "name": "e7e08e78f70c46cc7e948c475cb4ae5eb4ad97c79aff54fd76607c1c15a6f7b3",
-    "zid": "z5417372"
->>>>>>> brandan-voting-page
   }
 }

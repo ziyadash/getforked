@@ -1,7 +1,5 @@
 // Placeholder can change all of this
-interface Voter {
-    username: string,
-}
+
 
 interface Image {
     name: string,

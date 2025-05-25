@@ -14,31 +14,44 @@ export default function VoterJoinSessionPage() { // once voter has logged in
 
   const [input, setInput] = useState<string>('');
   const onClick = () => {
-      if (input.trim()) {
-        const checkElectionID= async () => {
-            const electionId = JSON.stringify(input);
-            if (electionId) {
-                const API_URL = import.meta.env.VITE_BACKEND_URL;
-                const response = await fetch(`${API_URL}/api/auth/checkSession`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    method: 'POST',
-                    body: JSON.stringify(
-                        {
-                            electionId: electionId,
-                        }),
-                });
-                if (response.ok) {
-                    navigate(`/voter/voting/${input.trim()}`);
-                    return;
-                }
-            }
-        };
-        checkElectionID();
-      } 
+    if (input.trim()) {
+      const checkElectionSessionCode = async () => {
+        const sessionCode = input;
+        if (sessionCode) {
+          console.log("HELLOWORD 3")
+          console.log(sessionCode)
+          const API_URL = import.meta.env.VITE_BACKEND_URL;
+          const response = await fetch(`${API_URL}/api/elections/checkElectionSessionCode`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify(
+              {
+                sessionCode: sessionCode,
+              }),
+          });
+          if (response.status == 200) {
+            const sessionId = localStorage.getItem('user-session-id');
+            fetch(`${API_URL}/api/elections/joinVote`, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+              body: JSON.stringify(
+                {
+                  sessionCode: sessionCode,
+                  sessionId: sessionId
+                }),
+            });
+            navigate(`/voter/voting/${input.trim()}`);
+            return;
+          }
+        }
+      };
+      checkElectionSessionCode();
+    }
   }
-
 
 
 
