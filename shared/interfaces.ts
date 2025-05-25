@@ -49,11 +49,48 @@ interface Question {
     ballot: Ballot[]
 }
 
+
+interface Ballot {
+    userid: string,
+    // Preferences = order of CandidateIndex
+    preferences: number[]
+}
+
+// For each question
+
+// User to submit ranked order
+
+/**
+ * Position: CEO
+ * Options;
+ * - RED: 0
+ * - GREEN: 1
+ * - BLUE: 2
+ * 
+ *  * Position: Treasurer
+ * Options;
+ * - RED: 0
+ * - GREEN: 1
+ * - BLUE: 2
+ * 
+ * Example Answer:
+ * USER A)
+ * {
+ *   0: [0, 1, 2]
+//  * = red - highest priority
+//  * = green - medium priority
+// *  = blue - low
+    = 
+ * }
+ * 
+ */
+
+
+
+
 // a voter submits a ballot for the position
 // it contains an ordered list of the candidates for this particular question
-export interface Ballot {
-    preferences: number[],
-}
+
 
 // Change this to use ZK Proof 
 interface VoteAnswer {
