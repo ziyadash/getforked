@@ -14,8 +14,36 @@ export default function VoterJoinSessionPage() { // once voter has logged in
 
   const [input, setInput] = useState<string>('');
   const onClick = () => {
-    navigate('/voter/voting/01');
+      if (input.trim()) {
+        const checkElectionID= async () => {
+            const electionId = JSON.stringify(input);
+            if (electionId) {
+                const API_URL = import.meta.env.VITE_BACKEND_URL;
+                const response = await fetch(`${API_URL}/api/auth/checkSession`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            electionId: electionId,
+                        }),
+                });
+                if (response.ok) {
+                    navigate(`/voter/voting/${input.trim()}`);
+                    return;
+                }
+            }
+            // No valid session
+
+        };
+        checkElectionID();
+      } 
   }
+
+
+
+
 
   return (
     <StyledBackground className="main justify-center">

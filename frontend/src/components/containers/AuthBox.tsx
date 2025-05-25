@@ -88,13 +88,13 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		console.log("HANDLING SESSION ID");
 		console.log(sessionId)
 		localStorage.setItem('user-session-id', sessionId); // session id stored in local storage
-	
+
 		if (route.includes('creator')) {
 			navigate(`/creator/view-voting-sessions`);
 		} else if (route.includes('voter')) {
 			navigate('/voter/join');
 		}
-	
+
 	}
 
 	const submit = async () => {
@@ -115,7 +115,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 				}
 			} else if (res2.sessionId) {
 				HandleFoundSessionid(res2.sessionId);
-			} 
+			}
 
 			if (res2.error === 'User not registered') {
 				const res3 = await register();
@@ -136,41 +136,41 @@ export default function AuthBox({ user }: AuthBoxInput) {
 
 
 	return (
-	<div className="…">
-		{/* … */}
-		<AuthInput
-		type="text"
-		label="zID"
-		placeholder="z1234567"
-		marginStyle="mt-[2em]"
-		setInput={setUsername}
-		w="w-[23em]"
-		h="h-[2.5em]"
-		disabled={loading}
-		/>
-		<AuthInput
-		type="password"
-		label="Password"
-		placeholder="••••••••••••"
-		marginStyle="mt-[1em]"
-		setInput={setPassword}
-		disabled={loading}
-		/>
+		<div className="…">
+			{/* … */}
+			<AuthInput
+				type="text"
+				label="zID"
+				placeholder="z1234567"
+				marginStyle="mt-[2em]"
+				setInput={setUsername}
+				w="w-[23em]"
+				h="h-[2.5em]"
+				disabled={loading}
+			/>
+			<AuthInput
+				type="password"
+				label="Password"
+				placeholder="••••••••••••"
+				marginStyle="mt-[1em]"
+				setInput={setPassword}
+				disabled={loading}
+			/>
 
-		{errorMsg && (
-		<div className="text-red-500 ml-24 mt-2 text-sm">
-			{errorMsg}
+			{errorMsg && (
+				<div className="text-red-500 ml-24 mt-2 text-sm">
+					{errorMsg}
+				</div>
+			)}
+
+			<ThinGradientButton
+				text={loading ? 'Loading…' : 'Continue'}
+				margin="mt-10"
+				w="w-[23em]"
+				onClick={submit}
+				disabled={loading}
+			/>
 		</div>
-		)}
-
-		<ThinGradientButton
-		text={loading ? 'Loading…' : 'Continue'}
-		margin="mt-10"
-		w="w-[23em]"
-		onClick={submit}
-		disabled={loading}
-		/>
-	</div>
 	);
 
 }

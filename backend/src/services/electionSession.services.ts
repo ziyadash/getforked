@@ -2,6 +2,7 @@ import { error } from "node:console";
 import { getHashOf } from "src/data/dataUtil";
 import { getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
 import { Ballot } from '../../../shared/interfaces';
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Get election status.
@@ -195,5 +196,33 @@ function calculatePreferentialVotingWinner(ballots: Ballot[]): number {
     if (activeCandidates.size === 0) {
       return -1;
     }
+  }
+}
+
+/**
+ * Checks if a Voting Session Exists
+ */
+export async function electionValidId(electionID: string): Promise<{ error?: string; status?: number } | void> {
+  console.log("Checking if election id is valid")
+  let found = false;
+
+  // Example: call getElectionData
+  await getElectionData((map) => {
+  // Instant lookup:
+   const election = map.get(electionID);
+  if (election) {
+    // Found the election, do something
+    console.log('Election found:', election);
+    found = true
+  } else {
+    // Not found
+  }
+});
+
+  if (!found) {
+    return {
+      error: 'Invalid electionID',
+      status: StatusCodes.UNAUTHORIZED,
+    };
   }
 }
