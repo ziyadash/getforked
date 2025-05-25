@@ -6,9 +6,15 @@
       "createdAt": "2025-05-25T13:12:52.019Z"
     },
     {
+<<<<<<< HEAD
       "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhOTk2MmIyZWRjNTZmYzZhNWRjNGYzOWZiYjFmNzI3NmVhMGE5Njg4ZWMzYzg0MDMyMmUwNjljOGRmMTEyOGI5IiwiaWF0IjoxNzQ4MTk0MDM1fQ.fasj5CdTiAPpCHktZnMlXS8XGKv2Pw5LIBMO5gs1SpA",
       "userId": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9",
       "createdAt": "2025-05-25T17:27:15.041Z"
+=======
+      "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZmY3NjY5ZDRjZWE2MTc1MjQ5YTBkMjc4YWQ0MDZhMjRhYzU4MjIyODMyNzQwNjRkZGE5MDlhYzA5OTViZDM2IiwiaWF0IjoxNzQ4MjAwMDQxfQ.pCpvmgFdsn-2WMLwbqQqAhxSoT21dfR7bW7inxGp8Kk",
+      "userId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+      "createdAt": "2025-05-25T19:07:21.307Z"
+>>>>>>> brandan-voting-page
     }
   ]
 }

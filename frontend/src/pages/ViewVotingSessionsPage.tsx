@@ -1,83 +1,113 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import StyledBackground from "../components/background/StyledBackground";
 import WideButton from "../components/buttons/WideButton";
 import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
-import { deleteElement } from "../helpers";
 import logoutIcon from "../assets/svg/logout.svg";
+import { Election } from "../../../shared/interfaces";
 
 export default function ViewVotingSessionsPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [votingSessions, setPositions] = useState([
-        'DevSoc AGM 2025',
-        'CSESoc AGM 2025',
-        'DevSoc AGM 2024',
-        'CSESoc AGM 2024'
-    ]);
+  const [loading, setLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const [votingSessions, setVotingSessions] = useState<Election[]>([]);
+  const debounceRef = useRef<boolean>(false);
 
-    const handleStart = (index: number) => {
-        index = index;
-        navigate(`/creator/voting-in-session/${index}`);
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    if (!isFetching) {
+        setIsFetching(true);
+        (async () => {
+        if (debounceRef.current) return;
+        debounceRef.current = true;
+        setTimeout(() => (debounceRef.current = false), 1000);
+
+        try {
+            const res = await fetch(`${API_URL}/api/auth/viewElections`, {
+                headers: {
+                    'x-session-id': localStorage.getItem('user-session-id') || ''
+                }
+                });
+            if (!res.ok) throw new Error("Failed to fetch voting sessions");
+            const data = await res.json();
+            setVotingSessions(data.result.elections);
+        } catch (err: any) {
+            console.error(err);
+            window.alert(err.message || "An unknown error occurred");
+        } finally {
+            setLoading(false);
+            setIsFetching(false);
+        }
+        })();
     }
+  }, []);
 
-    const handleStop = (index: number) => {
-        index = index;
-    }
+  const handleStart   = (i: number) => navigate(`/creator/voting-in-session/${i}`);
+  const handleStop    = (i: number) => {/* your stop logic */};
+  const handleResults = (i: number) => navigate(`/creator/results/${i}`);
+  const handleDeletion= (i: number) => {/* your deletion logic */};
+  const handleAddSession = () => navigate('/creator/create-vote');
+  const handleLogout    = () => navigate('/');
 
-    const handleResults = (index: number) => {
-        navigate(`/creator/results/${index}`);
-    }
+  return (
+    <StyledBackground className="main">
+      <div className="relative h-[100vh] p-[6rem] overflow-y-auto no-scrollbar">
+        {/* logout */}
+        <button
+          className="p-4 absolute top-2 right-4 z-20 hover:cursor-pointer"
+          onClick={handleLogout}
+          disabled={loading}
+        >
+          <img className="h-[40px]" src={logoutIcon} />
+        </button>
 
-    const handleDeletion = (index: number) => {
-        setPositions(deleteElement(votingSessions, index));
-    }
+        {/* semi-transparent overlay + spinner */}
+        {loading && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white bg-opacity-50">
+            <div className="animate-spin rounded-full border-4 border-blue-500 border-t-transparent h-12 w-12" />
+          </div>
+        )}
 
-    const handleAddSession = () => {
-        navigate('/creator/create-vote');
-    }
+        {/* content */}
+        <div className={`${loading ? 'opacity-50 pointer-events-none' : ''} flex flex-col gap-[1.5em] pt-0`}>
+          <Heading text="Your Voting Sessions" />
 
-    const handleLogout = () => {
-        navigate('/');
-    }
-
-    return (
-        <StyledBackground className='main'>
-            <div className="
-                flex flex-col overflow-y-auto no-scrollbar gap-[1.5em] 
-                h-[100vh]
-                pt-[0rem]
-                p-[6rem]
-            ">
-                <button className="p-4 absolute top-2 right-4 z-10 hover:cursor-pointer" onClick={handleLogout}>
-                    <img className="h-[40px]" src={logoutIcon}></img>
-                </button>
-                <Heading text="Your Voting Sessions" />
-                {votingSessions.map((name, index) => (
-                    <div className="flex flex-row justify-center items-center gap-[2vw]">
-                        <WideButton text={name} margin="mt-[0]">
-                            <div className="buttons-container">
-                                <SmallButton
-                                    buttonType="start"
-                                    onClick={() => handleStart(index)}
-                                />
-                                <SmallButton
-                                    buttonType="stop"
-                                    onClick={() => handleStop(index)}
-                                />
-                                <SmallButton
-                                    buttonType="results"
-                                    onClick={() => handleResults(index)}
-                                />
-                            </div>
-                        </WideButton>
-                        <SmallButton buttonType="bin" onClick={() => handleDeletion(index)} />
-                    </div>
-                ))}
-                <WideAddButton onClick={() => handleAddSession()}></WideAddButton>
+          {votingSessions.map((session, idx) => (
+            <div key={idx} className="flex items-center justify-center gap-[2vw]">
+              <WideButton text={session.name} margin="mt-[0]" disabled={loading}>
+                <div className="buttons-container">
+                  <SmallButton
+                    buttonType="start"
+                    onClick={() => handleStart(idx)}
+                    disabled={loading}
+                  />
+                  <SmallButton
+                    buttonType="stop"
+                    onClick={() => handleStop(idx)}
+                    disabled={loading}
+                  />
+                  <SmallButton
+                    buttonType="results"
+                    onClick={() => handleResults(idx)}
+                    disabled={loading}
+                  />
+                </div>
+              </WideButton>
+              <SmallButton
+                buttonType="bin"
+                onClick={() => handleDeletion(idx)}
+                disabled={loading}
+              />
             </div>
-        </StyledBackground>
-    );
+          ))}
+
+          <WideAddButton onClick={handleAddSession} disabled={loading} />
+        </div>
+      </div>
+    </StyledBackground>
+  );
 }
