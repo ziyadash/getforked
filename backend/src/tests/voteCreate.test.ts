@@ -34,94 +34,96 @@ User session from a prevoius test, or Create a session by calling the user API a
 // we should actually use the API route:
 //    router.post('/login', login);
 // to register a user and create a session token
-// describe('POST /createElection', () => {
-//   beforeEach(async () => {
-//     // await clear();
-//   });
+describe('POST /createElection', () => {
+  beforeEach(async () => {
+    // await clear();
+  });
 
-//   it.only('Should create an election successfully after registering user', async () => {
-//     const zId = encryptWithPublicKey(zidPlainText);
-//     const zPass = encryptWithPublicKey(zpassPlainText);
-
-//     // Register user and retrieve session
-//     const regRes = await request(app)
-//       .post(registerRoute)
-//       .send({ zId, zPass });
-
-//     expect(regRes.statusCode).toEqual(200);
-//     const sessionId = regRes.body.sessionId;
-
-//     // Create election with valid session
-//     const res = await request(app)
-//       .post('/api/auth/createElection')
-//       .set('x-session-id', sessionId)
-//       .send({
-//         title: 'Test Election',
-//         description: 'This is a test election',
-//         images: [],
-//         startDate: new Date(),
-//         endDate: new Date(),
-//         zid_requirement: false,
-//         locationOfVote: 'library',
-//       });
-
-//     expect(res.statusCode).toEqual(200);
-//     expect(res.body.electionId).toBeDefined();
-//   });
-// });
-
-// tests for adding/viewing/reordering positions
-describe('POST /reorderPositions', () => {
-  let sessionId: string;
-  let voteId: number;
-  let positionIds: number[] = [];
-
-  beforeAll(async () => {
-    // Register user
+  it.only('Should create an election successfully after registering user', async () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText);
-    const registerRes = await request(app)
+
+    // Register user and retrieve session
+    const regRes = await request(app)
       .post(registerRoute)
       .send({ zId, zPass });
 
-    expect(registerRes.statusCode).toBe(200);
-    sessionId = registerRes.body.sessionId;
+    expect(regRes.statusCode).toEqual(200);
+    const sessionId = regRes.body.sessionId;
 
-    // Create vote
-    // Create vote
-    const createVoteRes = await request(app)
-      .post(createVoteRoute)
+    // Create election with valid session
+    const res = await request(app)
+      .post('/api/auth/createElection')
       .set('x-session-id', sessionId)
       .send({
-        title: "Test Election yippee!",
-        description: "This is a test election. it has one position to vote for.",
+        title: 'Test Election',
+        description: 'This is a test election',
         images: [],
         startDate: new Date(),
         endDate: new Date(),
         zid_requirement: false,
-        locationOfVote: "library"
+        locationOfVote: 'library',        
       });
 
-    expect(createVoteRes.statusCode).toBe(200);
-    voteId = createVoteRes.body.electionId;
-    // console.log("the voteid is... " + voteRes.body);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.electionId).toBeDefined();
 
-    // Create positions
-    const titles = ['President', 'Treasurer'];
-    for (const title of titles) {
-      const posRes = await request(app)
-        .post(createPositionRoute)
-        .set('x-session-id', sessionId)
-        .send({
-          voteId,
-          title,
-          questionType: QuestionType.Preferential,
-        });
-
-      expect(posRes.statusCode).toBe(200);
-      positionIds.push(posRes.body.result.positionId);
-    }
+    
   });
+});
+
+// // tests for adding/viewing/reordering positions
+// describe('POST /reorderPositions', () => {
+//   let sessionId: string;
+//   let voteId: number;
+//   let positionIds: number[] = [];
+
+//   beforeAll(async () => {
+//     // Register user
+//     const zId = encryptWithPublicKey(zidPlainText);
+//     const zPass = encryptWithPublicKey(zpassPlainText);
+//     const registerRes = await request(app)
+//       .post(registerRoute)
+//       .send({ zId, zPass });
+
+//     expect(registerRes.statusCode).toBe(200);
+//     sessionId = registerRes.body.sessionId;
+
+//     // Create vote
+//     // Create vote
+//     const createVoteRes = await request(app)
+//       .post(createVoteRoute)
+//       .set('x-session-id', sessionId)
+//       .send({
+//         title: "Test Election yippee!",
+//         description: "This is a test election. it has one position to vote for.",
+//         images: [],
+//         startDate: new Date(),
+//         endDate: new Date(),
+//         zid_requirement: false,
+//         locationOfVote: "library"
+//       });
+
+//     expect(createVoteRes.statusCode).toBe(200);
+//     voteId = createVoteRes.body.electionId;
+//     // console.log("the voteid is... " + voteRes.body);
+
+//     // Create positions
+//     const titles = ['President', 'Treasurer'];
+//     for (const title of titles) {
+//       const posRes = await request(app)
+//         .post(createPositionRoute)
+//         .set('x-session-id', sessionId)
+//         .send({
+//           voteId,
+//           title,
+//           questionType: QuestionType.Preferential,
+//         });
+
+//       expect(posRes.statusCode).toBe(200);
+//       positionIds.push(posRes.body.result.positionId);
+//     }
+//   });
 
   // it('should reorder the positions in the election', async () => {
   //   const newOrder = [...positionIds].reverse();
@@ -148,35 +150,35 @@ describe('POST /reorderPositions', () => {
   //   expect(returnedIds).toEqual(newOrder);
   // });
 
-  it('should delete a position from the election', async () => {
-    // Ensure we have at least one position left to delete
-    const viewBefore = await request(app)
-      .get(getViewPositionsRoute(voteId))
-      .set('x-session-id', sessionId);
+//   it('should delete a position from the election', async () => {
+//     // Ensure we have at least one position left to delete
+//     const viewBefore = await request(app)
+//       .get(getViewPositionsRoute(voteId))
+//       .set('x-session-id', sessionId);
   
-    expect(viewBefore.statusCode).toBe(200);
-    const positionsBefore = viewBefore.body.result.positions;
-    expect(positionsBefore.length).toBeGreaterThan(0);
+//     expect(viewBefore.statusCode).toBe(200);
+//     const positionsBefore = viewBefore.body.result.positions;
+//     expect(positionsBefore.length).toBeGreaterThan(0);
   
-    const targetPositionId = positionsBefore[0].id;
+//     const targetPositionId = positionsBefore[0].id;
   
-    // Perform delete
-    const deleteRes = await request(app)
-      .delete(getDeletePositionRoute(voteId, targetPositionId))
-      .set('x-session-id', sessionId);
+//     // Perform delete
+//     const deleteRes = await request(app)
+//       .delete(getDeletePositionRoute(voteId, targetPositionId))
+//       .set('x-session-id', sessionId);
   
-    expect(deleteRes.statusCode).toBe(200);
-    expect(deleteRes.body.success).toBe(true);
+//     expect(deleteRes.statusCode).toBe(200);
+//     expect(deleteRes.body.success).toBe(true);
   
-    // Verify it's been deleted
-    const viewAfter = await request(app)
-      .get(getViewPositionsRoute(voteId))
-      .set('x-session-id', sessionId);
+//     // Verify it's been deleted
+//     const viewAfter = await request(app)
+//       .get(getViewPositionsRoute(voteId))
+//       .set('x-session-id', sessionId);
   
-    const positionIdsAfter = viewAfter.body.result.positions.map((p: any) => p.id);
-    expect(positionIdsAfter).not.toContain(targetPositionId);
-  });
-});
+//     const positionIdsAfter = viewAfter.body.result.positions.map((p: any) => p.id);
+//     expect(positionIdsAfter).not.toContain(targetPositionId);
+//   });
+// });
 
 // // tests for viewing/adding/modifying/deleting candidates in a position
 // describe('tests for viewing/adding/modifying/deleting candidates in a position', () => {
