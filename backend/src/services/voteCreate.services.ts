@@ -299,31 +299,30 @@ export const createCandidate = async (
 
   const newCandidateIndex = generateCandidateIndex();
 
-  // Modify election database
-  await getElectionData(map => {
-    const updatedElection = map.get(String(candidateData.voteId));
-    if (!updatedElection) throw new Error('Election unexpectedly missing from database');
-
-    const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
-    if (!position) throw new Error('Position unexpectedly missing');
-
-
-
-    const newCandidate: Candidate = {
-      fullName: candidateData.name,
-      description: '',
-      image: '',
-      votes: [],
-      candidateIndex: newCandidateIndex,
-    };
-
-    position.candidates.push(newCandidate);
-  });
-
-  await saveElectionDatabaseToFile();
-
-  return { candidateIndex: newCandidateIndex };
-};
+    // Modify election database
+    await getElectionData(map => {
+      const updatedElection = map.get(String(candidateData.voteId));
+      if (!updatedElection) throw new Error('Election unexpectedly missing from database');
+  
+      const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
+      if (!position) throw new Error('Position unexpectedly missing');
+  
+      
+  
+      const newCandidate: Candidate = {
+        fullName: candidateData.name,
+        description: '',
+        image: '',
+        candidateIndex: newCandidateIndex,
+      };
+  
+      position.candidates.push(newCandidate);
+    });
+  
+    await saveElectionDatabaseToFile();
+  
+    return { candidateIndex: newCandidateIndex };
+  };
 
 export interface EditCandidateProps {
   userSessionId: string;

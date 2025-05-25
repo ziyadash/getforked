@@ -1,6 +1,8 @@
 import express from 'express';
 import itemRoutes from './routes/itemRoutes';
 import authRoutes from './routes/authRoutes';
+import electionRoutes from './routes/electionRoutes'
+import votersRoutes from './routes/voterRoutes'
 import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -22,6 +24,10 @@ app.use('/api/items', itemRoutes);
 
 // Added auth routes
 app.use('/api/auth', authRoutes);
+
+app.use('/api/elections', electionRoutes);
+
+app.use('/api/voters', votersRoutes)
 
 // Global error handler (should be after routes)
 app.use(errorHandler);
