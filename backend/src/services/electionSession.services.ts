@@ -128,6 +128,9 @@ export const getResult = async (electionId: string) => {
 
         for (const q of questions) {
             const winnerId = calculatePreferentialVotingWinner(q.ballot);
+            if (winnerId === -1) {
+                resultMap[q.title] = "None";
+            }
             const winnerObj = q.candidates.find(c => c.candidateIndex === winnerId);
             if (winnerObj) {
                 resultMap[q.title] = winnerObj.fullName;
@@ -139,13 +142,13 @@ export const getResult = async (electionId: string) => {
 
     await saveElectionDatabaseToFile();
 
+    return resultMap;
 }
 
 function calculatePreferentialVotingWinner(ballots: Ballot[]): number {
-  // Get all candidate indices from ballots to know how many candidates there are
-  const numCandidates = Math.max(...ballots.flat()) + 1;
+  // Flatten all preferences to find max candidate index
+  const numCandidates = Math.max(...ballots.flatMap(b => b.preferences)) + 1;
 
-  // Start with all candidates active
   let activeCandidates = new Set<number>();
   for (let i = 0; i < numCandidates; i++) {
     activeCandidates.add(i);
@@ -159,36 +162,32 @@ function calculatePreferentialVotingWinner(ballots: Ballot[]): number {
 
     // Count votes for the highest-ranked active candidate on each ballot
     for (const ballot of ballots) {
-      const topChoice = ballot.find(c => activeCandidates.has(c));
+      const topChoice = ballot.preferences.find(c => activeCandidates.has(c));
       if (topChoice !== undefined) {
         voteCount.set(topChoice, (voteCount.get(topChoice) || 0) + 1);
       }
     }
 
-    // Total votes in this round
     const totalVotes = [...voteCount.values()].reduce((a, b) => a + b, 0);
 
-    // Check if any candidate has more than half the votes
     for (const [candidate, count] of voteCount) {
       if (count > totalVotes / 2) {
-        return candidate; // Winner found
+        return candidate;
       }
     }
 
-    // Find candidate(s) with the fewest votes
     const minVotes = Math.min(...voteCount.values());
+
     for (const [candidate, count] of voteCount) {
       if (count === minVotes) {
         activeCandidates.delete(candidate);
       }
     }
 
-    // If only one candidate remains, return them
     if (activeCandidates.size === 1) {
       return [...activeCandidates][0];
     }
 
-    // If no candidates remain (tie or all eliminated), return -1
     if (activeCandidates.size === 0) {
       return -1;
     }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ... } from '../../src/controllers/voterController.ts';
+// import { ... } from '../../src/controllers/voterController.ts';
 const router = Router();
 
 
