@@ -9,6 +9,8 @@ interface Image {
     file_id: string,
 }
 
+// have a flag called isActive
+// move other variables into election object once isActive
 interface Election {
     id: number,
     authUserId: string, // the owner of the election
@@ -20,7 +22,12 @@ interface Election {
     date_time_start: Date,
     date_time_end: Date,
     requires_zid: boolean,
-    questions: Question[]
+
+    // fields that are used once election is activated
+    isActive: boolean,
+    questions: Question[],
+    sessionCode: string, // voters enter this to join session
+    voters: Voter[], // array of voters' zids
 } 
 
 enum QuestionType {
@@ -32,9 +39,15 @@ interface Question {
     id: number;
     title: string; // e.g. "Treasurer"
     candidates: Candidate[];
-    questionType: QuestionType; // e.g. "single" or "multiple"
-  }
-  
+    questionType: QuestionType; // preferential
+    ballot: Ballot[]
+}
+
+// a voter submits a ballot for the position
+// it contains an ordered list of the candidates for this particular question
+interface Ballot {
+    preferences: number[],
+}
 
 // Change this to use ZK Proof 
 interface VoteAnswer {
@@ -85,3 +98,38 @@ export interface DataStore {
 export interface SessionStore {
     sessions: Session[]
 }
+
+// remove id from session when its no longer active
+// scrap this?
+export interface ElectionSession {
+    electionId: number, // references an election object 
+    sessionCode: string, // voters enter this to join session
+    voters: Voter[], // array of voters' zids
+}
+
+// enum ElectionSessionStates {
+//     // * Get election status. States: Ready to start | In progress | Ended
+//     READY_TO_START,
+//     IN_PROGRESS,
+//     ENDED
+// }
+
+interface Voter {
+    zid: string
+}
+
+/*
+creator side: 
+- activate an election (turn into a live session)
+- accept users into the .voters field (emit a session code for users to join with)
+- when session is stopped, we deactivate the sesssion
+
+voter side:
+- register as a user
+- join a vote by entering the session code emitted above
+
+voting process:
+- Question object contain an array of ballots
+- a voter submits their ballot, which is an array of the candidates for that particular question
+- we can have logic for counting votes based on preferential voting from this array of ballots, for every question
+*/
