@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { activateElection, getResults, checkElectionSessionCode } from '../../src/controllers/voteCreateController';
 import {joinVote, viewPositionsPublic } from '../../src/controllers/voterController';
+import { activateElection, getResults, checkElectionSessionCode, endElection } from '../../src/controllers/voteCreateController';
 const router = Router();
 
 router.post('/activateSession/:electionId', activateElection);
+router.post('/endElection/:electionId', endElection);
 
 router.get('/results/:electionId', getResults);
 

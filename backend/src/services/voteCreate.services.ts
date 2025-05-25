@@ -66,7 +66,7 @@ export const createElection = async (
         requires_zid: props.zid_requirement,
         questions: [],
         // isActive: false,
-        electionState: ElectionState.WaitingToStart,
+        electionState: 0,
         voters: [],
       };
   

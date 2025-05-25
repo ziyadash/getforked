@@ -323,6 +323,10 @@ export const activateElection = async (
 ) => {
   const electionId = String(req.params.electionId);
 
+
+  console.log("REQUEST HERE")
+  console.log(req.body)
+
   if (!electionId) {
     res.status(400).json({ error: 'Missing election ID' });
     return;
@@ -330,6 +334,31 @@ export const activateElection = async (
 
   try {
     const result = await electionSessionService.activateElectionSession(electionId);
+    res.status(200).json({ sessionCode: result });
+  } catch (e) {
+    next(e);
+  }
+};
+
+
+export const endElection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const electionId = String(req.params.electionId);
+
+
+  console.log("REQUEST HERE")
+  console.log(req.body)
+
+  if (!electionId) {
+    res.status(400).json({ error: 'Missing election ID' });
+    return;
+  }
+
+  try {
+    const result = await electionSessionService.endElection(electionId);
     res.status(200).json({ sessionCode: result });
   } catch (e) {
     next(e);

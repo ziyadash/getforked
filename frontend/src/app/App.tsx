@@ -37,7 +37,7 @@ export default function App() {
                     <Route path="/creator/create-vote/:vote_id/edit-position/:pos_id" element={<CreateVoteAddInfo />} />
                     <Route path="/creator/create-vote/:vote_id/edit-candidate/:id" element={<CreateVoteEditCandidate />} />
 
-                    <Route path="/creator/voting-in-session/:id" element={<VoteSessionPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
+                    <Route path="/creator/voting-in-session/:vote_id" element={<VoteSessionPage name="DevSoc AGM Voting 2025" />} /> {/* template */}
                     <Route path="/creator/results/:id" element={<ResultsPage />} />
                 </Routes>
             </VoteCreateProvider>
