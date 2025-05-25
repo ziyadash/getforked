@@ -297,60 +297,68 @@ export default function CreateVoteAddInfo() {
     navigate(`/creator/create-vote/${vote_id}/positions`);
   };
 
-  const handleSavePosition = async () => {
-    if (!positionName.trim() || (!isEditMode && !votingType)) {
-      alert('Please fill in all required fields');
-      return;
-    }
 
-    try {
-      setIsLoading(true);
-
-      if (isEditMode) {
-        // In edit mode, position already exists - just navigate back
-        navigate(`/creator/create-vote/${vote_id}/positions`);
-      } else {
-        // Create new position with all candidates in a single batch
-        const response = await apiCall('/api/auth/createPosition', {
-          method: 'POST',
-          body: JSON.stringify({
-            voteId: Number(vote_id),
-            title: positionName.trim(),
-            questionType: votingType
-          })
-        });
-
-        const positionId = response.result?.positionId;
-        if (!positionId) {
-          throw new Error('Position creation failed');
-        }
-
-        // Create all candidates in parallel (with minimal delay between requests)
-        const candidatePromises = candidates.map((candidate, index) => 
-          new Promise(resolve => 
-            setTimeout(() => {
-              apiCall('/api/auth/createCandidate', {
-                method: 'POST',
-                body: JSON.stringify({
-                  voteId: Number(vote_id),
-                  positionId: positionId,
-                  name: candidate.name
-                })
-              }).then(resolve).catch(resolve); // Don't fail the entire operation if one candidate fails
-            }, index * 100) // 100ms delay between each candidate creation
-          )
-        );
-
-        await Promise.all(candidatePromises);
-        navigate(`/creator/create-vote/${vote_id}/positions`);
+    const handleSavePosition = () => {
+      // guard early (optional), like you had before
+      if (!positionName.trim() || (!isEditMode && !votingType)) {
+        alert('Please fill in all required fields');
+        return;
       }
-    } catch (error) {
-      console.error('Failed to save position:', error);
-      alert('Failed to save position. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+      // debounce key must be unique
+      const debounceKey = 'create-position';
+
+      debounce(debounceKey, async () => {
+        try {
+          setIsLoading(true);
+
+          if (isEditMode) {
+            // edit-mode just navigates back
+            navigate(`/creator/create-vote/${vote_id}/positions`);
+          } else {
+            // 1) create the position
+            const response = await apiCall('/api/auth/createPosition', {
+              method: 'POST',
+              body: JSON.stringify({
+                voteId: Number(vote_id),
+                title: positionName.trim(),
+                questionType: votingType
+              })
+            });
+
+            const positionId = response.result?.positionId;
+            if (!positionId) throw new Error('Position creation failed');
+
+            // 2) then batch-create the candidates
+            const candidatePromises = candidates.map((candidate, index) =>
+              new Promise(resolve =>
+                setTimeout(() => {
+                  apiCall('/api/auth/createCandidate', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      voteId: Number(vote_id),
+                      positionId,
+                      name: candidate.name
+                    })
+                  })
+                    .then(resolve)
+                    .catch(resolve);
+                }, index * 100)
+              )
+            );
+
+            await Promise.all(candidatePromises);
+            navigate(`/creator/create-vote/${vote_id}/positions`);
+          }
+        } catch (error) {
+          console.error('Failed to save position:', error);
+          alert('Failed to save position. Please try again.');
+        } finally {
+          setIsLoading(false);
+        }
+      }, /* delay= */ 300);
+    };
+
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Enter') {

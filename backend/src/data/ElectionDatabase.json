@@ -53,7 +53,7 @@
         "title": "test pos 2",
         "candidates": [
           {
-            "name": "Test asdf",
+            "name": "REBANE TEST",
             "description": "",
             "image": "",
             "candidateIndex": 482375308
@@ -75,38 +75,6 @@
             "description": "",
             "image": "",
             "candidateIndex": 618649245
-          }
-        ],
-        "questionType": "preferential",
-        "ballot": []
-      },
-      {
-        "id": 582710495,
-        "title": "test pos 2",
-        "candidates": [
-          {
-            "name": "Test asdf",
-            "description": "",
-            "image": "",
-            "candidateIndex": 64312421
-          },
-          {
-            "name": "dsfasdfa",
-            "description": "",
-            "image": "",
-            "candidateIndex": 986029647
-          },
-          {
-            "name": "Lina Pasquierasfa",
-            "description": "",
-            "image": "",
-            "candidateIndex": 979975848
-          },
-          {
-            "name": "Timothy Stevens",
-            "description": "",
-            "image": "",
-            "candidateIndex": 170204449
           }
         ],
         "questionType": "preferential",
@@ -186,6 +154,85 @@
             "description": "",
             "image": "",
             "candidateIndex": 665897647
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      }
+    ],
+    "isActive": false,
+    "voters": []
+  },
+  "526470283": {
+    "id": 526470283,
+    "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+    "name": "test new pos",
+    "description": "asdfasdfasdf",
+    "images": [],
+    "location": "asdfa",
+    "date_time_start": "1970-01-01T00:00:00.000Z",
+    "date_time_end": "1970-01-01T00:00:00.000Z",
+    "requires_zid": true,
+    "questions": [
+      {
+        "id": 301432734,
+        "title": "Test BEW OIS",
+        "candidates": [
+          {
+            "name": "Alexia Lebrun",
+            "description": "",
+            "image": "",
+            "candidateIndex": 417235194
+          },
+          {
+            "name": "Patrick Cooper",
+            "description": "",
+            "image": "",
+            "candidateIndex": 809801767
+          },
+          {
+            "name": "Lina Pasquier",
+            "description": "",
+            "image": "",
+            "candidateIndex": 401375609
+          },
+          {
+            "name": "Timothy Stevens",
+            "description": "",
+            "image": "",
+            "candidateIndex": 806684329
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      },
+      {
+        "id": 171305444,
+        "title": "Test new Position proper spelling :?",
+        "candidates": [
+          {
+            "name": "Alexia Lebrun",
+            "description": "",
+            "image": "",
+            "candidateIndex": 325344490
+          },
+          {
+            "name": "Patrick Cooper",
+            "description": "",
+            "image": "",
+            "candidateIndex": 936697945
+          },
+          {
+            "name": "cheese boy",
+            "description": "",
+            "image": "",
+            "candidateIndex": 961361491
+          },
+          {
+            "name": "green fang",
+            "description": "",
+            "image": "",
+            "candidateIndex": 737833649
           }
         ],
         "questionType": "preferential",

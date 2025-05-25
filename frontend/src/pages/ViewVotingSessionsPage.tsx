@@ -50,10 +50,12 @@ export default function ViewVotingSessionsPage() {
     }
   }, []);
 
-  const handleStart   = (i: number) => navigate(`/creator/voting-in-session/${i}`);
-  const handleStop    = (i: number) => {/* your stop logic */};
-  const handleResults = (i: number) => navigate(`/creator/results/${i}`);
-  const handleDeletion= (i: number) => {/* your deletion logic */};
+  const handleStart   = (vote_id_input: string) => navigate(`/creator/voting-in-session/${vote_id_input}`);
+  const handleStop    = (vote_id_input: string) => {
+    console.log("")
+  };
+  const handleResults = (vote_id_input: string) => navigate(`/creator/results/${vote_id_input}`);
+  const handleDeletion= (vote_id_input: string) => {/* your deletion logic */};
   const handleAddSession = () => navigate('/creator/create-vote');
   const handleLogout    = () => navigate('/');
 
@@ -86,22 +88,35 @@ export default function ViewVotingSessionsPage() {
               navigate(`/creator/create-vote/${session.id}/positions`)
             }} key={idx} className="flex items-center justify-center gap-[2vw]">
               <WideButton text={session.name} margin="mt-[0]" disabled={loading}>
-                <div className="buttons-container">
+                <div className="buttons-container" style={{zIndex: 100}}>
                   <SmallButton
                     buttonType="start"
-                    onClick={() => handleStart(idx)}
+                    onClick={e => {
+                      e.stopPropagation();
+
+                      handleStart(session.id);
+                    }}
                     disabled={loading}
                   />
-                  <SmallButton
-                    buttonType="stop"
-                    onClick={() => handleStop(idx)}
-                    disabled={loading}
-                  />
+
                   <SmallButton
                     buttonType="results"
-                    onClick={() => handleResults(idx)}
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleResults(session.id);
+                    }}
                     disabled={loading}
                   />
+
+                  <SmallButton
+                    buttonType="bin"
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleDeletion(session.id);
+                    }}
+                    disabled={loading}
+                  />
+
                 </div>
               </WideButton>
               <SmallButton

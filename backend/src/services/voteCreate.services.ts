@@ -1,5 +1,5 @@
 import { getElectionData, saveElectionDatabaseToFile } from '../data/dataStore';
-import { Question, Election, QuestionType, Candidate } from '../../../shared/interfaces';
+import { Question, Election, QuestionType, Candidate, ElectionState } from '../../../shared/interfaces';
 import { } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
 import { validateSessionId, validateElectionId, validatePositionId } from './servicesUtil';
@@ -65,7 +65,8 @@ export const createElection = async (
         date_time_end: props.endDate,
         requires_zid: props.zid_requirement,
         questions: [],
-        isActive: false,
+        // isActive: false,
+        electionState: ElectionState.WaitingToStart,
         voters: [],
       };
   
