@@ -65,6 +65,8 @@ export const createElection = async (
         date_time_end: props.endDate,
         requires_zid: props.zid_requirement,
         questions: [],
+        isActive: false,
+        voters: [],
       };
   
       map.set(newElectionId.toString(), newElection);
@@ -116,6 +118,7 @@ export const createPosition = async (
       title: props.title,
       candidates: [],
       questionType: props.questionType, // store as string
+      ballot: [],
     };      
 
     election.questions.push(newQuestion);

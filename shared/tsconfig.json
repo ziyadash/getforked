@@ -10,6 +10,6 @@
       "baseUrl": "./",
       "resolveJsonModule": true
     },
-    "include": ["src/**/*"]
+    "include": ["src/**/*", "../backend/src/services/electionSession.services.ts"]
   }
   

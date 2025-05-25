@@ -1,3 +1,6 @@
+import { error } from "node:console";
+import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "src/data/dataStore";
+
 /**
  * Get election status.
  * An election is ready to start if it has at least one position
@@ -17,8 +20,30 @@ function isElectionActive(electionId: number): boolean {
  * side effect: update election.isActive to true
  * return: session code
  */
-function activateElectionSession(electionId: number): string {
-    return '42';
+async function activateElectionSession(electionId: string): Promise<string> {
+    let sessionCode: string = '';
+    // get election data
+    await getElectionData(electionDatabase => {
+        // check if election has atleast one pos
+        // check if question has atleast two candidates
+        // check if election is valid
+
+        const election = electionDatabase.get(electionId);
+        if (!election) {
+            throw new Error("invalid election id");
+        }
+        election.isActive = true;
+
+        sessionCode = Math.random().toString(36).slice(2, 7);
+        // add verification to make sure it is unique
+
+        election.sessionCode = sessionCode;
+    })
+
+    await saveElectionDatabaseToFile();
+
+    // return ses
+    return sessionCode;
 }
 
 /**

@@ -26,7 +26,7 @@ interface Election {
     // fields that are used once election is activated
     isActive: boolean,
     questions: Question[],
-    sessionCode: string, // voters enter this to join session
+    sessionCode?: string, // voters enter this to join session
     voters: Voter[], // array of voters' zids
 } 
 
