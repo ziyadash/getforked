@@ -1,35 +1,38 @@
 import { error } from "node:console";
 import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
+import { validateSessionId } from "./servicesUtil";
+import { Election, Question } from "../../../shared/interfaces";
 
-/**
- * Authenticate a voter - alr created
- */
 
-/**
- * Start voter's session --> user session id?
- */
 
-/**
- * Record vote for a specific position. Should accept an ordered list of candidates
- * or an abstention.
- * 
- * take userSessionId, hashmap:
- * 
- * sanity check:
- *  if election is an active session 
- *  if userSessionId's userId exist in election.voters[]
- *  check that user hasn't already voted
- * 
- * when user submit vote
- * pushes their ballot into question.ballot array
- * 
- */
-// TODO MAKE THIS ASYNC
-export const submitVote = (userSessionId: string, electionId: number): boolean => {
-  // check if sesId is invalid -> throw error 
-  return true;
-}
+export const viewPositions = async (
+  userSessionId: string, sessionCode: string
+): Promise<{ positions: Question[] }> => {
+        const sessionValidation = await validateSessionId(userSessionId);
+                console.log("HEllow owrld ")
+        console.log(userSessionId)
+        console.log(sessionCode)
 
+        if ('error' in sessionValidation) {
+        throw new Error(sessionValidation.error);
+        }
+         let foundElection: Election | undefined;
+
+  await getElectionData((map) => {
+    for (const election of map.values()) {
+      if (election.sessionCode === sessionCode) {
+        foundElection = election;
+        break;
+      }
+    }
+  });
+
+  if (foundElection) {
+    return { positions: foundElection.questions };
+  }
+
+  throw new Error("Could not find election");
+};
 /**
  * Other functions such as:
  * Moving to another position or getting the current position a voter is at

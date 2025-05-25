@@ -85,12 +85,13 @@ export async function addUsertoActiveElectionSession(sessionCode: string, userSe
 
       if (election.sessionCode === sessionCode) {
 
-       const voterExists = election.voters.some(v => v.zid === newVoter.zid);
+       const voterExists = election.voters.some(v => v.zid === userId);
     if (voterExists) {
       console.log('Voter already registered in this election');
       return; // or throw an error if preferred
     }
-        const newVoter: Voter = { zid: userId };
+            const newVoter: Voter = { zid: userId };
+
 
     // Add the new voter
     election.voters.push(newVoter);
