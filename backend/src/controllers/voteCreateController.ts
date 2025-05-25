@@ -362,24 +362,29 @@ export const getResults = async (
   }
 };
 
-  export const checkValidElectionID = async (
+  export const checkElectionSessionCode = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const electionId = String(req.params.electionId);
+    const sessionCode = String(req.body.sessionCode);
 
-  if (!electionId) {
-    res.status(400).json({ error: 'Missing election ID' });
-    return;
-  }
+    if (!sessionCode) {
+      res.status(400).json({ error: 'Missing election sessionCode' });
+      return;
+    }
 
+    try {
+      const result = await electionSessionService.doesElectionExist(sessionCode);
+      if (result == null) {
+                res.status(434).json({ results: result });
+      } else {
+                res.status(200).json({ results: result });
 
-  try {
-    const result = await electionSessionService.electionValidId(electionId);
-    res.status(200).json({ results: result });
-    console.log(result);
-  } catch (e) {
-    next(e);
-  }
-};
+      }
+
+      console.log(result);
+    } catch (e) {
+      next(e);
+    }
+  };

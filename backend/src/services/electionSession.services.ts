@@ -1,8 +1,10 @@
 import { error } from "node:console";
 import { getHashOf } from "src/data/dataUtil";
-import { getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
-import { Ballot } from '../../../shared/interfaces';
+import { getElectionData, getSessionData, saveElectionDatabaseToFile } from "../data/dataStore";
+import { Ballot, Voter } from '../../../shared/interfaces';
 import { StatusCodes } from "http-status-codes";
+import { validateElectionId } from "./servicesUtil";
+import { checkElectionSessionCode } from "src/controllers/voteCreateController";
 
 /**
  * Get election status.
@@ -54,30 +56,49 @@ export async function activateElectionSession(electionId: string): Promise<strin
  * Add users to authorised voters in this active election
  * note that a userId is a hashed zId.
  * error checks:
- *  - electionId is valid and refers to an ACTIVE election session
  *  - session code refers to this election and is valid
  *  - userSessionId is valid
  * side effect: add user to election.voters
  * return true if successful, false otherwise
- */
-export async function addUsertoActiveElectionSession(electionId: string, sessionCode: string, userSessionId: string) {
+//  */
+export async function addUsertoActiveElectionSession(sessionCode: string, userSessionId: string) {
     // get election data
-    await getElectionData(electionDatabase => {
+          const validelection = await doesElectionExist(sessionCode);
 
-        const election = electionDatabase.get(electionId);
-        if (!election) {
+        if (!validelection) {
             throw new Error("invalid election id");
         }
-
-
-        if (election.sessionCode && election.sessionCode != sessionCode) {
-            throw new Error("invalid session code");
+        let userId = '';
+        await getSessionData((store) => {
+    // Search for the session with matching sessionId
+            const session = store.sessions.find(s => s.sessionId === userSessionId);
+          if (session) {
+            userId = session.userId;
+          }
+        });
+        if (userId == '') {
+            throw new Error("invalid user session code");
         }
+        
+        await getElectionData((map) => {
+    for (const election of map.values()) {
 
-        // validate userSessionId
+      if (election.sessionCode === sessionCode) {
 
-        election.voters.push()
-    })
+       const voterExists = election.voters.some(v => v.zid === newVoter.zid);
+    if (voterExists) {
+      console.log('Voter already registered in this election');
+      return; // or throw an error if preferred
+    }
+        const newVoter: Voter = { zid: userId };
+
+    // Add the new voter
+    election.voters.push(newVoter);
+      }
+    }
+  });
+        
+    
 
     await saveElectionDatabaseToFile();
 
@@ -200,29 +221,22 @@ function calculatePreferentialVotingWinner(ballots: Ballot[]): number {
 }
 
 /**
- * Checks if a Voting Session Exists
+ * Checks if a Voting Session corresponding to a session code exists
  */
-export async function electionValidId(electionID: string): Promise<{ error?: string; status?: number } | void> {
-  console.log("Checking if election id is valid")
-  let found = false;
-
-  // Example: call getElectionData
+export async function doesElectionExist(sessionCode: string) {
+  let exists = null;
+//console.log("HELLO WORLD")
   await getElectionData((map) => {
-  // Instant lookup:
-   const election = map.get(electionID);
-  if (election) {
-    // Found the election, do something
-    console.log('Election found:', election);
-    found = true
-  } else {
-    // Not found
-  }
-});
+    for (const election of map.values()) {
+   //   console.log(election.sessionCode)
+    //  console.log(sessionCode)
+    //  console.log("HELLO WORLD 2")
+      if (election.sessionCode === sessionCode) {
+        exists = election;
+        break; 
+      }
+    }
+  });
 
-  if (!found) {
-    return {
-      error: 'Invalid electionID',
-      status: StatusCodes.UNAUTHORIZED,
-    };
-  }
+  return exists;
 }
