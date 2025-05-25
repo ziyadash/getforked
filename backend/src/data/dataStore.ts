@@ -1,8 +1,8 @@
 import { DataStore, Election, Session, SessionStore, User } from '../../../shared/interfaces';
-import {generateUserId, generateSessionId, verifySessionId, getHashOf} from './dataUtil';
+import { generateUserId, generateSessionId, verifySessionId, getHashOf } from './dataUtil';
 import { promises as fs, write } from 'fs';
 // to create & share one instance of Mutex & Semaphore
-const {Mutex, Semaphore } = require('async-mutex');
+const { Mutex, Semaphore } = require('async-mutex');
 
 const writeMutex = new Mutex();
 const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
@@ -73,13 +73,13 @@ export const loadUserDatabaseFromFile = async (): Promise<void> => {
 
   try {
     const data = await fs.readFile(USER_DATABASE_PATH, 'utf8');
-  
+
     if (!data.trim()) {
       console.warn('User database file is empty. Starting with an empty userDatabase.');
       userDatabase.clear();
       return;
     }
-  
+
     const obj = JSON.parse(data) as Record<string, string>;
 
     userDatabase.clear();
@@ -102,11 +102,11 @@ export const saveUserDataBaseToFile = async (): Promise<void> => {
     const json = JSON.stringify(obj, null, 2);
     await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
     console.log(`User database saved to ${USER_DATABASE_PATH}`);
-    
+
   } finally {
     release();
   }
-} 
+}
 
 // ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
 /** 
