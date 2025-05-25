@@ -39,9 +39,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 	}
 
 	async function login() {
-
 		const API_URL = import.meta.env.VITE_BACKEND_URL;
-		
 
 		const res = await fetch(`${API_URL}/api/auth/login`, {
 			method: 'POST',
@@ -51,8 +49,21 @@ export default function AuthBox({ user }: AuthBoxInput) {
 					zPass: password }),
 		});
 		const data = await res.json();
+		// if (!res.ok) throw new Error(data.error || 'Login failed');
+		return data; // { sessionId: ... }
+	}
 
+	async function register() {
+		const API_URL = import.meta.env.VITE_BACKEND_URL;
 
+		const res = await fetch(`${API_URL}/api/auth/register`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(
+				{ zId: username, 
+					zPass: password }),
+		});
+		const data = await res.json();
 		// if (!res.ok) throw new Error(data.error || 'Login failed');
 		return data; // { sessionId: ... }
 	}
@@ -60,6 +71,16 @@ export default function AuthBox({ user }: AuthBoxInput) {
 
 
 	const debounceRef = useRef<boolean>(false);
+
+	/**
+	 * This is what happens when we get a session ID
+	 * Handle storing it as a cookie and redirecting
+	 * @param sessionId 
+	 */
+	function HandleFoundSessionid(sessionId: string) {
+		console.log("HANDLING SESSION ID");
+		console.log(sessionId)
+	}
 
 	const submit = async () => {
 		if (debounceRef.current) return; 
@@ -74,16 +95,31 @@ export default function AuthBox({ user }: AuthBoxInput) {
 			console.table([username, password]);
 
 			const res2 = await login();
+			console.log("LOGIN RES", res2);
 
+			if (res2.error){
+				console.log("ERROR")
+				console.log(res2.error)
 
-			if (res2.error && (res2.error == "User already logged in" || res2.error == "User already registered")) {
-				console.log("re attempting")
+				if (res2.error === "User not registered") {
+					console.log("ERROR HERE")
 
+					const res3 = await register()
 
+					console.log("REGISTER RES");
+					console.log(res3)
+
+					if (res3.sessionId) {
+						HandleFoundSessionid(res3.sessionId)
+					}
+				}
+			} else {
+				if (res2.sessionId) {
+						HandleFoundSessionid(res2.sessionId)
+				}
 			}
 
 
-			console.log("LOGIN RES", res2);
 
 		} catch (err) {
 			console.error("Login failed:", err);
