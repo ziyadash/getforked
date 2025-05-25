@@ -45,7 +45,7 @@ interface Question {
 
 // a voter submits a ballot for the position
 // it contains an ordered list of the candidates for this particular question
-interface Ballot {
+export interface Ballot {
     preferences: number[],
 }
 
@@ -61,7 +61,6 @@ interface Candidate {
     fullName: string;
     description: string;
     image: string;
-    votes: number[]; // an array of preferential votes; votes[0] is the number of first preference votes
     candidateIndex: number,
 }
 
@@ -78,7 +77,7 @@ export {
 
 export interface User {
     name: string, 
-    userId: string,
+    userId: string
 };
 
 // In dataStore.ts or a shared types file

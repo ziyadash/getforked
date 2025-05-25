@@ -313,7 +313,6 @@ export const createCandidate = async (
         fullName: candidateData.name,
         description: '',
         image: '',
-        votes: [],
         candidateIndex: newCandidateIndex,
       };
   

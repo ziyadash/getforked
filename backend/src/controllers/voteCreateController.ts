@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as voteCreateService from '../services/voteCreate.services';
+import * as electionSessionService from '../services/electionSession.services'
 
 export const createElection = async (
   req: Request,
@@ -301,6 +302,52 @@ export const viewCandidates = async (
   try {
     const result = await voteCreateService.viewCandidates(props);
     res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const activateElection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const electionId = String(req.params.electionId);
+
+  if (!electionId) {
+    res.status(400).json({ error: 'Missing election ID' });
+    return;
+  }
+
+  try {
+    const result = await electionSessionService.activateElectionSession(electionId);
+    res.status(200).json({ sessionCode: result });
+  } catch (e) {
+    next(e);
+  }
+};
+
+
+
+export const getResults = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const electionId = String(req.params.electionId);
+
+  if (!electionId) {
+    res.status(400).json({ error: 'Missing election ID' });
+    return;
+  }
+
+
+  console.log("ELECTION CONTENT HERE -1")
+
+  try {
+    const result = await electionSessionService.getResult(electionId);
+    res.status(200).json({ results: result });
+    console.log(result);
   } catch (e) {
     next(e);
   }

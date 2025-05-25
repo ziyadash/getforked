@@ -1,30 +1,50 @@
 {
-  "186588018": {
-    "id": 186588018,
+  "232641437": {
+    "id": 232641437,
     "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
     "name": "Election 2",
     "description": "Test election",
     "images": [],
-    "location": "unsw",
-    "date_time_start": "2025-05-25T13:12:52.028Z",
-    "date_time_end": "2025-05-25T13:12:52.028Z",
+    "location": "library",
+    "date_time_start": "2025-05-25T14:05:31.501Z",
+    "date_time_end": "2025-05-25T14:05:31.501Z",
     "requires_zid": false,
-    "questions": [],
-    "isActive": false,
-    "voters": []
-  },
-  "704949588": {
-    "id": 704949588,
-    "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
-    "name": "Election 1",
-    "description": "Test election",
-    "images": [],
-    "location": "unsw",
-    "date_time_start": "2025-05-25T13:12:52.024Z",
-    "date_time_end": "2025-05-25T13:12:52.024Z",
-    "requires_zid": false,
-    "questions": [],
-    "isActive": false,
-    "voters": []
+    "questions": [
+      {
+        "id": 319784487,
+        "title": "President",
+        "candidates": [
+          {
+            "fullName": "d",
+            "description": "",
+            "image": "",
+            "candidateIndex": 957628488
+          },
+          {
+            "fullName": "a",
+            "description": "",
+            "image": "",
+            "candidateIndex": 572767634
+          },
+          {
+            "fullName": "b",
+            "description": "",
+            "image": "",
+            "candidateIndex": 723119424
+          },
+          {
+            "fullName": "c",
+            "description": "",
+            "image": "",
+            "candidateIndex": 286967994
+          }
+        ],
+        "questionType": 1,
+        "ballot": []
+      }
+    ],
+    "isActive": true,
+    "voters": [],
+    "sessionCode": "puvks"
   }
 }

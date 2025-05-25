@@ -15,6 +15,7 @@
  * sanity check:
  *  if election is an active session 
  *  if userSessionId's userId exist in election.voters[]
+ *  check that user hasn't already voted
  * 
  * when user submit vote
  * pushes their ballot into question.ballot array

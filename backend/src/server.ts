@@ -1,6 +1,6 @@
 import app from './app';
 import config from './config/config';
-import { loadUserDatabaseFromFile, loadSessionFromFile } from './data/dataStore';
+import { loadElectionDatabaseFromFile, loadUserDatabaseFromFile, loadSessionFromFile } from './data/dataStore';
 
 // app.listen(config.port, () => {
 //   console.log(`Server running on port ${config.port}`);
@@ -9,6 +9,8 @@ import { loadUserDatabaseFromFile, loadSessionFromFile } from './data/dataStore'
 const startServer = async () => {
   await loadUserDatabaseFromFile();
   await loadSessionFromFile();
+  await loadElectionDatabaseFromFile();
+  
   app.listen(config.port, () => {
     console.log(`Server running on port ${config.port}`);
   });

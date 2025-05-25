@@ -340,3 +340,78 @@ describe.only('GET /viewElections', () => {
 //     expect(viewRes3.body.result).toHaveLength(0);
 //   });
 // });
+
+
+
+// db
+// {
+//   "461763549": {
+//     "id": 461763549,
+//     "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
+//     "name": "Test Election",
+//     "description": "This is a test election",
+//     "images": [],
+//     "location": "library",
+//     "date_time_start": "2025-05-25T13:47:06.890Z",
+//     "date_time_end": "2025-05-25T13:47:06.890Z",
+//     "requires_zid": false,
+//     "questions": [
+//       {
+//         "id": 195018718,
+//         "title": "President",
+//         "candidates": [
+//           {
+//             "fullName": "d",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 939496344
+//           },
+//           {
+//             "fullName": "a",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 290814087
+//           },
+//           {
+//             "fullName": "b",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 624336104
+//           },
+//           {
+//             "fullName": "c",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 362976744
+//           }
+//         ],
+//         "questionType": 1,
+//         "ballot": [
+//             [939496344, 290814087, 624336104, 362976744],
+//             [290814087, 939496344],
+//             [624336104],
+//             [],
+//             [362976744, 624336104],
+//             [939496344],
+//             [290814087, 362976744],
+//             [624336104, 939496344, 290814087],
+//             [],
+//             [362976744],
+//             [939496344, 624336104],
+//             [290814087],
+//             [362976744, 939496344],
+//             [624336104, 290814087],
+//             [],
+//             [939496344, 362976744],
+//             [290814087, 624336104],
+//             [362976744],
+//             [939496344, 290814087, 624336104],
+//             []
+//         ]
+//       }
+//     ],
+//     "isActive": true,
+//     "voters": [],
+//     "sessionCode": "xlpgt"
+//   }
+// }

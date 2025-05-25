@@ -189,11 +189,29 @@ getter function, which handles concurrency.
       election.questions.push(newQuestion);
     });
 */
+
+
+function logLatestData () {
+  console.log("LATEST DATA LOG")
+  console.log(electionDatabase)
+}
+
 export const getElectionData = async (
   modifier: (map: Map<string, Election>) => void
 ): Promise<void> => {
+  logLatestData()
+
+
   const release = await writeMutex.acquire();
+  logLatestData()
+  console.log("DATA BASE HERE 1")
+  console.log(electionDatabase)
   try {
+    console.log("getElectionData sees election keys:", [...electionDatabase.keys()]);
+
+    console.log("DATA BASE HERE 2")
+    console.log(electionDatabase)
+
     modifier(electionDatabase);
     // await saveElectionDatabaseToFile(); // optionally persist changes
   } finally {
@@ -202,9 +220,10 @@ export const getElectionData = async (
 };
 
 export const loadElectionDatabaseFromFile = async (): Promise<void> => {
-  const release = await writeMutex.acquire();
+  // const release = await writeMutex.acquire();
   try {
     const data = await fs.readFile(ELECTION_DATABASE_PATH, 'utf8');
+    console.log("Raw election DB file contents:", data);
 
     // Handle empty file gracefully
     if (!data.trim()) {
@@ -217,15 +236,24 @@ export const loadElectionDatabaseFromFile = async (): Promise<void> => {
 
     electionDatabase.clear();
     for (const [id, election] of Object.entries(obj)) {
+      console.log("SETTING KEY HERE ANGRY ANGRY ")
       electionDatabase.set(id, election);
     }
+    console.log("Loaded election keys:", [...electionDatabase.keys()]);
+
+
+    console.log("FINAL ELECTION LOG")
+    console.log(electionDatabase)
 
     console.log('Election database loaded from file.');
   } catch (err) {
     console.error('Error loading election database:', err);
   } finally {
-    release();
+    // release();
+    console.log("RELEASE")
   }
+  console.log("AFTER RLEASE LOG")
+  console.log(electionDatabase)
 };
 
 export const saveElectionDatabaseToFile = async (): Promise<void> => {
@@ -245,6 +273,8 @@ export const saveElectionDatabaseToFile = async (): Promise<void> => {
 export const clear = async (): Promise<void> => {
   const release = await writeMutex.acquire();
   try {
+
+    console.log("CLEARING DATABASE");
     // Clear all in-memory stores
     userDatabase.clear();
     electionDatabase.clear();
