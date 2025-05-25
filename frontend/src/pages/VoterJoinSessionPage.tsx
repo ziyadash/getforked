@@ -34,8 +34,6 @@ export default function VoterJoinSessionPage() { // once voter has logged in
                     return;
                 }
             }
-            // No valid session
-
         };
         checkElectionID();
       } 

@@ -8,7 +8,7 @@ export default function VoterPage() {
 
     useEffect(() => {
         const checkSession = async () => {
-            const sessionId = JSON.stringify(localStorage.getItem('user-session-id'));
+            const sessionId = localStorage.getItem('user-session-id');
             if (sessionId) {
                 const API_URL = import.meta.env.VITE_BACKEND_URL;
                 const response = await fetch(`${API_URL}/api/auth/checkSession`, {

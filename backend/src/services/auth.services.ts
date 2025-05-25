@@ -220,10 +220,10 @@ export async function authLogout(sessionId: string): Promise<{ error?: string; s
 
 
 /**
- * ChecksifAsessionExists
+ * Checks if A sessionExists
  */
 export async function authValidSession(sessionId: string): Promise<{ error?: string; status?: number } | void> {
-  console.log("Checking session vali")
+  console.log("Checking session valid")
   let found = false;
 
   await getSessionData(store => {
@@ -233,7 +233,7 @@ export async function authValidSession(sessionId: string): Promise<{ error?: str
     }
   });
 
-  if (found) {
+  if (!found) {
     return {
       error: 'Invalid session token',
       status: StatusCodes.UNAUTHORIZED,
