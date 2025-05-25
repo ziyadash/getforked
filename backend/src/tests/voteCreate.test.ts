@@ -70,9 +70,10 @@ describe('POST /createElection', () => {
 
     const electionId = res.body.electionId
     const res1 = await request(app)
-      .post(`/api/activateSession/${electionId}`)
+      .post(`/api/elections/activateSession/${electionId}`)
 
     expect(res1.statusCode).toEqual(200);
+    expect(res1.body.sessionCode).toBeDefined();
   });
 });
 

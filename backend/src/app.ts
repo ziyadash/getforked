@@ -18,7 +18,7 @@ app.use('/api/items', itemRoutes);
 // Added auth routes
 app.use('/api/auth', authRoutes); 
 
-app.use('/api/auth', electionRoutes);
+app.use('/api/elections', electionRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);

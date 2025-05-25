@@ -293,7 +293,6 @@ export const activateElection = async (
   next: NextFunction
 ) => {
   const electionId = String(req.params.electionId);
-  console.log('hi')
 
   if (!electionId) {
     res.status(400).json({ error: 'Missing election ID' });
@@ -302,7 +301,7 @@ export const activateElection = async (
 
   try {
     const result = await electionSessionService.activateElectionSession(electionId);
-    res.status(200).json({ electionId: result });
+    res.status(200).json({ sessionCode: result });
   } catch (e) {
     next(e);
   }
