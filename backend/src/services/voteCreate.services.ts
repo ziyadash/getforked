@@ -161,6 +161,53 @@ export const deletePosition = async (
   return { success: true };
 };
 
+// voteCreate.services.ts
+
+interface ReorderPositionsProps {
+  userSessionId: string;
+  voteId: number;
+  newOrder: number[]; // array of position IDs in the new desired order
+}
+
+export const reorderPositions = async ({
+  userSessionId,
+  voteId,
+  newOrder,
+}: ReorderPositionsProps): Promise<{ message: string }> => {
+  const sessionValidation = await validateSessionId(userSessionId);
+  if ('error' in sessionValidation) throw new Error(sessionValidation.error);
+
+  const userId = sessionValidation.userId;
+  const electionValidation = await validateElectionId(voteId, userId);
+  if ('error' in electionValidation) throw new Error(electionValidation.error);
+
+  await getElectionData(map => {
+    const election = map.get(String(voteId));
+    if (!election) throw new Error('Election not found');
+
+    const idToPosition = new Map(
+      election.questions.map(q => [q.id, q])
+    );
+
+    if (newOrder.length !== election.questions.length) {
+      throw new Error('New order length does not match number of positions');
+    }
+
+    const reordered = newOrder.map(id => {
+      const pos = idToPosition.get(id);
+      if (!pos) throw new Error(`Invalid position ID: ${id}`);
+      return pos;
+    });
+
+    election.questions = reordered;
+  });
+
+  await saveElectionDatabaseToFile();
+
+  return { message: 'Positions reordered successfully' };
+};
+
+
 // functionality for creating votes is already done
 // functionality for creating positions in a vote is already done
 // gonna add the functionality for:

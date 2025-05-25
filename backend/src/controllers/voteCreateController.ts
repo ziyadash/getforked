@@ -102,6 +102,32 @@ export const deletePosition = async (
   }
 };
 
+export const reorderPositions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+  const { voteId, newOrder } = req.body;
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing session token' });
+    return;
+  }
+
+  try {
+    const result = await voteCreateService.reorderPositions({
+      userSessionId,
+      voteId,
+      newOrder,
+    });
+
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const createCandidate = async (
   req: Request,
   res: Response,
