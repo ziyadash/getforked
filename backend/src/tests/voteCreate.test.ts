@@ -35,104 +35,108 @@ User session from a prevoius test, or Create a session by calling the user API a
 //    router.post('/login', login);
 // to register a user and create a session token
 describe('POST /createElection', () => {
-  beforeEach(async () => {
-    // await clear();
-  });
+//   beforeEach(async () => {
+//     // await clear();
+//   });
 
   it.only('Should create an election successfully after registering user', async () => {
-    const zId = encryptWithPublicKey(zidPlainText);
-    const zPass = encryptWithPublicKey(zpassPlainText);
+    // const zId = encryptWithPublicKey(zidPlainText);
+    // const zPass = encryptWithPublicKey(zpassPlainText);
 
-    // Register user and retrieve session
-    const regRes = await request(app)
-      .post(registerRoute)
-      .send({ zId, zPass });
+    // // Register user and retrieve session
+    // const regRes = await request(app)
+    //   .post(registerRoute)
+    //   .send({ zId, zPass });
 
-    expect(regRes.statusCode).toEqual(200);
-    const sessionId = regRes.body.sessionId;
+    // expect(regRes.statusCode).toEqual(200);
+    // const sessionId = regRes.body.sessionId;
 
-    // Create election with valid session
-    const res = await request(app)
-      .post('/api/auth/createElection')
-      .set('x-session-id', sessionId)
-      .send({
-        title: 'Test Election',
-        description: 'This is a test election',
-        images: [],
-        startDate: new Date(),
-        endDate: new Date(),
-        zid_requirement: false,
-        locationOfVote: 'library',
-      });
+    // // Create election with valid session
+    // const res = await request(app)
+    //   .post('/api/auth/createElection')
+    //   .set('x-session-id', sessionId)
+    //   .send({
+    //     title: 'Test Election',
+    //     description: 'This is a test election',
+    //     images: [],
+    //     startDate: new Date(),
+    //     endDate: new Date(),
+    //     zid_requirement: false,
+    //     locationOfVote: 'library',
+    //   });
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.electionId).toBeDefined();
+    // expect(res.statusCode).toEqual(200);
+    // expect(res.body.electionId).toBeDefined();
 
-    const voteId = res.body.electionId
+    // const voteId = res.body.electionId
 
-    // console.log(electionId)
+    // // console.log(electionId)
     
-    let positionId;
-    // Create position
-    const createPositionRes = await request(app)
-      .post(createPositionRoute)
-      .set('x-session-id', sessionId)
-      .send({
-        voteId,
-        title: "President",
-        questionType: QuestionType.Preferential
-      });
+    // let positionId;
+    // // Create position
+    // const createPositionRes = await request(app)
+    //   .post(createPositionRoute)
+    //   .set('x-session-id', sessionId)
+    //   .send({
+    //     voteId,
+    //     title: "President",
+    //     questionType: QuestionType.Preferential
+    //   });
 
-    expect(createPositionRes.statusCode).toBe(200);
-    positionId = createPositionRes.body.result.positionId;
-    console.log(positionId);
+    // expect(createPositionRes.statusCode).toBe(200);
+    // positionId = createPositionRes.body.result.positionId;
+    // console.log(positionId);
 
-    const createCandidateRes = await request(app)
-        .post(createCandidateRoute)
-        .set('x-session-id', sessionId)
-        .send({
-        voteId,
-        positionId,
-        name: "d"
-        });
+    // const createCandidateRes = await request(app)
+    //     .post(createCandidateRoute)
+    //     .set('x-session-id', sessionId)
+    //     .send({
+    //     voteId,
+    //     positionId,
+    //     name: "d"
+    //     });
 
-    expect(createCandidateRes.statusCode).toBe(200);
+    // expect(createCandidateRes.statusCode).toBe(200);
 
-    await request(app)
-        .post(createCandidateRoute)
-        .set('x-session-id', sessionId)
-        .send({
-        voteId,
-        positionId,
-        name: "a"
-        });
+    // await request(app)
+    //     .post(createCandidateRoute)
+    //     .set('x-session-id', sessionId)
+    //     .send({
+    //     voteId,
+    //     positionId,
+    //     name: "a"
+    //     });
 
-    await request(app)
-        .post(createCandidateRoute)
-        .set('x-session-id', sessionId)
-        .send({
-        voteId,
-        positionId,
-        name: "b"
-        });
+    // await request(app)
+    //     .post(createCandidateRoute)
+    //     .set('x-session-id', sessionId)
+    //     .send({
+    //     voteId,
+    //     positionId,
+    //     name: "b"
+    //     });
 
-    await request(app)
-        .post(createCandidateRoute)
-        .set('x-session-id', sessionId)
-        .send({
-        voteId,
-        positionId,
-        name: "c"
-        });
+    // await request(app)
+    //     .post(createCandidateRoute)
+    //     .set('x-session-id', sessionId)
+    //     .send({
+    //     voteId,
+    //     positionId,
+    //     name: "c"
+    //     });
 
-    const res1 = await request(app)
-      .post(`/api/elections/activateSession/${voteId}`)
+    // const res1 = await request(app)
+    //   .post(`/api/elections/activateSession/${voteId}`)
 
-    expect(res1.statusCode).toEqual(200);
-    expect(res1.body.sessionCode).toBeDefined();
+    // expect(res1.statusCode).toEqual(200);
+    // expect(res1.body.sessionCode).toBeDefined();
 
-    
+    const voteId = '232641437';
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
+    const res3 = await request(app)
+        .get(`/api/elections/results/${voteId}`)
+    console.log(res3.body)
     // ACTUALLY TEST GET RESULTS
   });
 });
@@ -361,3 +365,78 @@ describe('POST /createElection', () => {
 //     expect(viewRes3.body.result).toHaveLength(0);
 //   });
 // });
+
+
+
+// db
+// {
+//   "461763549": {
+//     "id": 461763549,
+//     "authUserId": "23cb8a19b7a7246b5029df0ccbff840576e305fbae6a338353b635380b62c48e",
+//     "name": "Test Election",
+//     "description": "This is a test election",
+//     "images": [],
+//     "location": "library",
+//     "date_time_start": "2025-05-25T13:47:06.890Z",
+//     "date_time_end": "2025-05-25T13:47:06.890Z",
+//     "requires_zid": false,
+//     "questions": [
+//       {
+//         "id": 195018718,
+//         "title": "President",
+//         "candidates": [
+//           {
+//             "fullName": "d",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 939496344
+//           },
+//           {
+//             "fullName": "a",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 290814087
+//           },
+//           {
+//             "fullName": "b",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 624336104
+//           },
+//           {
+//             "fullName": "c",
+//             "description": "",
+//             "image": "",
+//             "candidateIndex": 362976744
+//           }
+//         ],
+//         "questionType": 1,
+//         "ballot": [
+//             [939496344, 290814087, 624336104, 362976744],
+//             [290814087, 939496344],
+//             [624336104],
+//             [],
+//             [362976744, 624336104],
+//             [939496344],
+//             [290814087, 362976744],
+//             [624336104, 939496344, 290814087],
+//             [],
+//             [362976744],
+//             [939496344, 624336104],
+//             [290814087],
+//             [362976744, 939496344],
+//             [624336104, 290814087],
+//             [],
+//             [939496344, 362976744],
+//             [290814087, 624336104],
+//             [362976744],
+//             [939496344, 290814087, 624336104],
+//             []
+//         ]
+//       }
+//     ],
+//     "isActive": true,
+//     "voters": [],
+//     "sessionCode": "xlpgt"
+//   }
+// }

@@ -10,6 +10,7 @@ const startServer = async () => {
   await loadUserDatabaseFromFile();
   await loadSessionFromFile();
   await loadElectionDatabaseFromFile();
+  
   app.listen(config.port, () => {
     console.log(`Server running on port ${config.port}`);
   });

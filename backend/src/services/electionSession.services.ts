@@ -1,6 +1,6 @@
 import { error } from "node:console";
 import { getHashOf } from "src/data/dataUtil";
-import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
+import { getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
 import { Ballot } from '../../../shared/interfaces';
 
 /**
@@ -30,7 +30,8 @@ export async function activateElectionSession(electionId: string): Promise<strin
         // check if question has atleast two candidates
         // check if election is valid
 
-        const election = electionDatabase.get(electionId);
+
+        const election = electionDatabase.get(String(electionId));
         if (!election) {
             throw new Error("invalid election id");
         }
@@ -115,7 +116,10 @@ export const getResult = async (electionId: string) => {
     // get election data
     await getElectionData(electionDatabase => {
 
+        console.log(electionDatabase)
+
         const election = electionDatabase.get(electionId);
+        // console.log([...electionDatabase.keys()]);
         if (!election) {
             throw new Error("invalid election id");
         }
