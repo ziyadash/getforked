@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import StyledBackground from '../components/background/StyledBackground';
 import ThinGradientButton from '../components/buttons/ThinGradientButton';
@@ -7,14 +7,62 @@ import Heading from '../components/buttons/Heading';
 
 export default function CreateVoteBasicInfo() {
     const navigate = useNavigate();
-    const [requireVerification, setRequireVerification] = useState(true);
+
+    const [electionName, setElectionName] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [images, /*setImages*/] = useState<string[]>([]);
+    const [startDate, setStartDate] = useState<string>('');
+    const [/*endDate, setEndDate*/] = useState<string>('');
+    const [requireVerification, setRequireVerification] = useState<boolean>(true);
+    const [locationOfVote, setLocationOfVote] = useState<string | undefined>('');
+
     const goBack = () => {
         navigate('/creator/view-voting-sessions');
     }
 
+    const createElectionWithDetails = useCallback(async (): Promise<void> => {
+        console.log(startDate); // ''
+        const DateObj = new Date(startDate); // e.g. 5 October 2014 / 14:00
+        // const ISODate = stringDate.toISOString();
+        const params = {
+            method: "POST",
+            headers: {
+                "x-session-id": "",
+            },
+            body: JSON.stringify({
+                "title": electionName,
+                "description": description,
+                "images": images,
+                "startDate": DateObj,
+                "endDate": DateObj, /* for now */
+                "zid_requirement": requireVerification,
+                "locationOfVote": locationOfVote,
+            }),
+        };
+        // submit form on continue
+        try {
+            const fetchResponse = await fetch(`http://localhost:9000/api/auth/createElection`, params);
+            const data = await fetchResponse.json();
+            console.log(data);
+            return data;
+        } catch (e) {
+            console.log('caught')
+            console.log('error: ', e);
+        }
+
+        console.log(DateObj);
+        console.log(params);
+    }, [electionName, description, images, startDate, requireVerification, locationOfVote]);
+
+    useEffect(() => {
+        console.log(electionName, description, images, startDate, requireVerification, locationOfVote);
+    }, [electionName, description, images, startDate, requireVerification, locationOfVote]);
+
     const goToAddPositions = () => {
-        navigate('/creator/create-vote/positions');
+        createElectionWithDetails();
+        // navigate('/creator/create-vote/positions');
     }
+
     return (
         <StyledBackground className='main'>
             <div className="
@@ -28,8 +76,6 @@ export default function CreateVoteBasicInfo() {
                 </button>
 
                 <div className="w-full max-w-3xl mx-auto px-4">
-                    {/* <h1 className="text-4xl text-white text-center mt-4 mb-8">Create a New Vote</h1> */}
-
                     <div className='mb-4'>
                         <Heading text="Create a New Vote" />
                     </div>
@@ -45,6 +91,8 @@ export default function CreateVoteBasicInfo() {
                                     type="text"
                                     placeholder="DevSoc AGM Voting 2025"
                                     className="w-full p-3 rounded-md bg-white text-black"
+                                    value={electionName}
+                                    onChange={(e) => setElectionName(e.target.value)}
                                 />
                             </div>
 
@@ -58,6 +106,8 @@ export default function CreateVoteBasicInfo() {
                                         type="text"
                                         placeholder="F10 Junge Griffith M17"
                                         className="w-full p-3 rounded-md bg-white text-black"
+                                        value={locationOfVote}
+                                        onChange={(e) => setLocationOfVote(e.target.value)}
                                     />
                                 </div>
 
@@ -68,8 +118,10 @@ export default function CreateVoteBasicInfo() {
                                     <input
                                         id="dateTime"
                                         type="text"
-                                        placeholder="Wed 2nd October, 4:45pm"
+                                        placeholder="Thu 2 October 2014, 14:45"
                                         className="w-full p-3 rounded-md bg-white text-black"
+                                        value={startDate}
+                                        onChange={(e) => { setStartDate(e.target.value); }}
                                     />
                                 </div>
                             </div>
@@ -85,6 +137,8 @@ export default function CreateVoteBasicInfo() {
                                     placeholder={`This meeting will be held to receive executive reports for 2024 📝, propose and approve amendments to our Club's constitution as well as announce our new Executive team for the next 12 months!
 
     Executive will also showcase all the new features developed under our current development.`}
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>
 
