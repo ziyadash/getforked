@@ -6,6 +6,16 @@ import svgr from "vite-plugin-svgr"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(), svgr(), tailwindcss(),
+    react(),
+    svgr(),
+    tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000', // backend server port i added this so we can make api requests to the backend
+        changeOrigin: true,
+      },
+    },
+  },
 })

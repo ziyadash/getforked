@@ -9,7 +9,6 @@ import {
 
 const router = Router();
 
-
 // Example Routes from tutorial
 router.get('/', getItems);
 router.get('/:id', getItemById);
