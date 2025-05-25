@@ -73,7 +73,7 @@ User session from a prevoius test, or Create a session by calling the user API a
 //   });
 // });
 
-describe('GET /viewElections', () => {
+describe.only('GET /viewElections', () => {
   it('Should return all elections for the logged-in user', async () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText);

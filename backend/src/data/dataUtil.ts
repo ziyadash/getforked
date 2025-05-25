@@ -46,3 +46,32 @@ export function verifySessionId(token: string): { userId: string } | null {
 export function getHashOf(plaintext: string) {
   return crypto.createHash('sha256').update(plaintext).digest('hex');
 }
+
+import { getSessionData, getUserData } from '../data/dataStore';
+
+
+export async function getzIdFromUserSessionId(userSessionId: string): Promise<string | null> {
+  let userId: string | null = null;
+
+  // find the userId corresponding to the sessionId
+  await getSessionData(store => {
+    const session = store.sessions.find(s => s.sessionId === userSessionId);
+    if (session) {
+      userId = session.userId;
+    }
+  });
+
+  if (!userId) return null;
+
+  // lookup the user's zID from the user database
+  let zid: string | null = null;
+
+  await getUserData(map => {
+    const user = map.get(userId!);
+    if (user) {
+      zid = user.zid;
+    }
+  });
+
+  return zid;
+}

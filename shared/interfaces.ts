@@ -81,6 +81,13 @@ export interface User {
     userId: string,
 };
 
+// In dataStore.ts or a shared types file
+export interface Userv2 {
+    name: string; // hashed name
+    zid: string;  // decrypted zID
+  }
+  
+
 // this is a generic session
 // we will discuss more design later but it makes sense to have 
 // different kinds of sessions maybe for voting vs creating votes?
