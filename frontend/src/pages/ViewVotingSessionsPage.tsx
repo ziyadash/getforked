@@ -7,17 +7,20 @@ import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import logoutIcon from "../assets/svg/logout.svg";
 import { Election } from "../../../shared/interfaces";
+import { useVoteCreateContext } from "../state/VoteCreateContext";
 
 export default function ViewVotingSessionsPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const [votingSessions, setVotingSessions] = useState<Election[]>([]);
+  // const [votingSessions, setVotingSessions] = useState<Election[]>([]);
   const debounceRef = useRef<boolean>(false);
 
   const API_URL = import.meta.env.VITE_BACKEND_URL;
 
+  const {state, dispatch} = useVoteCreateContext();
+ 
   useEffect(() => {
     if (!isFetching) {
         setIsFetching(true);
@@ -34,7 +37,8 @@ export default function ViewVotingSessionsPage() {
                 });
             if (!res.ok) throw new Error("Failed to fetch voting sessions");
             const data = await res.json();
-            setVotingSessions(data.result.elections);
+            dispatch({type: "SET_ELECTIONS", payload: data.result.elections})
+            // setVotingSessions(data.result.elections);
         } catch (err: any) {
             console.error(err);
             window.alert(err.message || "An unknown error occurred");
@@ -76,8 +80,11 @@ export default function ViewVotingSessionsPage() {
         <div className={`${loading ? 'opacity-50 pointer-events-none' : ''} flex flex-col gap-[1.5em] pt-0`}>
           <Heading text="Your Voting Sessions" />
 
-          {votingSessions.map((session, idx) => (
-            <div key={idx} className="flex items-center justify-center gap-[2vw]">
+          {state.elections.map((session, idx) => (
+            <div onClick={() => {
+              // console.log(session)
+              navigate(`/creator/create-vote/${session.id}/positions`)
+            }} key={idx} className="flex items-center justify-center gap-[2vw]">
               <WideButton text={session.name} margin="mt-[0]" disabled={loading}>
                 <div className="buttons-container">
                   <SmallButton

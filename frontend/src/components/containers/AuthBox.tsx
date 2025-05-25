@@ -4,6 +4,7 @@ import ThinGradientButton from "../buttons/ThinGradientButton";
 import AuthInput from "../inputs/AuthInput"
 import '../AuthBox.css'
 import { Link, useLocation, useNavigate } from "react-router";
+import { useVoteCreateContext } from "../../state/VoteCreateContext";
 
 interface AuthBoxInput {
 	user: string,
@@ -75,6 +76,7 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		return data; // { sessionId: ... }
 	}
 
+	const {state, dispatch} = useVoteCreateContext();
 
 
 	const debounceRef = useRef<boolean>(false);
@@ -88,7 +90,10 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		console.log("HANDLING SESSION ID");
 		console.log(sessionId)
 		localStorage.setItem('user-session-id', sessionId); // session id stored in local storage
-
+		dispatch({
+			type: "SET_USERNAME",
+			payload: username
+		})
 		if (route.includes('creator')) {
 			navigate(`/creator/view-voting-sessions`);
 		} else if (route.includes('voter')) {
