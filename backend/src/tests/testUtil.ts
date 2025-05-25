@@ -13,8 +13,9 @@ const url = 'http://localhost';
 export const registerRoute = '/api/auth/register';
 export const loginRoute = '/api/auth/login';
 export const logoutRoute = '/api/auth/logout';
-export const createVoteRoute = '/api/auth/createVoteSession';
+export const createVoteRoute = '/api/auth/createElection';
 export const createPositionRoute = '/api/auth/createPosition';
+export const reorderPositionsRoute = '/api/auth/reorderPositions';
 export const createCandidateRoute = '/api/auth/createCandidate';
 export const editCandidateRoute = '/api/auth/editCandidate';
 
@@ -24,6 +25,14 @@ export function getViewCandidatesRoute(voteId: number, positionId: number) {
 
 export function getDeleteCandidateRoute(voteId: number, positionId: number, candidateIndex: number) {
   return `/api/auth/votes/${voteId}/positions/${positionId}/candidates/${candidateIndex}`;
+}
+
+export function getViewPositionsRoute(voteId: number): string {
+  return `/api/auth/viewPositions/${voteId}`;
+}
+
+export function getDeletePositionRoute(voteId: number, positionId: number): string {
+  return `/api/auth/deletePosition/${voteId}/${positionId}`;
 }
 
 ////////////////////////////// STATUS CODES  //////////////////////////
@@ -38,12 +47,13 @@ export const UNAUTHORISED = 401;
 // src/test/testUtils.ts
 
 export function resetTestVotePosition(
-  authuserId: string,
+  userSessionId: string,
   voteId: number,
   positionId: number
 ) {
-  return deleteAllCandidates({ authuserId, voteId, positionId });
+  return deleteAllCandidates({ userSessionId, voteId, positionId });
 }
+
 
 export function post(
   route: string,

@@ -1,20 +1,25 @@
 import { Router } from 'express';
 import { register, login, logout } from '../controllers/authController';
-import { createVoteSession, createPosition, createCandidate, editCandidate, deleteCandidate, viewCandidates, } from '../controllers/voteCreateController';
+import {createElection, createPosition, deletePosition, reorderPositions, viewPositions, createCandidate, editCandidate, viewCandidates, deleteCandidate } from '../controllers/voteCreateController'
+// import {} from '../controllers/voteCreateController';
+// import { createVoteSession, createPosition, createCandidate, editCandidate, deleteCandidate, viewCandidates, } from '../controllers/voteCreateController';
 
 const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
-router.delete('/logout', logout);
 
 // TODO: move these to a new file called createVoteRoutes.ts or something
 // because this functionality is separate from auth
-router.post('/createVoteSession', createVoteSession);
+router.post('/createElection', createElection);
 
 // Routes for positions
 router.post('/createPosition', createPosition);
+router.delete('/deletePosition/:voteId/:positionId', deletePosition);
+router.post('/reorderPositions', reorderPositions);
+router.get('/viewPositions/:voteId', viewPositions);
+
 
 // Routes for candidates
 router.post('/createCandidate', createCandidate);

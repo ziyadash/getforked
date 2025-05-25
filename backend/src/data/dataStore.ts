@@ -1,49 +1,33 @@
 import { DataStore, Election, Session, SessionStore, User } from '../../../shared/interfaces';
 import {generateUserId, generateSessionId, verifySessionId, getHashOf} from './dataUtil';
-import { promises as fs } from 'fs';
+import { promises as fs, write } from 'fs';
+// to create & share one instance of Mutex & Semaphore
+const {Mutex, Semaphore } = require('async-mutex');
 
-// copied pretty much all of this code from devsoc mail!
+const writeMutex = new Mutex();
+const readSemaphore = new Semaphore(10); // allow 10 ppl to acess
 
-// TODO: change the type of session store, using any is bad practice.
-let sessionStore: SessionStore = { sessions: [] };
-let database: DataStore = { users: [], elections: [] };
+export let sessionDatabase: SessionStore = { sessions: [] };
+export let userDatabase: Map<string, string> = new Map();
+export let electionDatabase: Map<string, Election> = new Map();
 
-let userDatabase: Map<string, User> = new Map();
-let electionDatabase: Map<string, Election> = new Map();
-
-const SESSION_PATH = "./src/data/sessions.json";
-// const USER_DATABASE_PATH = "./src/data/userDatabase.json";
-const path = require('path');
-const USER_DATABASE_PATH = path.join(__dirname, 'data', 'userDatabase.json')
-
+// const SESSION_PATH = "./src/data/sessions.json";
+const USER_DATABASE_PATH = './src/data/userDatabase.json';
+const ELECTION_DATABASE_PATH = './src/data/electionDatabase.json';
+const SESSION_DATABASE_PATH = './src/data/sessions.json';
 // importing instance of mutex & semaphore
-const { writeMutex, readSemaphore } = require('./syncPrimitives');
 
 // TODO: move this to a .env file! and put the .env in .gitignore
 const secretKey = 'abcde12345';
 
+
+
 ////////////////////////////// SESSION UTILS  ////////////////////////////////
-
-export function saveSessions() {
-  const data = JSON.stringify(sessionStore, null, 2);
-  fs.writeFileSync(SESSION_PATH, data, { flag: 'w' });
-}
-
-export function loadSessions() {
-  if (fs.existsSync(SESSION_PATH)) {
-    const data = fs.readFileSync(SESSION_PATH, { flag: 'r' });
-    sessionStore = JSON.parse(data.toString());
-  } else {
-    // if file doesn't exist
-    saveSessions();
-  }
-}
-
 /**
  * Creates and registers a session for a given userId.
  * Returns the generated sessionId (JWT).
  */
-export function createAndStoreSession(userId: string): string {
+export async function createAndStoreSession(userId: string): Promise<string> {
   const sessionId = generateSessionId(userId);
   const session: Session = {
     sessionId,
@@ -51,54 +35,52 @@ export function createAndStoreSession(userId: string): string {
     createdAt: new Date(),
   };
 
-  const sessions = getSessions();
-  sessions.sessions.push(session);
-  setSessions(sessions);
+  await getSessionData(store => {
+    store.sessions.push(session);
+  });
 
+  await saveSessionToFile();
   return sessionId;
 }
 
-export function getSessions(): SessionStore {
-  return sessionStore;
-}
+// ///////////////// USER_DB RELATED FUNCTIONALITY /////////////////
 
-export function setSessions(sessions: SessionStore) {
-  sessionStore = sessions;
-  saveSessions();
-}
-
-////////////////////////////// DATA UTILS  ///////////////////////////////////
-
-// export function saveData() {
-//   const data = JSON.stringify(database, null, 2);
-//   fs.writeFileSync(DATA_PATH, data, { flag: 'w' });
-// }
-
-// export function loadData() {
-//   if (fs.existsSync(DATA_PATH)) {
-//     const data = fs.readFileSync(DATA_PATH, { flag: 'r' });
-//     database = JSON.parse(data.toString());
-//   } else {
-//     // if file doesn't exist
-//     saveData();
-//   }
-// }
-
-// export function getData() {
-//   return database;
-// }
-
-// export function setData(newData: DataStore) {
-//   database = newData;
-//   saveData();
-// }
+// create a getUserData function to modify
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+  await getUserData(map => {
+    userAlreadyExists = map.has(userId);
+    if (!userAlreadyExists) {
+      map.set(userId, hashedName);
+    }
+  });
+*/
+export const getUserData = async (
+  modifier: (map: Map<string, string>) => void
+): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    modifier(userDatabase);
+  } finally {
+    release();
+  }
+};
 
 export const loadUserDatabaseFromFile = async (): Promise<void> => {
   const release = await writeMutex.acquire();
 
   try {
-    const data = await fs.readFile(USER_DATABASE_PATH, 'utf8'); // idk what this is yet
-    const obj = JSON.parse(data) as Record<string, User>;
+    const data = await fs.readFile(USER_DATABASE_PATH, 'utf8');
+  
+    if (!data.trim()) {
+      console.warn('User database file is empty. Starting with an empty userDatabase.');
+      userDatabase.clear();
+      return;
+    }
+  
+    const obj = JSON.parse(data) as Record<string, string>;
 
     userDatabase.clear();
     for (const [id, user] of Object.entries(obj)) {
@@ -118,28 +100,165 @@ export const saveUserDataBaseToFile = async (): Promise<void> => {
   try {
     const obj = Object.fromEntries(userDatabase);
     const json = JSON.stringify(obj, null, 2);
-
     await fs.writeFile(USER_DATABASE_PATH, json, 'utf8');
-
     console.log(`User database saved to ${USER_DATABASE_PATH}`);
+    
+  } finally {
+    release();
+  }
+} 
+
+// ///////////////// SESSION_DB RELATED FUNCTIONALITY /////////////////
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+  await getSessionData(store => {
+    const index = store.sessions.findIndex(s => s.sessionId === sessionId);
+    if (index !== -1) {
+      store.sessions.splice(index, 1);
+      removed = true;
+    }
+  });
+*/
+export const getSessionData = async (
+  modifier: (store: SessionStore) => void
+): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    // console.log('Session database read:', JSON.stringify(sessionDatabase, null, 2)); // print out db just to see
+    modifier(sessionDatabase);
+  } finally {
+    release();
+  }
+};
+
+export const loadSessionFromFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+
+  try {
+    const data = await fs.readFile(SESSION_DATABASE_PATH, 'utf8');
+
+    if (!data.trim()) {
+      console.warn('Session file is empty. Starting with an empty sessionStore.');
+      sessionDatabase = { sessions: [] };
+      return;
+    }
+
+    const obj = JSON.parse(data) as SessionStore;
+    sessionDatabase = obj;
+    console.log('Session store loaded from file.');
+  } catch (err) {
+    console.error('Error loading session store:', err);
   } finally {
     release();
   }
 }
 
-////////////////////////////// DELETE UTILS  ////////////////////////////////
-// clears the entire database, as well as clears out all existing sessions.
-// export function clear() {
-//   // Reset both memory and files
-//   const data = getData();
-//   data.users = [];
-//   data.elections = [];
+export const saveSessionToFile = async () => {
+  const release = await writeMutex.acquire();
+  try {
+    const json = JSON.stringify(sessionDatabase, null, 2);
+    await fs.writeFile(SESSION_DATABASE_PATH, json, 'utf8');
+    console.log(`Session store saved to ${SESSION_DATABASE_PATH}`);
+  } catch (err) {
+    console.error('Error saving session store:', err);
+  } finally {
+    release();
+  }
+}
 
-//   const session = getSessions();
-//   session.sessions = [];
+// ///////////////// ELECTION_DB RELATED FUNCTIONALITY /////////////////
+/** 
+Example usage:
+The key idea is when we try to modify the database, it is wrapped in this
+getter function, which handles concurrency.
+    await getElectionData(map => {
+      const election = map.get(String(props.voteId));
+      if (!election) throw new Error('Election unexpectedly not found');
   
-//   setData(data);
-//   setSessions(session);
+      const newQuestionId = election.questions.length + 1;
+  
+      const newQuestion = {
+        id: newQuestionId,
+        title: props.title,
+        candidates: [],
+        questionType: props.questionType, // store as string
+      };      
+  
+      election.questions.push(newQuestion);
+    });
+*/
+export const getElectionData = async (
+  modifier: (map: Map<string, Election>) => void
+): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    modifier(electionDatabase);
+    // await saveElectionDatabaseToFile(); // optionally persist changes
+  } finally {
+    release();
+  }
+};
 
-//   return {};
-// }
+export const loadElectionDatabaseFromFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    const data = await fs.readFile(ELECTION_DATABASE_PATH, 'utf8');
+
+    // Handle empty file gracefully
+    if (!data.trim()) {
+      console.warn('Election database file is empty. Starting with an empty electionDatabase.');
+      electionDatabase.clear();
+      return;
+    }
+
+    const obj = JSON.parse(data) as Record<string, Election>;
+
+    electionDatabase.clear();
+    for (const [id, election] of Object.entries(obj)) {
+      electionDatabase.set(id, election);
+    }
+
+    console.log('Election database loaded from file.');
+  } catch (err) {
+    console.error('Error loading election database:', err);
+  } finally {
+    release();
+  }
+};
+
+export const saveElectionDatabaseToFile = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    const obj = Object.fromEntries(electionDatabase);
+    const json = JSON.stringify(obj, null, 2);
+    await fs.writeFile(ELECTION_DATABASE_PATH, json, 'utf8');
+    console.log(`Election database saved to ${ELECTION_DATABASE_PATH}`);
+  } catch (err) {
+    console.error('Error saving election database:', err);
+  } finally {
+    release();
+  }
+};
+
+export const clear = async (): Promise<void> => {
+  const release = await writeMutex.acquire();
+  try {
+    // Clear all in-memory stores
+    userDatabase.clear();
+    electionDatabase.clear();
+    sessionDatabase.sessions = [];
+
+    // Persist all cleared data to disk
+    await Promise.all([
+      saveUserDataBaseToFile(),
+      saveElectionDatabaseToFile(),
+      saveSessionToFile()
+    ]);
+
+    console.log('All in-memory data cleared and persisted to disk.');
+  } finally {
+    release();
+  }
+};

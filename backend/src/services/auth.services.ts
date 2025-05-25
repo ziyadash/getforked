@@ -1,20 +1,16 @@
 import {
-  getData,
-  setData,
-  getSessions,
-  setSessions,
+  // getSessions,
+  // setSessions,
+  // createAndStoreSession,
+  getUserData,
+  saveUserDataBaseToFile,
   createAndStoreSession,
+  getSessionData,
+  saveSessionToFile
 } from '../data/dataStore';
 import { getHashOf, } from '../data/dataUtil';
 import { StatusCodes } from 'http-status-codes';
 import { decryptData } from '../../../shared/src/encryptionBackend';
-import { Question, Election, Session, User } from '../../../shared/interfaces';
-
-// get instance of mutex
-const { writeMutex } = require('../data/syncPrimitives');
-const USER_DATABASE_PATH = require('../data/userDatabase.json'); // not 100% sure if this is correct
-const fs = require('fs/promises');
-
 
 ////////////// Util function(s) //////////////
 /**
@@ -94,8 +90,11 @@ async function verifyZidCredentials(zId: string, zPass: string): Promise<{ displ
  * @param zPass 
  * @returns 
  */
-export async function authRegister(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
-  // decrypt first
+export async function authRegister(
+  zId: string,
+  zPass: string
+): Promise<{ sessionId?: string; error?: string; status?: number }> {
+  console.log("registering user!")
   const decryptedZID = decryptData(zId);
   const decryptedZPass = decryptData(zPass);
 
@@ -103,64 +102,106 @@ export async function authRegister(zId: string, zPass: string): Promise<{ sessio
   if (result.error) return result;
 
   const userId = getHashOf(decryptedZID);
-  const db = getData();
+  const hashedName = getHashOf(result.displayName!);
 
-  if (db.users.find((u) => u.userId === userId)) {
-    return { error: 'User already registered', status: StatusCodes.CONFLICT };
+  let userAlreadyExists = false;
+
+  await getUserData(map => {
+    userAlreadyExists = map.has(userId);
+    if (!userAlreadyExists) {
+      map.set(userId, hashedName);
+    }
+  });
+
+  // If user is already registered, check if they are already logged in
+  if (userAlreadyExists) {
+    let alreadyLoggedIn = false;
+    await getSessionData(store => {
+      alreadyLoggedIn = store.sessions.some(session => session.userId === userId);
+    });
+
+    if (alreadyLoggedIn) {
+      return {
+        error: 'User already logged in',
+        status: StatusCodes.CONFLICT,
+      };
+    }
+
+    return {
+      error: 'User already registered',
+      status: StatusCodes.CONFLICT,
+    };
   }
 
-  const hashedName = getHashOf(result.displayName!);
-  db.users.push({ userId: userId, name: hashedName });
-  setData(db);
-  
-  const sessionId = createAndStoreSession(userId);
-
+  await saveUserDataBaseToFile();
+  const sessionId = await createAndStoreSession(userId);
   return { sessionId };
 }
 
 
 /**
  * Logs in an existing user and returns a session ID.
- * @param zId 
- * @param zPass 
- * @returns 
+ * Prevents multiple sessions for the same user.
  */
 export async function authLogin(zId: string, zPass: string): Promise<{ sessionId?: string; error?: string; status?: number }> {
-  // decrypt first
+  console.log("logging in user!")
+  // Decrypt inputs
   const decryptedZID = decryptData(zId);
   const decryptedZPass = decryptData(zPass);
 
+  // Verify credentials (e.g. against UNSW API or dummy auth)
   const result = await verifyZidCredentials(decryptedZID, decryptedZPass);
   if (result.error) return result;
 
+  // Hash ZID to get userId
   const userId = getHashOf(decryptedZID);
-  const db = getData();
-  const user = db.users.find((u) => u.userId === userId);
 
-  if (!user) {
+  let userExists = false;
+
+  await getUserData(map => {
+    userExists = map.has(userId);
+  });
+
+  if (!userExists) {
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  const sessionId = createAndStoreSession(userId);
+  // Check if user already has an active session
+  let alreadyLoggedIn = false;
+  await getSessionData(store => {
+    alreadyLoggedIn = store.sessions.some(session => session.userId === userId);
+  });
 
+  if (alreadyLoggedIn) {
+    return { error: 'User already logged in', status: StatusCodes.CONFLICT };
+  }
+
+  // Create and return new session
+  const sessionId = await createAndStoreSession(userId);
   return { sessionId };
 }
 
 /**
- * @param sessionId
  * Logs out the user by removing their session.
  */
-export function authLogout(sessionId: string): { error?: string; status?: number } | void {
-  const sessions = getSessions();
-  const sessionExists = sessions.sessions.some(s => s.sessionId === sessionId);
+export async function authLogout(sessionId: string): Promise<{ error?: string; status?: number } | void> {
+  console.log("logging out user!")
+  let removed = false;
 
-  if (!sessionExists) {
+  await getSessionData(store => {
+    const index = store.sessions.findIndex(s => s.sessionId === sessionId);
+    if (index !== -1) {
+      store.sessions.splice(index, 1);
+      removed = true;
+    }
+  });
+
+  if (!removed) {
     return {
       error: 'Invalid session token',
       status: StatusCodes.UNAUTHORIZED,
     };
   }
 
-  sessions.sessions.filter(s => s.sessionId !== sessionId);
-  setSessions(sessions);
+  await saveSessionToFile();
 }

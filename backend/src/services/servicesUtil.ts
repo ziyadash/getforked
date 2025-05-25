@@ -1,38 +1,56 @@
-import { getData } from "../data/dataStore";
-import { User, Election, Candidate, Question } from "../../../shared/interfaces";
+import { getUserData, getElectionData, getSessionData } from '../data/dataStore';
+import { User, Election, Candidate, Question } from '../../../shared/interfaces';
 import { StatusCodes } from 'http-status-codes';
 
-// util file for helper functions
-export function validateUserId(authuserId: string) {
-  // console.log("the auth userid we are trying to find is... " + authuserId);
-  const db = getData();
-  const user = db.users.find(u => u.userId === authuserId);
+export async function validateUserId(authuserId: string): Promise<
+  | { user: { userId: string; name: string } }
+  | { error: string; status: number }
+> {
+  let foundUser: { userId: string; name: string } | null = null;
 
-  if (!user) {
+  await getUserData(map => {
+    if (map.has(authuserId)) {
+      foundUser = { userId: authuserId, name: map.get(authuserId)! };
+    }
+  });
+
+  if (!foundUser) {
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
   }
 
-  return { user };
+  return { user: foundUser };
 }
 
-export function validateElectionId(
+export async function validateElectionId(
   voteId: number,
   authuserId: string
-) {
-  const db = getData();
-  const election = db.elections.find(e => e.id === voteId);
+): Promise<
+  | { election: Election }
+  | { error: string; status: number }
+> {
+  let result: { election: Election } | { error: string; status: number } = {
+    error: 'Election not found',
+    status: StatusCodes.NOT_FOUND,
+  };
 
-  if (!election) {
-    return { error: 'Election not found', status: StatusCodes.NOT_FOUND };
-  }
+  await getElectionData(map => {
+    for (const election of map.values()) {
+      if (election.id === voteId) {
+        if (election.authUserId !== authuserId) {
+          result = {
+            error: 'You do not own this election',
+            status: StatusCodes.FORBIDDEN,
+          };
+        } else {
+          result = { election };
+        }
+        break;
+      }
+    }
+  });
 
-  if (election.authUserId !== authuserId) {
-    return { error: 'You do not own this election', status: StatusCodes.FORBIDDEN };
-  }
-
-  return { election };
+  return result;
 }
-
 
 export function validatePositionId(
   election: Election,
@@ -45,4 +63,26 @@ export function validatePositionId(
   }
 
   return { position };
+}
+
+/**
+ * Validates a session ID and returns the associated user ID.
+ */
+export async function validateSessionId(
+  sessionId: string
+): Promise<{ userId: string } | { error: string; status: number }> {
+  let sessionUserId: string | null = null;
+
+  await getSessionData(store => {
+    const session = store.sessions.find(s => s.sessionId === sessionId);
+    if (session) {
+      sessionUserId = session.userId;
+    }
+  });
+
+  if (!sessionUserId) {
+    return { error: 'Invalid session ID', status: StatusCodes.UNAUTHORIZED };
+  }
+
+  return { userId: sessionUserId };
 }
