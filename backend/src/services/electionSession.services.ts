@@ -1,11 +1,11 @@
 import { error } from "node:console";
-import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "src/data/dataStore";
+import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
 
 /**
  * Get election status.
  * An election is ready to start if it has at least one position
  */
-function isElectionActive(electionId: number): boolean {
+export function isElectionActive(electionId: number): boolean {
     return true;
 }
 
@@ -20,7 +20,7 @@ function isElectionActive(electionId: number): boolean {
  * side effect: update election.isActive to true
  * return: session code
  */
-async function activateElectionSession(electionId: string): Promise<string> {
+export async function activateElectionSession(electionId: string): Promise<string> {
     let sessionCode: string = '';
     // get election data
     await getElectionData(electionDatabase => {
@@ -56,7 +56,7 @@ async function activateElectionSession(electionId: string): Promise<string> {
  * side effect: add user to election.voters
  * return true if successful, false otherwise
  */
-function addUsertoActiveElectionSession(electionId: number, sessionCode: string, userSessionId: string) {
+export function addUsertoActiveElectionSession(electionId: number, sessionCode: string, userSessionId: string) {
     return true;
 }
 
@@ -64,19 +64,19 @@ function addUsertoActiveElectionSession(electionId: number, sessionCode: string,
  * Delete zId from authorised votes in election
  * return boolean
  */
-const deleteVoter = (electionId: number, sessionCode: string, userSessionId: string): boolean => {
+export const deleteVoter = (electionId: number, sessionCode: string, userSessionId: string): boolean => {
     return true;
 }
-
 
 /**
  * End an election
  * checks if election session is live
  * side effects: update sessionIsLive flag to false
  */
-const endElection = (electionId: number): boolean => {
+export const endElection = (electionId: number): boolean => {
     return true;
 }
+
 /**
  * Get results of an election. Election must have ended
  * 
@@ -86,6 +86,6 @@ const endElection = (electionId: number): boolean => {
  * return hashmap: 
  *  key: question, value: winner (string)
  */
-const getResult = (electionId: number) => {
+export const getResult = (electionId: number) => {
     
 }

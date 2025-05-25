@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { activateElection } from 'src/controllers/voteCreateController';
 const router = Router();
 
-router.post('/register', register);
+router.post('/activateSession/:electionId', activateElection);
+
