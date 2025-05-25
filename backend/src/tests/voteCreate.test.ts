@@ -12,6 +12,7 @@ import {
   getViewPositionsRoute,
   getDeletePositionRoute,
   createVoteRoute,
+  viewElectionsRoute,
   createCandidateRoute,
   editCandidateRoute,
   getDeleteCandidateRoute,
@@ -34,41 +35,84 @@ User session from a prevoius test, or Create a session by calling the user API a
 // we should actually use the API route:
 //    router.post('/login', login);
 // to register a user and create a session token
-describe('POST /createElection', () => {
-  beforeEach(async () => {
-    // await clear();
-  });
+// describe('POST /createElection', () => {
+//   beforeEach(async () => {
+//     // await clear();
+//   });
 
-  it.only('Should create an election successfully after registering user', async () => {
+//   it.only('Should create an election successfully after registering user', async () => {
+//     const zId = encryptWithPublicKey(zidPlainText);
+//     const zPass = encryptWithPublicKey(zpassPlainText);
+
+//     // Register user and retrieve session
+//     const regRes = await request(app)
+//       .post(registerRoute)
+//       .send({ zId, zPass });
+
+//     expect(regRes.statusCode).toEqual(200);
+//     const sessionId = regRes.body.sessionId;
+
+//     // Create election with valid session
+//     const res = await request(app)
+//       .post('/api/auth/createElection')
+//       .set('x-session-id', sessionId)
+//       .send({
+//         title: 'Test Election',
+//         description: 'This is a test election',
+//         images: [],
+//         startDate: new Date(),
+//         endDate: new Date(),
+//         zid_requirement: false,
+//         locationOfVote: 'library',        
+//       });
+
+//     expect(res.statusCode).toEqual(200);
+//     expect(res.body.electionId).toBeDefined();
+
+    
+//   });
+// });
+
+describe('GET /viewElections', () => {
+  it('Should return all elections for the logged-in user', async () => {
     const zId = encryptWithPublicKey(zidPlainText);
     const zPass = encryptWithPublicKey(zpassPlainText);
 
-    // Register user and retrieve session
+    // Register and get session ID
     const regRes = await request(app)
       .post(registerRoute)
       .send({ zId, zPass });
 
-    expect(regRes.statusCode).toEqual(200);
+    expect(regRes.statusCode).toBe(200);
     const sessionId = regRes.body.sessionId;
 
-    // Create election with valid session
-    const res = await request(app)
-      .post('/api/auth/createElection')
-      .set('x-session-id', sessionId)
-      .send({
-        title: 'Test Election',
-        description: 'This is a test election',
-        images: [],
-        startDate: new Date(),
-        endDate: new Date(),
-        zid_requirement: false,
-        locationOfVote: 'library',        
-      });
+    // Create 2 elections
+    for (let i = 0; i < 2; i++) {
+      const createRes = await request(app)
+        .post(createVoteRoute)
+        .set('x-session-id', sessionId)
+        .send({
+          title: `Election ${i + 1}`,
+          description: 'Test election',
+          images: [],
+          startDate: new Date(),
+          endDate: new Date(),
+          zid_requirement: false,
+          locationOfVote: 'unsw',
+        });
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.electionId).toBeDefined();
+      expect(createRes.statusCode).toBe(200);
+    }
 
-    
+    // View elections
+    const viewRes = await request(app)
+      .get(viewElectionsRoute)
+      .set('x-session-id', sessionId);
+
+    expect(viewRes.statusCode).toBe(200);
+    expect(viewRes.body.result.elections.length).toBeGreaterThanOrEqual(2);
+    expect(viewRes.body.result.elections[0]).toHaveProperty('name');
+    expect(viewRes.body.result.elections[0]).toHaveProperty('id');
   });
 });
 
