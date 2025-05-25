@@ -34,16 +34,32 @@ export async function activateElectionSession(electionId: string): Promise<strin
         // check if election is valid
 
 
+
+        // If election is waitingtoStart create id
+
+        // if election is already going return existing id
+
+        // if election has stopped return error
+
+
         const election = electionDatabase.get(String(electionId));
         if (!election) {
             throw new Error("invalid election id");
         }
-        election.electionState = ElectionState.Ongoing;
 
-        sessionCode = Math.random().toString(36).slice(2, 7);
-        // add verification to make sure it is unique
+        if (election.electionState === 0) {
+          election.electionState = 1;
+          sessionCode = Math.random().toString(36).slice(2, 7);
+          // add verification to make sure it is unique
+          election.sessionCode = sessionCode;
 
-        election.sessionCode = sessionCode;
+        } else if (election.electionState === 1) {
+          sessionCode = String(election.sessionCode)
+        } else {
+          sessionCode = "Already started"
+        }
+
+
     })
 
     await saveElectionDatabaseToFile();
@@ -63,7 +79,7 @@ export async function activateElectionSession(electionId: string): Promise<strin
 //  */
 export async function addUsertoActiveElectionSession(sessionCode: string, userSessionId: string) {
     // get election data
-          const validelection = await doesElectionExist(sessionCode);
+        const validelection = await doesElectionExist(sessionCode);
 
         if (!validelection) {
             throw new Error("invalid election id");
@@ -114,14 +130,37 @@ export async function addUsertoActiveElectionSession(sessionCode: string, userSe
 //     return true;
 // }
 
+
 /**
  * End an election
  * checks if election session is live
- * side effects: update sessionIsLive flag to false
+ * side effects: update electionState to 2 (stopped)
  */
 export const endElection = (electionId: string): boolean => {
-    return true;
-}
+    try {
+        getElectionData((electionDatabase) => {
+            const election = electionDatabase.get(String(electionId));
+            if (!election) {
+                throw new Error("Invalid election ID");
+            }
+
+            if (election.electionState !== 1) {
+                throw new Error("Election is not currently active");
+            }
+
+            // Set the election state to 'stopped'
+            election.electionState = 2;
+        });
+
+        saveElectionDatabaseToFile(); // Persist the changes
+        return true;
+
+    } catch (error) {
+        console.error("Failed to end election:", error);
+        return false;
+    }
+};
+
 
 /**
  * Get results of an election. Election must have ended
@@ -146,7 +185,7 @@ export const getResult = async (electionId: string) => {
             throw new Error("invalid election id");
         }
 
-        if (election.electionState !== ElectionState.Stopped) {
+        if (election.electionState !== 2) {
             throw new Error("election not ended");
         }
 

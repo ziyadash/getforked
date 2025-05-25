@@ -1,8 +1,8 @@
 {
-  "75304690": {
-    "id": 75304690,
+  "126276064": {
+    "id": 126276064,
     "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
-    "name": "Test vote",
+    "name": "asdf",
     "description": "asdf",
     "images": [],
     "location": "asdf",
@@ -11,84 +11,51 @@
     "requires_zid": true,
     "questions": [
       {
-        "id": 180406024,
-        "title": "demon",
+        "id": 519818045,
+        "title": "President",
         "candidates": [
           {
-            "name": "iris",
+            "name": "Alexia Lebrun",
             "description": "",
             "image": "",
-            "candidateIndex": 769157348
+            "candidateIndex": 863666704
           },
           {
-            "name": "cath 2",
+            "name": "Patrick Cooper",
             "description": "",
             "image": "",
-            "candidateIndex": 300411843
+            "candidateIndex": 803310424
           },
           {
-            "name": "louis",
+            "name": "Lina Pasquier",
             "description": "",
             "image": "",
-            "candidateIndex": 657164246
-          },
-          {
-            "name": "ziyad",
-            "description": "",
-            "image": "",
-            "candidateIndex": 550173
-          },
-          {
-            "name": "patrick",
-            "description": "",
-            "image": "",
-            "candidateIndex": 754641475
-          }
-        ],
-        "questionType": "preferential",
-        "ballot": []
-      },
-      {
-        "id": 696304143,
-        "title": "test pos 2",
-        "candidates": [
-          {
-            "name": "REBANE TEST",
-            "description": "",
-            "image": "",
-            "candidateIndex": 482375308
-          },
-          {
-            "name": "dsfasdfa",
-            "description": "",
-            "image": "",
-            "candidateIndex": 818639443
-          },
-          {
-            "name": "Lina Pasquierasfa",
-            "description": "",
-            "image": "",
-            "candidateIndex": 407264473
+            "candidateIndex": 886472694
           },
           {
             "name": "Timothy Stevens",
             "description": "",
             "image": "",
-            "candidateIndex": 618649245
+            "candidateIndex": 83888129
           }
         ],
         "questionType": "preferential",
         "ballot": []
       }
     ],
-    "isActive": false,
-    "voters": []
+    "electionState": 1,
+    "voters": [
+      {
+        "zid": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36"
+      }
+    ],
+    "sessionCode": "pnt1a"
   },
-  "472856190": {
-    "id": 472856190,
+  "209005771": {
+    "id": 209005771,
     "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
-    "name": "Test Demon",
-    "description": "asdfasdf",
+    "name": "asdf",
+    "description": "asdf",
     "images": [],
     "location": "asdf",
     "date_time_start": "1970-01-01T00:00:00.000Z",
@@ -96,150 +63,108 @@
     "requires_zid": true,
     "questions": [
       {
-        "id": 822314041,
-        "title": "President",
+        "id": 647740454,
+        "title": "test",
         "candidates": [
           {
-            "name": "Test cheese",
+            "name": "cgeese",
             "description": "",
             "image": "",
-            "candidateIndex": 824009584
+            "candidateIndex": 103524216
           },
           {
             "name": "Patrick Cooper",
             "description": "",
             "image": "",
-            "candidateIndex": 483283045
+            "candidateIndex": 73176642
           },
           {
-            "name": "Lina Pasquier",
+            "name": "sdf",
             "description": "",
             "image": "",
-            "candidateIndex": 636970241
-          },
-          {
-            "name": "Timothy Stevens",
-            "description": "",
-            "image": "",
-            "candidateIndex": 426243942
-          }
-        ],
-        "questionType": "preferential",
-        "ballot": []
-      },
-      {
-        "id": 188605331,
-        "title": "President",
-        "candidates": [
-          {
-            "name": "Test cheese",
-            "description": "",
-            "image": "",
-            "candidateIndex": 481496543
-          },
-          {
-            "name": "Patrick Cooper",
-            "description": "",
-            "image": "",
-            "candidateIndex": 654896511
-          },
-          {
-            "name": "Lina Pasquier",
-            "description": "",
-            "image": "",
-            "candidateIndex": 665200784
+            "candidateIndex": 95035947
           },
           {
             "name": "Timothy Stevens",
             "description": "",
             "image": "",
-            "candidateIndex": 665897647
+            "candidateIndex": 687823584
           }
         ],
         "questionType": "preferential",
         "ballot": []
       }
     ],
-    "isActive": false,
-    "voters": []
+    "electionState": 2,
+    "voters": [],
+    "sessionCode": "ifsrz"
   },
-  "526470283": {
-    "id": 526470283,
+  "812448784": {
+    "id": 812448784,
     "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
-    "name": "test new pos",
-    "description": "asdfasdfasdf",
+    "name": "New Test",
+    "description": "asdf",
     "images": [],
-    "location": "asdfa",
+    "location": "asdf",
     "date_time_start": "1970-01-01T00:00:00.000Z",
     "date_time_end": "1970-01-01T00:00:00.000Z",
     "requires_zid": true,
     "questions": [
       {
-        "id": 301432734,
-        "title": "Test BEW OIS",
+        "id": 446309946,
+        "title": "Favorite cheese",
         "candidates": [
           {
-            "name": "Alexia Lebrun",
+            "name": "Red",
             "description": "",
             "image": "",
-            "candidateIndex": 417235194
+            "candidateIndex": 675823449
           },
           {
-            "name": "Patrick Cooper",
+            "name": "BLue!",
             "description": "",
             "image": "",
-            "candidateIndex": 809801767
+            "candidateIndex": 212381149
           },
           {
-            "name": "Lina Pasquier",
+            "name": "Green",
             "description": "",
             "image": "",
-            "candidateIndex": 401375609
-          },
-          {
-            "name": "Timothy Stevens",
-            "description": "",
-            "image": "",
-            "candidateIndex": 806684329
+            "candidateIndex": 234638946
           }
         ],
         "questionType": "preferential",
         "ballot": []
       },
       {
-        "id": 171305444,
-        "title": "Test new Position proper spelling :?",
+        "id": 53264488,
+        "title": "Favourite Dog",
         "candidates": [
           {
             "name": "Alexia Lebrun",
             "description": "",
             "image": "",
-            "candidateIndex": 325344490
+            "candidateIndex": 27755416
           },
           {
             "name": "Patrick Cooper",
             "description": "",
             "image": "",
-            "candidateIndex": 936697945
+            "candidateIndex": 438267746
           },
           {
-            "name": "cheese boy",
+            "name": "Timothy Stevens",
             "description": "",
             "image": "",
-            "candidateIndex": 961361491
-          },
-          {
-            "name": "green fang",
-            "description": "",
-            "image": "",
-            "candidateIndex": 737833649
+            "candidateIndex": 156994878
           }
         ],
         "questionType": "preferential",
         "ballot": []
       }
     ],
-    "isActive": false,
-    "voters": []
+    "electionState": 2,
+    "voters": [],
+    "sessionCode": "7h7zi"
   }
 }

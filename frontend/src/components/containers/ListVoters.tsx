@@ -23,6 +23,7 @@ export default function ListVoters({ num, zidList, setZidList }: ListVotersInput
       <div className="ml-100">
         <SampleQRButton />
       </div>
+      
       <VotingOrganiserButton text="Start Session" width="w-55" height="h-12" zidList={[]} setZidList={setZidList} zid={""} />
 
     </div>

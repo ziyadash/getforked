@@ -7,11 +7,7 @@ interface Image {
     file_id: string,
 }
 
-export enum ElectionState {
-    WaitingToStart,
-    Ongoing,
-    Stopped,
-}
+
 
 // have a flag called isActive
 // move other variables into election object once isActive
@@ -35,6 +31,11 @@ interface Election {
     voters: Voter[], // array of voters' zids
 } 
 
+export enum ElectionState {
+    WaitingToStart,
+    Ongoing,
+    Stopped,
+}
 enum QuestionType {
     // SelectOne, we are only doing preferential voting for the mvp!
     Preferential,
