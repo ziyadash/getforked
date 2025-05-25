@@ -51,12 +51,9 @@ export const createElection = async (
       throw new Error('Title cannot be empty');
     }
   
-    let newElectionId: number = generateElectionId();
+    const newElectionId: number = generateElectionId();
   
-    await getElectionData(map => {
-      const maxId = Math.max(0, ...Array.from(map.values()).map(e => e.id));
-      newElectionId = maxId + 1;
-  
+    await getElectionData(map => {  
       const newElection: Election = {
         id: newElectionId,
         authUserId: userId,
@@ -108,11 +105,11 @@ export const createPosition = async (
     throw new Error(electionValidation.error);
   }
 
+  const newQuestionId = generatePositionId();
+
   await getElectionData(map => {
     const election = map.get(String(props.voteId));
     if (!election) throw new Error('Election unexpectedly not found');
-
-    const newQuestionId = generatePositionId();
 
     const newQuestion = {
       id: newQuestionId,
@@ -126,7 +123,7 @@ export const createPosition = async (
 
   await saveElectionDatabaseToFile();
 
-  return { positionId: props.voteId };
+  return { positionId: newQuestionId };
 };
 
 interface DeletePositionProps {
@@ -208,6 +205,31 @@ export const reorderPositions = async ({
 };
 
 
+export interface ViewPositionsProps {
+  userSessionId: string;
+  voteId: number;
+}
+
+export const viewPositions = async (
+  props: ViewPositionsProps
+): Promise<{ positions: Question[] }> => {
+  const sessionValidation = await validateSessionId(props.userSessionId);
+  if ('error' in sessionValidation) {
+    throw new Error(sessionValidation.error);
+  }
+
+  const userId = sessionValidation.userId;
+
+  const electionValidation = await validateElectionId(props.voteId, userId);
+  if ('error' in electionValidation) {
+    throw new Error(electionValidation.error);
+  }
+
+  const election = electionValidation.election;
+
+  return { positions: election.questions };
+};
+
 // functionality for creating votes is already done
 // functionality for creating positions in a vote is already done
 // gonna add the functionality for:
@@ -244,7 +266,9 @@ export const createCandidate = async (
     // Validate position exists
     const positionCheck = validatePositionId(election, candidateData.positionId);
     if ('error' in positionCheck) return positionCheck;
-  
+
+    const newCandidateIndex = generateCandidateIndex();
+
     // Modify election database
     await getElectionData(map => {
       const updatedElection = map.get(String(candidateData.voteId));
@@ -253,7 +277,7 @@ export const createCandidate = async (
       const position = updatedElection.questions.find(q => q.id === candidateData.positionId);
       if (!position) throw new Error('Position unexpectedly missing');
   
-      const newCandidateIndex = generateCandidateIndex();
+      
   
       const newCandidate: Candidate = {
         fullName: candidateData.name,
@@ -268,9 +292,7 @@ export const createCandidate = async (
   
     await saveElectionDatabaseToFile();
   
-    return { candidateIndex: election.questions
-      .find(q => q.id === candidateData.positionId)!
-      .candidates.length };
+    return { candidateIndex: newCandidateIndex };
   };
 
 export interface EditCandidateProps {

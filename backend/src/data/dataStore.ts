@@ -126,7 +126,7 @@ export const getSessionData = async (
 ): Promise<void> => {
   const release = await writeMutex.acquire();
   try {
-    console.log('Session database read:', JSON.stringify(sessionDatabase, null, 2)); // print out db just to see
+    // console.log('Session database read:', JSON.stringify(sessionDatabase, null, 2)); // print out db just to see
     modifier(sessionDatabase);
   } finally {
     release();

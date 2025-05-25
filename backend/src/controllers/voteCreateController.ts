@@ -128,6 +128,31 @@ export const reorderPositions = async (
   }
 };
 
+export const viewPositions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+  const voteId = Number(req.params.voteId);
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing user session ID' });
+    return;
+  }
+
+  try {
+    const result = await voteCreateService.viewPositions({
+      userSessionId,
+      voteId,
+    });
+
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const createCandidate = async (
   req: Request,
   res: Response,

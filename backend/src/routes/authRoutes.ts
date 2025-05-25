@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { register, login, logout } from '../controllers/authController';
-import {createElection, createPosition, deletePosition, reorderPositions, createCandidate, editCandidate, viewCandidates, deleteCandidate } from '../controllers/voteCreateController'
+import {createElection, createPosition, deletePosition, reorderPositions, viewPositions, createCandidate, editCandidate, viewCandidates, deleteCandidate } from '../controllers/voteCreateController'
 // import {} from '../controllers/voteCreateController';
 // import { createVoteSession, createPosition, createCandidate, editCandidate, deleteCandidate, viewCandidates, } from '../controllers/voteCreateController';
 
@@ -18,7 +18,7 @@ router.post('/createElection', createElection);
 router.post('/createPosition', createPosition);
 router.delete('/deletePosition/:voteId/:positionId', deletePosition);
 router.post('/reorderPositions', reorderPositions);
-
+router.get('/viewPositions/:voteId', viewPositions);
 
 
 // Routes for candidates
