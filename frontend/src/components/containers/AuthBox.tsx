@@ -22,6 +22,9 @@ export default function AuthBox({ user }: AuthBoxInput) {
 	const [password, setPassword] = useState<string>('');
 
 
+	const [loading, setLoading] = useState(false);
+	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
 
 	useEffect(() => {
 		if (route === `/${user}/signup`) {
@@ -85,76 +88,89 @@ export default function AuthBox({ user }: AuthBoxInput) {
 		console.log("HANDLING SESSION ID");
 		console.log(sessionId)
 		localStorage.setItem('user-session-id', sessionId); // session id stored in local storage
+	
+		if (route.includes('creator')) {
+			navigate(`/creator/view-voting-sessions`);
+		} else if (route.includes('voter')) {
+			navigate('/voter/join');
+		}
+	
 	}
 
 	const submit = async () => {
 		if (debounceRef.current) return;
-
 		debounceRef.current = true;
+		setTimeout(() => (debounceRef.current = false), 1000);
 
-		setTimeout(() => {
-			debounceRef.current = false;
-		}, 1000);
-
+		setErrorMsg(null);
+		setLoading(true);
 		try {
-			console.table([username, password]);
-
 			const res2 = await login();
-			console.log("LOGIN RES", res2);
 
 			if (res2.error) {
-				console.log("ERROR")
-				console.log(res2.error)
-
-				if (res2.error === "User not registered") {
-					console.log("ERROR HERE")
-
-					const res3 = await register()
-
-					console.log("REGISTER RES");
-					console.log(res3)
-
-					if (res3.sessionId) {
-						HandleFoundSessionid(res3.sessionId)
-					}
+				if (res2.error === 'Incorrect password') {
+					setErrorMsg('Incorrect password');
+				} else {
+					// window.alert(res2.error);
 				}
-			} else {
-				if (res2.sessionId) {
-					HandleFoundSessionid(res2.sessionId)
-				}
-			}
+			} else if (res2.sessionId) {
+				HandleFoundSessionid(res2.sessionId);
+			} 
 
-			if (route.includes('creator')) {
-				navigate(`/creator/view-voting-sessions`);
-			} else if (route.includes('voter')) {
-				navigate('/voter/join');
+			if (res2.error === 'User not registered') {
+				const res3 = await register();
+				if (res3.error) {
+					window.alert(res3.error);
+				} else if (res3.sessionId) {
+					HandleFoundSessionid(res3.sessionId);
+				}
 			}
 
 		} catch (err) {
-			console.error("Login failed:", err);
+			window.alert(err || 'Login failed');
+		} finally {
+			setLoading(false);
 		}
 	};
 
 
-	return (
-		<div className="flex flex-col mt-8 w-[35em] h-[32em] border-2 border-[#f1e9e9] rounded-4xl">
-			<button className="text-white p-4 text-2xl flex justify-start pt-10 pl-10 hover:cursor-pointer" onClick={goBack}>
-				←
-			</button>
 
-			<h1 className="flex justify-center mt-1 text-[#f1e9e9] text-3xl"> {signupLogin} with your zID </h1>
-			<div>
-				<AuthInput type="text" label="zID" placeholder="z1234567" marginStyle="mt-[2em]" setInput={setUsername} w="w-[23em]" h="h-[2.5em]" />
-				<AuthInput type="password" label="Password" placeholder="••••••••••••" marginStyle="mt-[1em]" setInput={setPassword} w="" h="" />
-				{
-					route === `/${user}/login`
-						? <div className="text-[#f1e9e9] ml-24 mt-5 text-sm">Don't have an account? Sign up <Link className="underline" to={navTo}>here</Link></div>
-						: <div className="text-[#f1e9e9] ml-24 mt-5 text-sm">Already have an account? Login <Link className="underline" to={navTo}>here</Link></div>
-				}
-				{/* NOTE FOR PASSWORD PLACEHOLDER: Chrome uses • whereas other browsers use ● */}
-				{/* https://stackoverflow.com/questions/6859727/styling-password-fields-in-css */}
-				<ThinGradientButton text="Continue" margin="mt-10" w="w-[23em]" onClick={submit} />
-			</div>
+	return (
+	<div className="…">
+		{/* … */}
+		<AuthInput
+		type="text"
+		label="zID"
+		placeholder="z1234567"
+		marginStyle="mt-[2em]"
+		setInput={setUsername}
+		w="w-[23em]"
+		h="h-[2.5em]"
+		disabled={loading}
+		/>
+		<AuthInput
+		type="password"
+		label="Password"
+		placeholder="••••••••••••"
+		marginStyle="mt-[1em]"
+		setInput={setPassword}
+		disabled={loading}
+		/>
+
+		{errorMsg && (
+		<div className="text-red-500 ml-24 mt-2 text-sm">
+			{errorMsg}
 		</div>
+		)}
+
+		<ThinGradientButton
+		text={loading ? 'Loading…' : 'Continue'}
+		margin="mt-10"
+		w="w-[23em]"
+		onClick={submit}
+		disabled={loading}
+		/>
+	</div>
 	);
+
 }
