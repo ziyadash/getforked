@@ -61,7 +61,6 @@ interface Candidate {
     fullName: string;
     description: string;
     image: string;
-    votes: number[]; // an array of preferential votes; votes[0] is the number of first preference votes
     candidateIndex: number,
 }
 
