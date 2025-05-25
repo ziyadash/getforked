@@ -45,7 +45,7 @@ interface Question {
 
 // a voter submits a ballot for the position
 // it contains an ordered list of the candidates for this particular question
-interface Ballot {
+export interface Ballot {
     preferences: number[],
 }
 
@@ -78,7 +78,7 @@ export {
 
 export interface User {
     name: string, 
-    userId: string,
+    userId: string
 };
 
 // this is a generic session

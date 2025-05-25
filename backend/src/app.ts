@@ -20,6 +20,8 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/elections', electionRoutes);
 
+app.use('')
+
 // Global error handler (should be after routes)
 app.use(errorHandler);
 
