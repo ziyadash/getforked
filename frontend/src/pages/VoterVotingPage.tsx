@@ -7,13 +7,18 @@ import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
+import { Question } from "../../../shared/interfaces";
 
 export default function VoterVotingPage() {
           const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const placeHolderCandidates = [
+    interface thisPagesCandidates {
+        position: string,
+        candidates: string[],
+    }
+    const placeHolderCandidates:thisPagesCandidates[] = [
         {
             position: 'Treasurer',
             candidates: ['Matthew Stewart', 'Lara Thiele', 'Lotte Schipper']
@@ -45,13 +50,15 @@ export default function VoterVotingPage() {
       }
 
       const data = await response.json();
-
+console.log(data)
+const positions:Question[] = data.result.positions;
       // data.result.positions contains the questions
-      const loadedCandidates = data.result.positions.map(q => ({
+      const loadedCandidates:thisPagesCandidates[] = positions.map(q => ({
             position: q.title,
             candidates: q.candidates.map(c => c.name),
         }));
-      setOriginalCandidates(loadedCandidates);
+    setOriginalCandidates(loadedCandidates);
+    setCandidates(loadedCandidates)
     } catch (err) {
         console.log(err)
     }
