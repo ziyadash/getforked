@@ -44,7 +44,7 @@ export default function VoterJoinSessionPage() { // once voter has logged in
                   sessionId: sessionId
                 }),
             });
-            navigate(`/voter/voting/${input.trim()}`);
+            navigate(`/voter/voting/${input.trim()}/0`);
             return;
           }
         }

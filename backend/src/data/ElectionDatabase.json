@@ -1,4 +1,88 @@
 {
+  "86149844": {
+    "id": 86149844,
+    "authUserId": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9",
+    "name": "rwrqwrqrwrwq",
+    "description": "rwrqwrqrqwr",
+    "images": [],
+    "location": "rwqrwqrqw",
+    "date_time_start": "1970-01-01T00:00:00.000Z",
+    "date_time_end": "1970-01-01T00:00:00.000Z",
+    "requires_zid": true,
+    "questions": [
+      {
+        "id": 586038437,
+        "title": "President",
+        "candidates": [
+          {
+            "name": "Alexia Lebrun",
+            "description": "",
+            "image": "",
+            "candidateIndex": 788829446
+          },
+          {
+            "name": "Patrick Cooper",
+            "description": "",
+            "image": "",
+            "candidateIndex": 88141193
+          },
+          {
+            "name": "Lina Pasquier",
+            "description": "",
+            "image": "",
+            "candidateIndex": 151724461
+          },
+          {
+            "name": "Timothy Stevens",
+            "description": "",
+            "image": "",
+            "candidateIndex": 689837082
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      },
+      {
+        "id": 15477694,
+        "title": "President In chief",
+        "candidates": [
+          {
+            "name": "Alexia Lebrun",
+            "description": "",
+            "image": "",
+            "candidateIndex": 460654746
+          },
+          {
+            "name": "Patrick Cooper",
+            "description": "",
+            "image": "",
+            "candidateIndex": 695010949
+          },
+          {
+            "name": "Lina Pasquier",
+            "description": "",
+            "image": "",
+            "candidateIndex": 555553748
+          },
+          {
+            "name": "Timothy Stevens",
+            "description": "",
+            "image": "",
+            "candidateIndex": 327779459
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      }
+    ],
+    "electionState": 1,
+    "voters": [
+      {
+        "zid": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9"
+      }
+    ],
+    "sessionCode": "lm9vv"
+  },
   "414078483": {
     "id": 414078483,
     "authUserId": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9",

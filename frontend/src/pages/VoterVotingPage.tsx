@@ -10,7 +10,11 @@ import ThinGradientButton from "../components/buttons/ThinGradientButton";
 import { Question } from "../../../shared/interfaces";
 
 export default function VoterVotingPage() {
-          const { id } = useParams();
+const { id} = useParams();
+if (!id) {
+    // handle missing index, e.g. show error or fallback
+    throw new Error("Index parameter is missing");
+  }
 
     const navigate = useNavigate();
 
@@ -68,8 +72,10 @@ const positions:Question[] = data.result.positions;
 
     const [originalCandidates, setOriginalCandidates] = useState(placeHolderCandidates);
     const [candidates, setCandidates] = useState(originalCandidates);
-    const [positionIndex, setPositionIndex] = useState(0);
-
+    //const [positionIndex, setPositionIndex] = useState(index);
+    const indexParam = useParams().index ?? "0"; // fallback to "0"
+    const positionIndex = parseInt(indexParam, 10);
+    
     const positionName = candidates[positionIndex].position;
     const currentCandidates = candidates[positionIndex].candidates;
 
@@ -101,7 +107,7 @@ const positions:Question[] = data.result.positions;
 
     const handleConfirm = () => {
         if (positionIndex < candidates.length - 1) {
-            setPositionIndex(positionIndex + 1);
+            navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {
             navigate("/voter/finish");
         }
@@ -109,9 +115,9 @@ const positions:Question[] = data.result.positions;
 
     const handleAbstain = () => {
         if (positionIndex < candidates.length - 1) {
-            setPositionIndex(positionIndex + 1);
+            navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {
-            navigate("/finish");
+            navigate("/voter/finish");
         }
     };
 
