@@ -9,7 +9,6 @@ const router = Router();
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
-router.delete('/logout', logout);
 
 // TODO: move these to a new file called createVoteRoutes.ts or something
 // because this functionality is separate from auth
@@ -17,7 +16,7 @@ router.post('/createElection', createElection);
 
 // Routes for positions
 router.post('/createPosition', createPosition);
-router.delete('/votes/:voteId/positions/:positionId', deletePosition);
+router.delete('/deletePosition/:voteId/:positionId', deletePosition);
 
 
 // Routes for candidates
