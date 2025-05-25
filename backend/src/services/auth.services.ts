@@ -113,7 +113,10 @@ export async function authRegister(
   await getUserData(map => {
     userAlreadyExists = map.has(userId);
     if (!userAlreadyExists) {
-      map.set(userId, hashedName);
+      map.set(userId, {
+        name: hashedName,
+        zid: decryptedZID
+      });
     }
   });
 

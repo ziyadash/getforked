@@ -38,9 +38,51 @@ export interface CreateElectionProps {
  * Creates a new election and returns its unique ID.
  */
 export const createElection = async (
-  props: CreateElectionProps
-): Promise<number> => {
-  console.log('my props bro', props)
+    props: CreateElectionProps
+  ): Promise<number> => {
+    const sessionValidation = await validateSessionId(props.userSessionId);
+    if ('error' in sessionValidation) {
+      throw new Error(sessionValidation.error);
+    }
+  
+    const userId = sessionValidation.userId;
+  
+    if (props.title.trim().length === 0) {
+      throw new Error('Title cannot be empty');
+    }
+  
+    const newElectionId: number = generateElectionId();
+  
+    await getElectionData(map => {  
+      const newElection: Election = {
+        id: newElectionId,
+        authUserId: userId,
+        name: props.title,
+        description: props.description,
+        images: props.images,
+        location: props.locationOfVote,
+        date_time_start: props.startDate,
+        date_time_end: props.endDate,
+        requires_zid: props.zid_requirement,
+        questions: [],
+        isActive: false,
+        voters: [],
+      };
+  
+      map.set(newElectionId.toString(), newElection);
+    });
+  
+    await saveElectionDatabaseToFile();
+    return newElectionId;
+  };
+
+export interface ViewElectionsProps {
+  userSessionId: string;
+}
+  
+export const viewElections = async (
+  props: ViewElectionsProps
+): Promise<{ elections: Election[] }> => {
   const sessionValidation = await validateSessionId(props.userSessionId);
   if ('error' in sessionValidation) {
     throw new Error(sessionValidation.error);
@@ -48,34 +90,18 @@ export const createElection = async (
 
   const userId = sessionValidation.userId;
 
-  if (props.title.trim().length === 0) {
-    throw new Error('Title cannot be empty');
-  }
-
-  const newElectionId: number = generateElectionId();
+  const userElections: Election[] = [];
 
   await getElectionData(map => {
-    const newElection: Election = {
-      id: newElectionId,
-      authUserId: userId,
-      name: props.title,
-      description: props.description,
-      images: props.images,
-      location: props.locationOfVote,
-      date_time_start: props.startDate,
-      date_time_end: props.endDate,
-      requires_zid: props.zid_requirement,
-      questions: [],
-      isActive: false,
-      voters: [],
-    };
-
-    map.set(newElectionId.toString(), newElection);
+    for (const election of map.values()) {
+      if (election.authUserId === userId) {
+        userElections.push(election);
+      }
+    }
   });
 
-  await saveElectionDatabaseToFile();
-  return newElectionId;
-};
+  return { elections: userElections };
+};  
 
 // functionality for creating voting sessions is already done
 // gonna add the functionality for:

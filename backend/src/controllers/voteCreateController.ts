@@ -51,6 +51,26 @@ export const createElection = async (
   }
 };
 
+export const viewElections = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userSessionId = req.headers['x-session-id'] as string;
+
+  if (!userSessionId) {
+    res.status(400).json({ error: 'Missing session token' });
+    return;
+  }
+
+  try {
+    const result = await voteCreateService.viewElections({ userSessionId });
+    res.status(200).json({ result });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const createPosition = async (
   req: Request,
   res: Response,

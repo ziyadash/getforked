@@ -9,10 +9,12 @@ export async function validateUserId(authuserId: string): Promise<
   let foundUser: { userId: string; name: string } | null = null;
 
   await getUserData(map => {
-    if (map.has(authuserId)) {
-      foundUser = { userId: authuserId, name: map.get(authuserId)! };
+    const user = map.get(authuserId);
+    if (user) {
+      foundUser = { userId: authuserId, name: user.name };
     }
   });
+  
 
   if (!foundUser) {
     return { error: 'User not registered', status: StatusCodes.NOT_FOUND };
