@@ -50,7 +50,7 @@ interface Question {
 }
 
 
-interface Ballot {
+export interface Ballot {
     userid: string,
     // Preferences = order of CandidateIndex
     preferences: number[]
