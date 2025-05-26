@@ -6,7 +6,7 @@ import Heading from "../components/buttons/Heading";
 import SmallButton from "../components/buttons/SmallButton";
 import WideAddButton from "../components/buttons/WideAddButton";
 import logoutIcon from "../assets/svg/logout.svg";
-import { Election } from "../../../shared/interfaces";
+import { Election, ElectionState } from "../../../shared/interfaces";
 import { useVoteCreateContext } from "../state/VoteCreateContext";
 
 export default function ViewVotingSessionsPage() {
@@ -54,7 +54,22 @@ export default function ViewVotingSessionsPage() {
   const handleStop    = (vote_id_input: string) => {
     console.log("")
   };
-  const handleResults = (vote_id_input: string) => navigate(`/creator/results/${vote_id_input}`);
+  const handleResults = (vote_id_input: string) => {
+    
+    let find_election = state.elections.find((e) => String(e.id).match(vote_id_input));
+
+    if (find_election !== undefined && find_election !== null) {
+
+      if (find_election.electionState !== 2) {
+        window.alert("Vote needs to be finished to view results")
+      } else {
+    navigate(`/creator/results/${vote_id_input}`)};
+
+      }
+
+    }
+    
+    
   const handleDeletion= (vote_id_input: string) => {/* your deletion logic */};
   const handleAddSession = () => navigate('/creator/create-vote');
   const handleLogout    = () => navigate('/');

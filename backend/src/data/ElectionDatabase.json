@@ -83,6 +83,86 @@
     ],
     "sessionCode": "lm9vv"
   },
+  "347696421": {
+    "id": 347696421,
+    "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+    "name": "Test Vote",
+    "description": "asdf",
+    "images": [],
+    "location": "Location",
+    "date_time_start": "1970-01-01T00:00:00.000Z",
+    "date_time_end": "1970-01-01T00:00:00.000Z",
+    "requires_zid": true,
+    "questions": [
+      {
+        "id": 991319373,
+        "title": "President",
+        "candidates": [
+          {
+            "name": "Alexia Lebrun",
+            "description": "",
+            "image": "",
+            "candidateIndex": 979832324
+          },
+          {
+            "name": "Patrick Cooper",
+            "description": "",
+            "image": "",
+            "candidateIndex": 469629441
+          },
+          {
+            "name": "Lina Pasquier",
+            "description": "",
+            "image": "",
+            "candidateIndex": 267400431
+          },
+          {
+            "name": "Timothy Stevens",
+            "description": "",
+            "image": "",
+            "candidateIndex": 441760204
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      },
+      {
+        "id": 929008459,
+        "title": "VIce President",
+        "candidates": [
+          {
+            "name": "steve",
+            "description": "",
+            "image": "",
+            "candidateIndex": 229352620
+          },
+          {
+            "name": "bob",
+            "description": "",
+            "image": "",
+            "candidateIndex": 870009864
+          },
+          {
+            "name": "alex",
+            "description": "",
+            "image": "",
+            "candidateIndex": 937680403
+          },
+          {
+            "name": "dylan",
+            "description": "",
+            "image": "",
+            "candidateIndex": 162017904
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      }
+    ],
+    "electionState": 1,
+    "voters": [],
+    "sessionCode": "mtq70"
+  },
   "414078483": {
     "id": 414078483,
     "authUserId": "a9962b2edc56fc6a5dc4f39fbb1f7276ea0a9688ec3c840322e069c8df1128b9",
@@ -134,6 +214,54 @@
       }
     ],
     "sessionCode": "y0m78"
+  },
+  "660565439": {
+    "id": 660565439,
+    "authUserId": "3ff7669d4cea6175249a0d278ad406a24ac5822283274064dda909ac0995bd36",
+    "name": "asdf",
+    "description": "asdf",
+    "images": [],
+    "location": "asdf",
+    "date_time_start": "1970-01-01T00:00:00.000Z",
+    "date_time_end": "1970-01-01T00:00:00.000Z",
+    "requires_zid": true,
+    "questions": [
+      {
+        "id": 504483359,
+        "title": "asdf",
+        "candidates": [
+          {
+            "name": "asdf",
+            "description": "",
+            "image": "",
+            "candidateIndex": 579342419
+          },
+          {
+            "name": "asdf",
+            "description": "",
+            "image": "",
+            "candidateIndex": 464391844
+          },
+          {
+            "name": "asdfasdfasdf",
+            "description": "",
+            "image": "",
+            "candidateIndex": 957946584
+          },
+          {
+            "name": "asdfadsfasdfa",
+            "description": "",
+            "image": "",
+            "candidateIndex": 23380445
+          }
+        ],
+        "questionType": "preferential",
+        "ballot": []
+      }
+    ],
+    "electionState": 2,
+    "voters": [],
+    "sessionCode": "rmo8s"
   },
   "891531194": {
     "id": 891531194,
