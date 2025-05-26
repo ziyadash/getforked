@@ -59,7 +59,7 @@ import { voteProps } from '../services/voter.services';
     next: NextFunction
   ) => {
         const { userSessionId, sessionCode, positionId, preferences } = req.body;
-        
+
         const props:voteProps ={ 
                 userSessionId,
                 sessionCode,
@@ -82,6 +82,8 @@ import { voteProps } from '../services/voter.services';
       res.status(400).json({ error: 'Missing user preferences ' });
       return;
     }
+          console.log("HEllow owrld in controller")
+        console.log(preferences)
   
     try {
       const result = await voterServices.vote(props);

@@ -9,7 +9,7 @@ export const viewPositions = async (
   userSessionId: string, sessionCode: string
 ): Promise<{ positions: Question[] }> => {
         const sessionValidation = await validateSessionId(userSessionId);
-                console.log("HEllow owrld ")
+      //          console.log("HEllow owrld ")
         console.log(userSessionId)
         console.log(sessionCode)
 
@@ -65,29 +65,39 @@ export const vote = async (
         if (!foundElection) {
                 throw new Error("Could not find election");
         }
+        console.log("HEllow owrld in vote ")
+        console.log(props.preferences)
 
         //Checks the question exists
-        const positionCheck = validatePositionId(foundElection, props.positionId);
-        if ('error' in positionCheck) return positionCheck;
-
-        const { position } = positionCheck;
+     //   const positionCheck = validatePositionId(foundElection, props.positionId);
+      //  if ('error' in positionCheck) return positionCheck;
 
 
 
-        const existingBallotIndex = position.ballot.findIndex(b => b.userid === userId);
+          await getElectionData(map => {
+                const storedElection = map.get(String(foundElection?.id));
+                 if (!storedElection) throw new Error('Election unexpectedly missing');
+                if (storedElection.questions.length <= props.positionId) {
+                        throw new Error('Position unexpectedly missing');
+                } else {
+                        const storedPosition = storedElection.questions[props.positionId];
+                        const existingBallotIndex = storedPosition.ballot.findIndex(b => b.userid === userId);
         if (existingBallotIndex !== -1) {
-                position.ballot[existingBallotIndex] = {
+                storedPosition.ballot[existingBallotIndex] = {
                 userid: userId,
                 preferences: props.preferences,
                 };
                 console.log('Updated existing ballot.');
         } else {
-                position.ballot.push({
+                storedPosition.ballot.push({
                 userid: userId,
                 preferences: props.preferences,
                 });
                 console.log('Added new ballot.');
         }
+                }
+      
+        });
 
   await saveElectionDatabaseToFile();
   return 0;
