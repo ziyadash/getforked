@@ -106,13 +106,15 @@ const positions:Question[] = data.result.positions;
     }
     const handleConfirm = () => {
        const preferences = new Array(originalCandidates[positionIndex].candidates.length);
-        originalCandidates[positionIndex].candidates.forEach((orig, originalIndex) => {
-                preferences[originalIndex] = candidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig);;
-             //  console.log(orig)
+       candidates[positionIndex].candidates.forEach((orig, originalIndex) => {
+            preferences[originalIndex] = originalCandidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig);
         });
+        // originalCandidates[positionIndex].candidates.forEach((orig, originalIndex) => {
+        //         preferences[originalCandidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig)] = candidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig);;
+        //      //  console.log(orig)
+        // });
         const userSessionId = localStorage.getItem('user-session-id');
         const API_URL = import.meta.env.VITE_BACKEND_URL;
-        const preferencesWrapper = {preferences}
         console.log("HELLO WORD PAGE");
         console.log(preferences)
         fetch(`${API_URL}/api/voters/vote`, {
