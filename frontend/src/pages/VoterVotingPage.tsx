@@ -40,7 +40,35 @@ if (!id) {
 
     try {
         const API_URL = import.meta.env.VITE_BACKEND_URL;
-        const response = await fetch(`${API_URL}/api/voters/viewPositionsPublic`, {
+        let response = await fetch(`${API_URL}/api/voters/checkSessionExists`, {
+       headers: {
+          'Content-Type': 'application/json',
+        },
+                method: 'POST',
+
+        body: JSON.stringify({sessionCode: sessionCode }),
+      });
+      const sessionExists = await response.json();
+      if (!sessionExists.results) {
+        navigate("/voter/join");
+      }
+      response = await fetch(`${API_URL}/api/voters/checkSessionState`, {
+       headers: {
+          'Content-Type': 'application/json',
+        },
+                method: 'POST',
+
+        body: JSON.stringify({sessionCode: sessionCode }),
+      });
+      const sessionState = await response.json();
+              console.log("HELLO WORD PAGE");
+        console.log(sessionState.results);
+
+      if (sessionState.results == 2) {
+        navigate("/voter/finish");
+      }
+
+        response = await fetch(`${API_URL}/api/voters/viewPositionsPublic`, {
        headers: {
           'Content-Type': 'application/json',
         },
@@ -54,11 +82,7 @@ if (!id) {
       }
 
       const data = await response.json();
-if (data.result.ElectionState == "2") {
-         navigate("/voter/finish");
-         console.log("Should go away")
-    }
-const positions:Question[] = data.result.positions;
+    const positions:Question[] = data.result.positions;
       // data.result.positions contains the questions
       const loadedCandidates:thisPagesCandidates[] = positions.map(q => ({
             position: q.title,
@@ -116,7 +140,6 @@ const positions:Question[] = data.result.positions;
         });
         const userSessionId = localStorage.getItem('user-session-id');
         const API_URL = import.meta.env.VITE_BACKEND_URL;
-        console.log("HELLO WORD PAGE");
         console.log(preferences)
         fetch(`${API_URL}/api/voters/vote`, {
               headers: {

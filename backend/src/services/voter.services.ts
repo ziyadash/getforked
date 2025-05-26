@@ -68,7 +68,7 @@ export const vote = async (
           await getElectionData(map => {
                 const storedElection = map.get(String(foundElection?.id));
                  if (!storedElection) throw new Error('Election unexpectedly missing');
-                 if (storedElection.electionState != ElectionState.Ongoing) {
+                 if (storedElection.electionState != 1) {
                   throw new Error('Voting Ended');
                  }
                 if (storedElection.questions.length <= props.positionId) {
@@ -104,3 +104,36 @@ storedPosition.ballot.push({
   return 0;
 };
 
+/**
+ * Check  election exists from session Code
+ */
+export async function electionStateVoter(sessionCode: string) {
+  let state = null;
+  await getElectionData((map) => {
+    for (const election of map.values()) {
+      if (election.sessionCode === sessionCode) {
+        state = election.electionState;
+        break; 
+      }
+    }
+  });
+
+  return state;
+}
+
+/**
+ * Get State of election from session Code
+ */
+export async function electionExistsVoter(sessionCode: string) {
+  let exist = false;
+  await getElectionData((map) => {
+    for (const election of map.values()) {
+      if (election.sessionCode === sessionCode) {
+        exist = true;
+        break; 
+      }
+    }
+  });
+
+  return exist;
+}
