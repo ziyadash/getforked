@@ -7,7 +7,7 @@ import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
-import {Question } from "../../../shared/interfaces";
+import {Question} from "../../../shared/interfaces";
 
 export default function VoterVotingPage() {
 const { id} = useParams();
@@ -54,7 +54,10 @@ if (!id) {
       }
 
       const data = await response.json();
-console.log(data)
+if (data.result.ElectionState == "2") {
+         navigate("/voter/finish");
+         console.log("Should go away")
+    }
 const positions:Question[] = data.result.positions;
       // data.result.positions contains the questions
       const loadedCandidates:thisPagesCandidates[] = positions.map(q => ({
@@ -63,6 +66,8 @@ const positions:Question[] = data.result.positions;
         }));
     setOriginalCandidates(loadedCandidates);
     setCandidates(loadedCandidates)
+    //Trying to imort the electionState enum breaks everything for some reason :D
+    
     } catch (err) {
         console.log(err)
     }
@@ -109,10 +114,6 @@ const positions:Question[] = data.result.positions;
        candidates[positionIndex].candidates.forEach((orig, originalIndex) => {
             preferences[originalIndex] = originalCandidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig);
         });
-        // originalCandidates[positionIndex].candidates.forEach((orig, originalIndex) => {
-        //         preferences[originalCandidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig)] = candidates[positionIndex].candidates.findIndex(candidateName => candidateName === orig);;
-        //      //  console.log(orig)
-        // });
         const userSessionId = localStorage.getItem('user-session-id');
         const API_URL = import.meta.env.VITE_BACKEND_URL;
         console.log("HELLO WORD PAGE");
@@ -138,6 +139,22 @@ const positions:Question[] = data.result.positions;
     };
 
     const handleAbstain = () => {
+        const preferences:number[] = [];
+        const userSessionId = localStorage.getItem('user-session-id');
+        const API_URL = import.meta.env.VITE_BACKEND_URL;
+        fetch(`${API_URL}/api/voters/vote`, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+              body: JSON.stringify(
+                {
+                userSessionId: userSessionId,
+                sessionCode: id,
+                positionId: JSON.stringify(positionIndex),
+                preferences: preferences
+                }),
+            });
         if (positionIndex < candidates.length - 1) {
             navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {

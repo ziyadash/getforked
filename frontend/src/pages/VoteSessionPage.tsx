@@ -90,7 +90,7 @@ export default function VoteSessionPage({ name }: OrganiserInput) {
             console.log("END ELECTION RESULT")
             console.log(data)
         } catch (error) {
-          
+          console.log(error);
         } finally {
 
             setTimeout(() => {
