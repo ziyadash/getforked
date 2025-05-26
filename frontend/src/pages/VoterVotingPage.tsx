@@ -7,7 +7,7 @@ import SmallButton from "../components/buttons/SmallButton";
 import { deleteElement, reorderElements } from "../helpers";
 import CandidatePane from "../components/buttons/CandidatePane";
 import ThinGradientButton from "../components/buttons/ThinGradientButton";
-import { Question } from "../../../shared/interfaces";
+import { Ballot, Question } from "../../../shared/interfaces";
 
 export default function VoterVotingPage() {
 const { id} = useParams();
@@ -104,8 +104,28 @@ const positions:Question[] = data.result.positions;
         newCandidates[positionIndex] = originalCandidates[positionIndex]
         setCandidates(originalCandidates);
     }
-
     const handleConfirm = () => {
+        const preferences = new Array(originalCandidates.length);
+        originalCandidates.forEach((originalCandidate, originalIndex) => {
+            const currentIndex = candidates.indexOf(originalCandidate);
+            preferences[originalIndex] = currentIndex;
+        });
+        const userSessionId = localStorage.getItem('user-session-id');
+        const API_URL = import.meta.env.VITE_BACKEND_URL;
+        fetch(`${API_URL}/api/voter/vote`, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+              body: JSON.stringify(
+                {
+                userSessionId: userSessionId,
+                sessionCode: id,
+                positionId: indexParam,
+                preferences: preferences
+
+                }),
+            });
         if (positionIndex < candidates.length - 1) {
             navigate(`/voter/voting/${id.trim()}/${positionIndex+1}`);
         } else {
