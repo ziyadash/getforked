@@ -30,6 +30,7 @@ export default function ResultsPage() {
 
 
     const [voteResults, setVoteResults] = useState<Results[] | null>(null);
+    const [voteTitle, setVoteTitle] = useState<string | null>(null);
 
 
 
@@ -296,6 +297,7 @@ function calculatePreferentialWinner(question: Question): Results {
                 const find_election = electionsFind.find((e) => String(e.id).match(String(vote_id)))
 
                 if (find_election !== undefined && find_election !== null) {
+                    setVoteTitle(find_election.name)
                     console.log("FOUND ELECTION")
                     console.log(find_election)
                     CalculateVoteResults(find_election)
@@ -357,7 +359,7 @@ function calculatePreferentialWinner(question: Question): Results {
                 <button className="hover:cursor-pointer text-white p-4 text-2xl absolute top-2 left-4 z-10" onClick={goBack}>
                     ←
                 </button>
-                <Heading text={`${voteResults[0].voteName} Results`} />
+                <Heading text={`${voteTitle} Results`} />
 
                 {/* {voteResults.winners.map((winner, index) => (
                     <WinnerPane key={index} winner={winner}>

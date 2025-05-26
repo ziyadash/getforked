@@ -265,12 +265,8 @@ function calculatePreferentialVotingWinner(ballots: Ballot[]): number {
  */
 export async function doesElectionExist(sessionCode: string) {
   let exists = null;
-//console.log("HELLO WORLD")
   await getElectionData((map) => {
     for (const election of map.values()) {
-   //   console.log(election.sessionCode)
-    //  console.log(sessionCode)
-    //  console.log("HELLO WORLD 2")
       if (election.sessionCode === sessionCode) {
         exists = election;
         break; 
@@ -280,3 +276,4 @@ export async function doesElectionExist(sessionCode: string) {
 
   return exists;
 }
+

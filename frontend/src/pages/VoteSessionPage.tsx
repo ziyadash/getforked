@@ -90,7 +90,7 @@ export default function VoteSessionPage({ name }: OrganiserInput) {
             console.log("END ELECTION RESULT")
             console.log(data)
         } catch (error) {
-          
+          console.log(error);
         } finally {
 
             setTimeout(() => {
@@ -124,7 +124,7 @@ export default function VoteSessionPage({ name }: OrganiserInput) {
           setButtonText("Start Session")
           return;
         case (1):
-          setHeaderText("X Amount of people have joined");
+          setHeaderText("Voting session has started");
           setButtonText("Stop Vote Session")
 
           return;

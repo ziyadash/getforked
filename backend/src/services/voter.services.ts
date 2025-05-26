@@ -1,7 +1,7 @@
 import { error } from "node:console";
 import { electionDatabase, getElectionData, saveElectionDatabaseToFile } from "../data/dataStore";
 import { validatePositionId, validateSessionId } from "./servicesUtil";
-import { Election, Question } from "../../../shared/interfaces";
+import { Election, ElectionState, Question } from "../../../shared/interfaces";
 
 
 
@@ -65,35 +65,36 @@ export const vote = async (
         if (!foundElection) {
                 throw new Error("Could not find election");
         }
-        console.log("HEllow owrld in vote ")
-        console.log(props.preferences)
-
-        //Checks the question exists
-     //   const positionCheck = validatePositionId(foundElection, props.positionId);
-      //  if ('error' in positionCheck) return positionCheck;
-
-
-
           await getElectionData(map => {
                 const storedElection = map.get(String(foundElection?.id));
                  if (!storedElection) throw new Error('Election unexpectedly missing');
+                 if (storedElection.electionState != 1) {
+                  throw new Error('Voting Ended');
+                 }
                 if (storedElection.questions.length <= props.positionId) {
                         throw new Error('Position unexpectedly missing');
                 } else {
                         const storedPosition = storedElection.questions[props.positionId];
                         const existingBallotIndex = storedPosition.ballot.findIndex(b => b.userid === userId);
         if (existingBallotIndex !== -1) {
-                storedPosition.ballot[existingBallotIndex] = {
+                if (props.preferences.length == 0) {
+                  storedPosition.ballot.splice(existingBallotIndex, 1);
+                } else {
+                  storedPosition.ballot[existingBallotIndex] = {
                 userid: userId,
                 preferences: props.preferences,
                 };
+                }
                 console.log('Updated existing ballot.');
         } else {
-                storedPosition.ballot.push({
+          if (props.preferences.length != 0) {
+storedPosition.ballot.push({
                 userid: userId,
                 preferences: props.preferences,
                 });
                 console.log('Added new ballot.');
+                }
+                
         }
                 }
       
@@ -103,3 +104,36 @@ export const vote = async (
   return 0;
 };
 
+/**
+ * Check  election exists from session Code
+ */
+export async function electionStateVoter(sessionCode: string) {
+  let state = null;
+  await getElectionData((map) => {
+    for (const election of map.values()) {
+      if (election.sessionCode === sessionCode) {
+        state = election.electionState;
+        break; 
+      }
+    }
+  });
+
+  return state;
+}
+
+/**
+ * Get State of election from session Code
+ */
+export async function electionExistsVoter(sessionCode: string) {
+  let exist = false;
+  await getElectionData((map) => {
+    for (const election of map.values()) {
+      if (election.sessionCode === sessionCode) {
+        exist = true;
+        break; 
+      }
+    }
+  });
+
+  return exist;
+}

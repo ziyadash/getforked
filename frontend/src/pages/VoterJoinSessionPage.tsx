@@ -18,10 +18,10 @@ export default function VoterJoinSessionPage() { // once voter has logged in
       const checkElectionSessionCode = async () => {
         const sessionCode = input;
         if (sessionCode) {
-          console.log("HELLOWORD 3")
-          console.log(sessionCode)
+          //console.log("HELLOWORD 3")
+          //console.log(sessionCode)
           const API_URL = import.meta.env.VITE_BACKEND_URL;
-          const response = await fetch(`${API_URL}/api/elections/checkElectionSessionCode`, {
+          let response = await fetch(`${API_URL}/api/elections/checkElectionSessionCode`, {
             headers: {
               'Content-Type': 'application/json',
             },
@@ -31,6 +31,19 @@ export default function VoterJoinSessionPage() { // once voter has logged in
                 sessionCode: sessionCode,
               }),
           });
+          response = await fetch(`${API_URL}/api/voters/checkSessionState`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+
+            body: JSON.stringify({ sessionCode: sessionCode }),
+          });
+          const sessionState = await response.json();
+          if (sessionState.results == 2) {
+            navigate("/voter/finish");
+            return;
+          }
           if (response.status == 200) {
             const sessionId = localStorage.getItem('user-session-id');
             fetch(`${API_URL}/api/elections/joinVote`, {
@@ -52,8 +65,6 @@ export default function VoterJoinSessionPage() { // once voter has logged in
       checkElectionSessionCode();
     }
   }
-
-
 
 
   return (

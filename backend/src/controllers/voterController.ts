@@ -16,7 +16,6 @@ import { voteProps } from '../services/voter.services';
       res.status(400).json({ error: 'Missing election sessionCode or sessionID' });
       return;
     }
-
     try {
       const result = await electionSessionService.addUsertoActiveElectionSession(sessionCode, sessionId);
 
@@ -24,8 +23,6 @@ import { voteProps } from '../services/voter.services';
     } catch (e) {
       next(e);
     }
-                   
-
   };
 
   export const viewPositionsPublic = async (
@@ -94,3 +91,42 @@ import { voteProps } from '../services/voter.services';
     }
   };
   
+    export const checkElectionExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { sessionCode } = req.body;
+
+    if (!sessionCode ) {
+      res.status(400).json({ error: 'Missing election sessionCode' });
+      return;
+    }
+    try {
+      const result = await voterServices.electionExistsVoter(sessionCode);
+
+   res.status(200).json({ results: result });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+      export const checkElectionState = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { sessionCode } = req.body;
+
+    if (!sessionCode ) {
+      res.status(400).json({ error: 'Missing election sessionCode' });
+      return;
+    }
+    try {
+      const result = await voterServices.electionStateVoter(sessionCode);
+
+   res.status(200).json({ results: result });
+    } catch (e) {
+      next(e);
+    }
+  };
