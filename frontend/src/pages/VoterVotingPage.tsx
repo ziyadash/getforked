@@ -112,7 +112,7 @@ const positions:Question[] = data.result.positions;
         });
         const userSessionId = localStorage.getItem('user-session-id');
         const API_URL = import.meta.env.VITE_BACKEND_URL;
-        fetch(`${API_URL}/api/voter/vote`, {
+        fetch(`${API_URL}/api/voters/vote`, {
               headers: {
                 'Content-Type': 'application/json',
               },
